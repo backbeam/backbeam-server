@@ -79,6 +79,12 @@ exports.createServer = function(options) {
     return app
   }
 
+  server.adminResources = function() {
+    var app = createRouter()
+    require('./lib/admin').configure(app)
+    return app
+  }
+
   return server
 
 }

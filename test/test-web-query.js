@@ -3,7 +3,17 @@ var request = require('supertest')
 var _ = require('underscore')
 var app = require('./app')()
 
-describe('Test web response', function() {
+describe('Test web queries', function() {
+
+  before(function(done) {
+    request(app)
+      .post('/admin/migrate')
+      .end(function(err, res) {
+        assert.ifError(err)
+        assert.equal(res.status, 200)
+        done()
+      })
+  })
 
   beforeEach(function(done) {
     done()

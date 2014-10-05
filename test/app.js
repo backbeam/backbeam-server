@@ -44,6 +44,8 @@ module.exports = function() {
 
   app.use(require('cookie-parser')('secret'))
 
+  app.use('/admin', server.adminResources())
+
   app.use('/api', server.apiResources())
 
   app.use(server.webResources())

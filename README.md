@@ -31,7 +31,7 @@ Work in progress.
 
 ## What does it support?
 
-Both backbeam.io and backbeam-shed provide the following features
+Both backbeam.io and `backbeam-server` provide the following features
 
 - Database
 - REST API (with Open Source SDKs for iOS, Android and JavaScript)
