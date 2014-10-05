@@ -1,0 +1,1 @@
+response.send(backbeam.util.querystring.stringify({ foo:'bar', baz:'bax' }))

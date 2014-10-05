@@ -1,0 +1,1 @@
+response.send(require('util').hello('world')+' '+require('./util').hello('world'))

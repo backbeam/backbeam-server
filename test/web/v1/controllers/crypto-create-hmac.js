@@ -1,0 +1,1 @@
+response.send(backbeam.util.crypto.createHmac("SHA1", "key").update("").digest("hex"))

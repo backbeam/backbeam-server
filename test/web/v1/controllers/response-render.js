@@ -1,0 +1,1 @@
+response.render('index.html', {count: 1}, true)

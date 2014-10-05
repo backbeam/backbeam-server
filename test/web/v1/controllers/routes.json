@@ -1,0 +1,117 @@
+[
+  {
+    "method": "GET",
+    "path": "/response/send",
+    "file": "response-send.js"
+  },
+  {
+    "method": "GET",
+    "path": "/response/redirect",
+    "file": "response-redirect.js"
+  },
+  {
+    "method": "GET",
+    "path": "/response/json-string",
+    "file": "response-json-string.js"
+  },
+  {
+    "method": "GET",
+    "path": "/response/json-object",
+    "file": "response-json-object.js"
+  },
+  {
+    "method": "GET",
+    "path": "/response/render",
+    "file": "response-render.js"
+  },
+  {
+    "method": "POST",
+    "path": "/request/post/:foo/:bar",
+    "file": "request-post.js"
+  },
+  {
+    "method": "GET",
+    "path": "/crypto/hashes",
+    "file": "crypto-hashes.js"
+  },
+  {
+    "method": "GET",
+    "path": "/crypto/create-hash",
+    "file": "crypto-create-hash.js"
+  },
+  {
+    "method": "GET",
+    "path": "/crypto/create-hmac",
+    "file": "crypto-create-hmac.js"
+  },
+  {
+    "method": "GET",
+    "path": "/crypto/errors",
+    "file": "crypto-errors.js"
+  },
+  {
+    "method": "GET",
+    "path": "/querystring/stringify",
+    "file": "querystring-stringify.js"
+  },
+  {
+    "method": "GET",
+    "path": "/querystring/parse",
+    "file": "querystring-parse.js"
+  },
+  {
+    "method": "GET",
+    "path": "/require",
+    "file": "require.js"
+  },
+  {
+    "method": "GET",
+    "path": "/require/error",
+    "file": "require-error.js"
+  },
+  {
+    "method": "GET",
+    "path": "/http-client",
+    "file": "http-client.js"
+  },
+  {
+    "method": "POST",
+    "path": "/query/empty-save",
+    "file": "query-empty-save.js"
+  },
+  {
+    "method": "GET",
+    "path": "/query/fetch",
+    "file": "query-fetch.js"
+  },
+  {
+    "method": "GET",
+    "path": "/query/read",
+    "file": "query-read.js"
+  },
+  {
+    "method": "POST",
+    "path": "/query/remove",
+    "file": "query-remove.js"
+  },
+  {
+    "method": "GET",
+    "path": "/error/method",
+    "file": "error-method.js"
+  },
+  {
+    "method": "GET",
+    "path": "/error/template",
+    "file": "error-template.js"
+  },
+  {
+    "method": "GET",
+    "path": "/route-without-code",
+    "file": "file-that-does-not-exist.js"
+  },
+  {
+    "method": "GET",
+    "path": "/error/template-not-found",
+    "file": "error-template-not-found.js"
+  }
+]

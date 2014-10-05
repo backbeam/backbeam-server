@@ -1,0 +1,1 @@
+response.send(backbeam.util.crypto.getHashes().join(","))

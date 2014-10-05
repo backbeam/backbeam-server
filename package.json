@@ -1,0 +1,42 @@
+{
+  "name": "backbeam-server",
+  "version": "0.1.0",
+  "description": "Open Source backend platform compatible with backbeam.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/.bin/_mocha -R spec"
+  },
+  "repository": "",
+  "keywords": [
+    "backend",
+    "platform"
+  ],
+  "author": "The backbeam.io team <contact@backbeam.io>",
+  "license": "MIT",
+  "dependencies": {
+    "apn": "^1.6.2",
+    "async": "^0.9.0",
+    "backbeam": "^0.12.1",
+    "body-parser": "^1.9.0",
+    "cookie-parser": "^1.3.3",
+    "express": "^4.9.5",
+    "hashids": "^1.0.1",
+    "mkdirp": "^0.5.0",
+    "mysql": "~2.0.0-alpha9",
+    "nodemailer": "^1.3.0",
+    "nunjucks": "^1.1.0",
+    "request": "^2.44.0",
+    "socket.io": "^1.1.0",
+    "sprintf": "^0.1.4",
+    "sql": "^0.40.0",
+    "supertest": "^0.14.0",
+    "txain": "^0.3.0",
+    "underscore": "^1.7.0",
+    "useragent": "^2.1.0"
+  },
+  "devDependencies": {
+    "istanbul": "^0.3.2",
+    "mocha": "^1.21.4",
+    "supertest": "^0.13.0"
+  }
+}
