@@ -1,5 +1,7 @@
 # Backbeam server
 
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/backbeam/backbeam-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 Backbeam-server is a compatible implementation of [Backbeam.io](http://backbeam.io), a cloud backend-as-a-service. This project is maintained by the creators of Backbeam and this project will pass similar tests to keep its compatibility.
 
 ## Introduction
