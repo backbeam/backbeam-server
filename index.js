@@ -1,5 +1,6 @@
-
 var path = require('path')
+var express = require('express')
+var _ = require('underscore')
 
 function identity(options) {
   return function(core) {
@@ -31,11 +32,7 @@ var implementations = {
   },
 }
 
-var express = require('express')
-var _ = require('underscore')
-
 exports.createServer = function(options) {
-
   var server = {}
   var managers = {}
 
@@ -86,6 +83,4 @@ exports.createServer = function(options) {
   }
 
   return server
-
 }
-
