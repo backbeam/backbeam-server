@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var colors = require('colors')
 var util = require('util')
 
