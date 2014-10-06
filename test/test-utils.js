@@ -1,5 +1,6 @@
 var crypto = require('crypto')
 var security = require('../lib/util/security')
+var assert = require('assert')
 
 function sign(options, shared, secret) {
   var shared = options.shared
@@ -45,4 +46,16 @@ exports.request = function(app) {
   }
 
   return request
+}
+
+exports.migrate = function(app, done) {
+  var request = require('supertest')
+
+  request(app)
+    .post('/admin/migrate')
+    .end(function(err, res) {
+      assert.ifError(err)
+      assert.equal(res.status, 200)
+      done()
+    })
 }

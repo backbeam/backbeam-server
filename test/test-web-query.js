@@ -2,21 +2,12 @@ var assert = require('assert')
 var request = require('supertest')
 var _ = require('underscore')
 var app = require('./app')()
+var utils = require('./test-utils')
 
 describe('Test web queries', function() {
 
   before(function(done) {
-    request(app)
-      .post('/admin/migrate')
-      .end(function(err, res) {
-        assert.ifError(err)
-        assert.equal(res.status, 200)
-        done()
-      })
-  })
-
-  beforeEach(function(done) {
-    done()
+    utils.migrate(app, done)
   })
 
   it('#empty() and #save()', function(done) {

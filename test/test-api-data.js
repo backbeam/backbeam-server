@@ -13,6 +13,10 @@ describe('Test API for data manipulation', function() {
   var name = 'Item name'
   var id
 
+  before(function(done) {
+    utils.migrate(app, done)
+  })
+
   it('should insert an object', function(done) {
     request(app)
       .api({
