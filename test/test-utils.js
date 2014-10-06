@@ -11,7 +11,11 @@ function sign(options, shared, secret) {
     .createHash('sha1')
     .update(data.time+':'+Math.random())
     .digest('hex')
-  data.method = (options.method || 'GET').toUpperCase()
+  if (options.method === 'del') {
+    data.method = 'DELETE'
+  } else {
+    data.method = (options.method || 'GET').toUpperCase()
+  }
   data.path = options.path.substring('/api'.length)
   var signature = security.signData(data, shared, secret)
   data.signature = signature
