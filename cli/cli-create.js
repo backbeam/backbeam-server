@@ -5,6 +5,7 @@ var txain = require('txain')
 var colors = require('colors')
 var program = require('commander')
 var version = require('../package.json').version
+var crypto = require('crypto')
 
 program
   .version(version)
@@ -45,8 +46,12 @@ txain(function(callback) {
       user: 'root',
       pass: '',
       database: projectName,
-    }
+    },
+    api: {
+      keys: {}
+    },
   }
+  data.api.keys[randomToken(16)] = randomToken(32)
   fs.writeFile(configFile, JSON.stringify(data, null, 2), 'utf8', callback)
 })
 .then(function(callback) {
@@ -89,3 +94,7 @@ txain(function(callback) {
   }
   console.log('Done')
 })
+
+function randomToken(len) {
+  return crypto.randomBytes(len).toString('hex')
+}
