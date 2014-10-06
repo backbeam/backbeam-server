@@ -1,8 +1,12 @@
 language: node_js
 node_js:
   - "0.10"
+script: npm run-script test-travis
 before_script:
   - mysql -e 'create database shed;'
+after_script:
+- npm install -g coveralls@2
+- cat ./coverage/lcov.info | coveralls
 notifications:
   webhooks:
     urls:

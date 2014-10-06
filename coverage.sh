@@ -1,2 +1,2 @@
-NODE_ENV=test TEST_REMOTE_SERVICES=no node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- -R spec
+npm run-script test-cov
 open coverage/lcov-report/index.html
