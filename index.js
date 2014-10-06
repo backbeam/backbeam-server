@@ -59,6 +59,7 @@ exports.createServer = function(options) {
         if (str === 'project') return
         core[str] = managers[str](core)
       })
+      core.config = options
       return next()
     })
     return app

@@ -38,6 +38,11 @@ module.exports = function() {
       pass: '',
       database: 'shed',
     },
+    api: {
+      keys: {
+        foo: 'bar'
+      }
+    }
   })
 
   app.use(require('body-parser').urlencoded({ extended: true }))

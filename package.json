@@ -4,7 +4,7 @@
   "description": "Open Source backend platform compatible with backbeam.io",
   "main": "index.js",
   "scripts": {
-    "test": "node node_modules/.bin/_mocha -R spec"
+    "test": "NODE_ENV=test node node_modules/.bin/_mocha -R spec"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "apn": "^1.6.2",
     "async": "^0.9.0",
     "backbeam": "^0.12.1",
+    "bcrypt": "^0.8.0",
     "body-parser": "^1.9.0",
     "colors": "^1.0.2",
     "commander": "^2.3.0",
@@ -45,7 +46,7 @@
     "mocha": "^1.21.4",
     "supertest": "^0.13.0"
   },
-  "bin" : {
-    "backbeam" : "cli/index.js"
+  "bin": {
+    "backbeam": "cli/index.js"
   }
 }
