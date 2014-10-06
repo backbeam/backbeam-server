@@ -16,7 +16,7 @@ Another important reason is flexibility. Having the opportunity to host your own
 - If you are developing a new SDK for Backbeam.io you can test it locally with `backbeam-server`.
 - Soon you will be able to dump your data from Backbeam.io to your machines and import the data to a local instance to inspect the data carefully for: machine learning, data mining, reporting, pattern-finding, etc.
 
-### What does it differ from backbeam.io?
+### How does it differ from backbeam.io?
 
 There are many differences in the implementation.
 
@@ -49,3 +49,12 @@ Both backbeam.io and `backbeam-server` provide the following features
 - Server-side code execution in JavaScript
 - Full-featured MVC web framework
 - A real-time API
+
+## Roadmap
+
+- Almost full `bql` support on top of `mysql`
+- Implementation of email service
+- Users authentication
+- Push notifications
+- Finish implementation of `bql` on top of `mysql`
+- Full implementation of `bql` on top of `mysql`
