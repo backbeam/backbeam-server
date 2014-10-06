@@ -4,10 +4,9 @@
   "description": "Open Source backend platform compatible with backbeam.io",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test node node_modules/.bin/_mocha -R spec",
     "test": "NODE_ENV=test node node_modules/.bin/_mocha --reporter spec --check-leaks test/",
     "test-cov": "NODE_ENV=test node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- --reporter dot --check-leaks test/",
-    "test-travis": "NODE_ENV=test node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- --reporter lcovonly --check-leaks test/"
+    "test-travis": "NODE_ENV=test node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- --reporter mocha-lcov-reporter --check-leaks test/"
   },
   "repository": {
     "type": "git",
@@ -47,6 +46,7 @@
   "devDependencies": {
     "istanbul": "^0.3.2",
     "mocha": "^1.21.4",
+    "mocha-lcov-reporter": "0.0.1",
     "supertest": "^0.13.0"
   },
   "bin": {
