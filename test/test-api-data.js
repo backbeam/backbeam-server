@@ -1,6 +1,6 @@
 var assert = require('assert')
 var utils = require('./test-utils')
-var async  = require('async')
+var txain  = require('txain')
 var _ = require('underscore')
 var request = utils.request
 var app = require('./app')()
@@ -14,7 +14,13 @@ describe('Test API for data manipulation', function() {
   var id
 
   before(function(done) {
-    utils.migrate(app, done)
+    txain(function(callback) {
+      utils.migrate(app, callback)
+    })
+    .then(function(callback) {
+      utils.deleteData(app, callback)
+    })
+    .end(done)
   })
 
   it('should insert an object', function(done) {

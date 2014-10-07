@@ -58,6 +58,7 @@ exports.createServer = function(options) {
       _.keys(implementations).forEach(function(str) {
         if (str === 'project') return
         core[str] = managers[str](core)
+        core.push = require('./lib/core/core-push')(core)
       })
       core.config = options
       return next()
