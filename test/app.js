@@ -32,6 +32,9 @@ module.exports = function() {
             'units': {
               type: 'number',
             },
+            'description': {
+              type: 'textarea',
+            },
           }
         }
       }
