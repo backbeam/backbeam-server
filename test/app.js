@@ -20,8 +20,18 @@ module.exports = function() {
           fields: {
             'name': {
               type: 'text',
-              mandatory: true
-            }
+              mandatory: true,
+              fulltext: true,
+            },
+            'weight': {
+              type: 'number',
+            },
+            'price': {
+              type: 'number',
+            },
+            'units': {
+              type: 'number',
+            },
           }
         }
       }

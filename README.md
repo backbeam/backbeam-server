@@ -57,4 +57,4 @@ Both backbeam.io and `backbeam-server` provide the following features
 - Users authentication
 - Push notifications
 - Finish implementation of `bql` on top of `mysql`
-- Full implementation of `bql` on top of `mysql`
+- Full implementation of `bql` on top of `redis`

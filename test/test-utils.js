@@ -48,6 +48,18 @@ exports.request = function(app) {
   return request
 }
 
+exports.deleteData = function(app, done) {
+  var request = require('supertest')
+
+  request(app)
+    .post('/admin/delete-data')
+    .end(function(err, res) {
+      assert.ifError(err)
+      assert.equal(res.status, 200)
+      done()
+    })
+}
+
 exports.migrate = function(app, done) {
   var request = require('supertest')
 
