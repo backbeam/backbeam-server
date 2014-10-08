@@ -116,6 +116,7 @@ describe('Test API for data manipulation', function() {
             assert.ok(res.body)
             assert.equal(res.body.status, 'Success')
             assert.ok(res.body.id)
+            record.id = res.body.id
             callback()
           })
       })
@@ -312,7 +313,7 @@ describe('Test API for data manipulation', function() {
     })
   })
 
-  it('searches using one word', function(done) {
+  it('queries inside a fulltext field using one word', function(done) {
     var options = {
       q: 'where name like ? sort by name desc',
       params: ['rabbit'],
@@ -323,7 +324,7 @@ describe('Test API for data manipulation', function() {
     })
   })
 
-  it('searches using two words', function(done) {
+  it('queries inside a fulltext field using two words', function(done) {
     var options = {
       q: 'where name like ? sort by name desc',
       params: ['buffalo rabbit'],
@@ -334,7 +335,7 @@ describe('Test API for data manipulation', function() {
     })
   })
 
-  it('searches one word and sorts by relevance', function(done) {
+  it('queries one word and sorts by relevance', function(done) {
     var options = {
       q: 'where weight>=? and name like ?',
       params: [1, 'database'],
@@ -345,6 +346,26 @@ describe('Test API for data manipulation', function() {
     })
   })
 
-  // TODO: in, not in
+  it('queries by _id using `in`', function(done) {
+    var options = {
+      q: 'where this in ?',
+      params: [records[0].id],
+    }
+    query(options, function(ids, objects) {
+      assertRecords(ids, objects, [0])
+      done()
+    })
+  })
+
+  it('queries by _id using `not in`', function(done) {
+    var options = {
+      q: 'where this not in ?',
+      params: [[records[0].id, records[1].id, records[2].id, records[3].id, records[4].id].join('\n')],
+    }
+    query(options, function(ids, objects) {
+      assertRecords(ids, objects, [5, 6])
+      done()
+    })
+  })
 
 })
