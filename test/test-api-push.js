@@ -23,7 +23,7 @@ describe('Test API for push notifications', function() {
   var token = 'fake-token'
   var gateway = 'apn'
 
-  it('should subscribe the device', function(done) {
+  it('should subscribe the device to two channels', function(done) {
     request(app)
       .api({
         path: '/api/push/subscribe',
@@ -45,7 +45,7 @@ describe('Test API for push notifications', function() {
       })
   })
 
-  it('should subscribe the device', function(done) {
+  it('checks that the device is subscribed', function(done) {
     request(app)
       .api({
         path: '/api/push/subscribed-channels',
@@ -68,7 +68,7 @@ describe('Test API for push notifications', function() {
       })
   })
 
-  it('should unsubscribe from one channel', function(done) {
+  it('should unsubscribe the device from one channel', function(done) {
     txain(function(callback) {
       // unsubscribe
       request(app)

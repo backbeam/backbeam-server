@@ -113,5 +113,10 @@
     "method": "GET",
     "path": "/error/template-not-found",
     "file": "error-template-not-found.js"
+  },
+  {
+    "method": "POST",
+    "path": "/push/:action",
+    "file": "push-all.js"
   }
 ]
