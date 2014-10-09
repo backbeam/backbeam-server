@@ -8,4 +8,5 @@ response.json({
   acceptedLanguages: request.acceptedLanguages,
   headers: request.headers,
   protocol: request.protocol,
+  sdk: backbeam.sdk(),
 })

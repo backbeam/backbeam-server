@@ -1,0 +1,5 @@
+Hi there,
+
+We need to verify your email address.
+
+Just click here: http://{{host}}/common/verify/{{code}}

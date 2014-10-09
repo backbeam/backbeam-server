@@ -55,7 +55,12 @@ module.exports = function() {
       keys: {
         foo: 'bar'
       }
-    }
+    },
+    email: {
+      transport: {
+
+      },
+    },
   })
 
   app.use(require('body-parser').urlencoded({ extended: true }))

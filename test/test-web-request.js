@@ -14,6 +14,7 @@ describe('Test web request', function() {
       .post('/request/post/xxx/yyy?query-key=query-value')
       .query({'query-key': 'query-value'})
       .set('X-Custom-Header', 'foobar')
+      .set('X-Backbeam-SDK', 'mysdk')
       .type('form')
       .send({
         'post-key': 'post-value',
@@ -28,6 +29,7 @@ describe('Test web request', function() {
         assert.ok(_.isEqual(res.body.params, { foo: 'xxx', bar: 'yyy' }))
         assert.ok(_.isEqual(res.body.body, { 'post-key': 'post-value' }))
         assert.ok(_.isEqual(res.body.query, { 'query-key': 'query-value' }))
+        assert.ok(_.isEqual(res.body.sdk, 'mysdk'))
         done()
       })
   })
