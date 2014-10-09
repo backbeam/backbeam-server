@@ -25,8 +25,8 @@ describe('Test email support', function() {
     },
   })
 
-  it('#sendEmail()', function(done) {
-    email.sendEmail('confirm', {}, function(err, result) {
+  it('#sendMail()', function(done) {
+    email.sendMail('confirm', {}, function(err, result) {
       assert.ifError(err)
       done()
     })

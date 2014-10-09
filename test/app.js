@@ -58,8 +58,10 @@ module.exports = function() {
     },
     email: {
       transport: {
-
+        service: 'stub',
       },
+      from: 'user@example.com',
+      inline: true,
     },
   })
 

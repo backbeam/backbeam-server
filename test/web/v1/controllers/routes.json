@@ -118,5 +118,10 @@
     "method": "POST",
     "path": "/push/:action",
     "file": "push-all.js"
+  },
+  {
+    "method": "GET",
+    "path": "/misc/:action",
+    "file": "misc-all.js"
   }
 ]
