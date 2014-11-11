@@ -63,6 +63,11 @@ module.exports = function() {
       from: 'user@example.com',
       inline: true,
     },
+    authentication: {
+      email: {
+        confirmation: 'optional',
+      }
+    }
   })
 
   app.use(require('body-parser').urlencoded({ extended: true }))
