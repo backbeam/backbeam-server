@@ -1,1 +1,1 @@
-response.send(require('util').hello('world')+' '+require('./util').hello('world'))
+response.send(require('../libs/util').hello('world')+' '+require('../libs/util.js').hello('world'))

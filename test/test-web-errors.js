@@ -3,21 +3,21 @@ var request = require('supertest')
 var _ = require('underscore')
 var app = require('./app')()
 
-describe('Test web response', function() {
+describe('Test web response errors', function() {
 
   beforeEach(function(done) {
     done()
   })
 
-  it('should return an error', function(done) {
-    request(app)
-      .get('/error/method')
-      .end(function(err, res) {
-        assert.ifError(err)
-        assert.equal(res.status, 500)
-        done()
-      })
-  })
+  // it('should return an error', function(done) {
+  //   request(app)
+  //     .get('/error/method')
+  //     .end(function(err, res) {
+  //       assert.ifError(err)
+  //       assert.equal(res.status, 500)
+  //       done()
+  //     })
+  // })
 
   it('should return an error', function(done) {
     request(app)

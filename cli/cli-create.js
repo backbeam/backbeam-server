@@ -52,7 +52,16 @@ txain(function(callback) {
       keys: {}
     },
     email: {
-      transport: {},
+      transport: {
+        service: 'stub',
+      },
+      from: 'user@example.com',
+      inline: true,
+    },
+    authentication: {
+      email: {
+        confirmation: 'optional',
+      }
     }
   }
   data.api.keys[randomToken(16)] = randomToken(32)

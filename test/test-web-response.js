@@ -16,7 +16,7 @@ describe('Test web response', function() {
         assert.equal(res.status, 201)
         assert.equal(res.text, 'Hello world')
         assert.equal(res.header['x-custom-header'], 'value')
-        assert.equal(res.header['content-type'], 'text/plain')
+        assert.equal(res.header['content-type'], 'text/plain; charset=utf-8')
         done()
       })
   })
@@ -38,7 +38,7 @@ describe('Test web response', function() {
       .end(function(err, res) {
         assert.ifError(err)
         assert.equal(res.status, 200)
-        assert.equal(res.header['content-type'], 'application/json;charset=utf-8')
+        assert.equal(res.header['content-type'], 'application/json; charset=utf-8')
         assert.ok(res.body)
         assert.equal(res.text, '{}')
         done()
@@ -51,7 +51,7 @@ describe('Test web response', function() {
       .end(function(err, res) {
         assert.ifError(err)
         assert.equal(res.status, 200)
-        assert.equal(res.header['content-type'], 'application/json;charset=utf-8')
+        assert.equal(res.header['content-type'], 'application/json; charset=utf-8')
         assert.ok(res.body)
         assert.equal(res.text, '{"foo":"bar"}')
         done()
@@ -64,7 +64,7 @@ describe('Test web response', function() {
       .end(function(err, res) {
         assert.ifError(err)
         assert.equal(res.status, 200)
-        assert.equal(res.header['content-type'], 'text/html;charset=utf-8')
+        assert.equal(res.header['content-type'], 'text/html; charset=utf-8')
         assert.equal(res.text, '<p>1 category</p>')
         done()
       })
