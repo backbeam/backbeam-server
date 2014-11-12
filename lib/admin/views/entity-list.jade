@@ -3,8 +3,12 @@ extends layout
 block content
   .row
     .col-lg-12
-      h1 List entity 
-        //- small: a.btn.btn-primary.btn-xs(type='button', href='/admin/entity/foo/edit') Edit
+      h1 List #{_s.humanize(req.params.entity)} 
+        small: a.btn.btn-primary.btn-xs(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/_new') New #{_s.humanize(req.params.entity)}
+      hr
+
+      - var entity = core.model.entities[req.params.entity]
+      - var fields = entity.fields
 
       .table-responsive
         table.table.table-bordered.table-striped
@@ -13,45 +17,20 @@ block content
             col.col-xs-7
           thead
             tr
-              th Class
-              th Description
-              th Description
+              each field in _.keys(fields)
+                th= _s.humanize(field)
+              th
           tbody
-            tr
-              td active
-              td Applies the hover color to a particular row or cell
-              td
-                .btn-group.pull-right
-                  a.btn.btn-primary.btn-sm(type='button', href='/admin/object/user/123') Edit
-                  a.btn.btn-danger.btn-sm(type='button') Delete
-            tr
-              td success
-              td Indicates a successful or positive action
-              td
-                .btn-group.pull-right
-                  a.btn.btn-primary.btn-sm(type='button', href='/admin/object/user/123') Edit
-                  a.btn.btn-danger.btn-sm(type='button') Delete
-            tr
-              td info
-              td Indicates a neutral informative change or action
-              td
-                .btn-group.pull-right
-                  a.btn.btn-primary.btn-sm(type='button', href='/admin/object/user/123') Edit
-                  a.btn.btn-danger.btn-sm(type='button') Delete
-            tr
-              td warning
-              td Indicates a warning that might need attention
-              td
-                .btn-group.pull-right
-                  a.btn.btn-primary.btn-sm(type='button', href='/admin/object/user/123') Edit
-                  a.btn.btn-danger.btn-sm(type='button') Delete
-            tr
-              td danger
-              td Indicates a dangerous or potentially negative action
-              td
-                .btn-group.pull-right
-                  a.btn.btn-primary.btn-sm(type='button', href='/admin/object/user/123') Edit
-                  a.btn.btn-danger.btn-sm(type='button') Delete
+            each id in ids
+              - var object = objects[id]
+              tr
+                each field in _.keys(fields)
+                  td= object.get(field)
+                td
+                  .btn-group.pull-right
+                    a.btn.btn-primary.btn-sm(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/#{id}') Edit
+                    a.btn.btn-danger.btn-sm(type='button') Delete
+
       ul.pagination
         li.disabled
           a(href='#') «

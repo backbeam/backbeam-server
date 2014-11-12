@@ -44,6 +44,7 @@
     "supertest": "^0.14.0",
     "txain": "^0.4.0",
     "underscore": "^1.7.0",
+    "underscore.string": "^2.3.3",
     "useragent": "^2.1.0"
   },
   "devDependencies": {

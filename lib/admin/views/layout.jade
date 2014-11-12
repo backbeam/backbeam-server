@@ -3,13 +3,13 @@ html
   head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    link(rel='stylesheet', href='/admin/css/bootstrap.min.css', media='screen')
+    link(rel='stylesheet', href='#{req.baseUrl}/css/bootstrap.min.css', media='screen')
     title Backbeam
   body
     .navbar.navbar-inverse.navbar-fixed-top
       .container
         .navbar-header
-          a.navbar-brand(href='/admin') Backbeam
+          a.navbar-brand(href=req.baseUrl) Backbeam
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-main')
             span.icon-bar
             span.icon-bar
@@ -21,38 +21,37 @@ html
                 span.caret
               ul.dropdown-menu(aria-labelledby='menu-entities')
                 //- li
-                //-   a(href='/admin/entity/_new/edit') New entity
+                //-   a(href='#{req.baseUrl}/entity/_new/edit') New entity
                 //- li.divider
-                li
-                  a(href='/admin/entity/user') Users
-                li
-                  a(href='/admin/entity/file') Files
+                each key in _.keys(core.model.entities)
+                  li
+                    a(href='#{req.baseUrl}/entity/#{key}')= _s.humanize(key)
             li.dropdown
               a#menu-view.dropdown-toggle(data-toggle='dropdown', href='#') View
                 span.caret
               ul.dropdown-menu(aria-labelledby='menu-view')
                 li
-                  a(href='/admin/email-templates') Email templates
+                  a(href='#{req.baseUrl}/email-templates') Email templates
                 li
-                  a(href='/admin/push') Push notifications
+                  a(href='#{req.baseUrl}/push') Push notifications
                 li
-                  a(href='/admin/logs') Logs
+                  a(href='#{req.baseUrl}/logs') Logs
                 li
-                  a(href='/admin/stats') Statistics
+                  a(href='#{req.baseUrl}/stats') Statistics
             //- li
-            //-   a(href='/admin/web') Web development
+            //-   a(href='#{req.baseUrl}/web') Web development
             //- li
             //-   a#menu-configuration.dropdown-toggle(data-toggle='dropdown', href='#') Configuration
             //-     span.caret
             //-   ul.dropdown-menu(aria-labelledby='menu-configuration')
             //-     li
-            //-       a(href='/admin/configuration/general') General settings
+            //-       a(href='#{req.baseUrl}/configuration/general') General settings
             //-     li
-            //-       a(href='/admin/configuration/authentication') Users authentication
+            //-       a(href='#{req.baseUrl}/configuration/authentication') Users authentication
             //-     li
-            //-       a(href='/admin/configuration/push') Push notifications
+            //-       a(href='#{req.baseUrl}/configuration/push') Push notifications
             //-     li
-            //-       a(href='/admin/configuration/email') Email settings
+            //-       a(href='#{req.baseUrl}/configuration/email') Email settings
           //- ul.nav.navbar-nav.navbar-right
           //-   li
           //-     a(href='#') Log out
@@ -61,5 +60,5 @@ html
       block content
 
 
-    script(src='/admin/js/jquery-1.11.1.min.js')
-    script(src='/admin/js/bootstrap.min.js')
+    script(src='#{req.baseUrl}/js/jquery-1.11.1.min.js')
+    script(src='#{req.baseUrl}/js/bootstrap.min.js')

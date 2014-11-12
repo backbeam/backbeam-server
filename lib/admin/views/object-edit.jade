@@ -3,33 +3,42 @@ extends layout
 block content
   .row
     .col-lg-12
-      h1 Edit object
+      h1 Edit #{_s.humanize(req.params.entity)}
       hr
+      - var entity = core.model.entities[req.params.entity]
+      - var fields = entity.fields
 
-      form.form-horizontal(role='form')
-        .form-group
-          label.col-sm-2.control-label(for='inputEmail3') Email
-          .col-sm-10
-            input#inputEmail3.form-control(type='email', placeholder='Email')
-        .form-group
-          label.col-sm-2.control-label(for='inputPassword3') Password
-          .col-sm-10
-            input#inputPassword3.form-control(type='password', placeholder='Password')
-        .form-group
-          label.col-sm-2.control-label(for='inputPassword3') Password
-          .col-sm-10
-            .input-group
-              input.form-control(type='text')
-              span.input-group-btn
-                button.btn.btn-info(type='button') Search location
-        .form-group
-          label.col-sm-2.control-label(for='inputPassword3') Password
-          .col-sm-10
-            .input-group
-              input.form-control(type='text')
-              span.input-group-btn
-                button.btn.btn-primary(type='button') Browse
-                button.btn.btn-info(type='button') Add
+      form.form-horizontal(role='form', action='#{req.baseUrl}/object/#{req.params.entity}/#{req.params.id}', method='post')
+        each fieldid in _.keys(fields)
+          - var field = fields[fieldid]
+          case field.type
+            when 'text'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  input.form-control(
+                    type='text',
+                    placeholder=_s.humanize(fieldid),
+                    value=object.get(fieldid),
+                    name='set-#{fieldid}'
+                  )
+            when 'location'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  .input-group
+                    input.form-control(type='text')
+                    span.input-group-btn
+                      button.btn.btn-info(type='button') Search coordinates
+            when 'relationship'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  .input-group
+                    input.form-control(type='text')
+                    span.input-group-btn
+                      button.btn.btn-primary(type='button') Browse
+                      button.btn.btn-info(type='button') Add
         .form-group
           .col-sm-offset-2.col-sm-10
             button.btn.btn-primary(type='submit') Save changes
