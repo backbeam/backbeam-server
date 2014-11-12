@@ -3,10 +3,10 @@ html
   head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    link(rel='stylesheet', href='./css/bootstrap.min.css', media='screen')
+    link(rel='stylesheet', href='/admin/css/bootstrap.min.css', media='screen')
     title Backbeam
   body
-    .navbar.navbar-default.navbar-fixed-top
+    .navbar.navbar-inverse.navbar-fixed-top
       .container
         .navbar-header
           a.navbar-brand(href='/admin') Backbeam
@@ -20,39 +20,39 @@ html
               a#menu-entities.dropdown-toggle(data-toggle='dropdown', href='#') Entities 
                 span.caret
               ul.dropdown-menu(aria-labelledby='menu-entities')
+                //- li
+                //-   a(href='/admin/entity/_new/edit') New entity
+                //- li.divider
                 li
-                  a(href='#') New entity
-                li.divider
+                  a(href='/admin/entity/user') Users
                 li
-                  a(href='#') Users
-                li
-                  a(href='#') Files
+                  a(href='/admin/entity/file') Files
             li.dropdown
               a#menu-view.dropdown-toggle(data-toggle='dropdown', href='#') View
                 span.caret
               ul.dropdown-menu(aria-labelledby='menu-view')
                 li
-                  a(href='#') Email templates
+                  a(href='/admin/email-templates') Email templates
                 li
-                  a(href='#') Push notifications
+                  a(href='/admin/push') Push notifications
                 li
-                  a(href='#') Logs
+                  a(href='/admin/logs') Logs
                 li
-                  a(href='#') Statistics
-            li
-              a(href='#') Web development
-            li
-              a#menu-configuration.dropdown-toggle(data-toggle='dropdown', href='#') Configuration
-                span.caret
-              ul.dropdown-menu(aria-labelledby='menu-configuration')
-                li
-                  a(href='#') General settings
-                li
-                  a(href='#') Users authentication
-                li
-                  a(href='#') Push notifications
-                li
-                  a(href='#') Email settings
+                  a(href='/admin/stats') Statistics
+            //- li
+            //-   a(href='/admin/web') Web development
+            //- li
+            //-   a#menu-configuration.dropdown-toggle(data-toggle='dropdown', href='#') Configuration
+            //-     span.caret
+            //-   ul.dropdown-menu(aria-labelledby='menu-configuration')
+            //-     li
+            //-       a(href='/admin/configuration/general') General settings
+            //-     li
+            //-       a(href='/admin/configuration/authentication') Users authentication
+            //-     li
+            //-       a(href='/admin/configuration/push') Push notifications
+            //-     li
+            //-       a(href='/admin/configuration/email') Email settings
           //- ul.nav.navbar-nav.navbar-right
           //-   li
           //-     a(href='#') Log out
@@ -61,5 +61,5 @@ html
       block content
 
 
-    script(src='./js/jquery-1.11.1.min.js')
-    script(src='./js/bootstrap.min.js')
+    script(src='/admin/js/jquery-1.11.1.min.js')
+    script(src='/admin/js/bootstrap.min.js')

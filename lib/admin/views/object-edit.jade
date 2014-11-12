@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  .row
+    .col-lg-12
+      h1 Edit object
+      hr
+
+      form.form-horizontal(role='form')
+        .form-group
+          label.col-sm-2.control-label(for='inputEmail3') Email
+          .col-sm-10
+            input#inputEmail3.form-control(type='email', placeholder='Email')
+        .form-group
+          label.col-sm-2.control-label(for='inputPassword3') Password
+          .col-sm-10
+            input#inputPassword3.form-control(type='password', placeholder='Password')
+        .form-group
+          label.col-sm-2.control-label(for='inputPassword3') Password
+          .col-sm-10
+            .input-group
+              input.form-control(type='text')
+              span.input-group-btn
+                button.btn.btn-info(type='button') Search location
+        .form-group
+          label.col-sm-2.control-label(for='inputPassword3') Password
+          .col-sm-10
+            .input-group
+              input.form-control(type='text')
+              span.input-group-btn
+                button.btn.btn-primary(type='button') Browse
+                button.btn.btn-info(type='button') Add
+        .form-group
+          .col-sm-offset-2.col-sm-10
+            button.btn.btn-primary(type='submit') Save changes
