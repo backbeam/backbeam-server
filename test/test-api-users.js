@@ -10,6 +10,8 @@ var secret = 'bar'
 
 describe('Test API for users administration', function() {
 
+  var auth
+
   before(function(done) {
     txain(function(callback) {
       utils.migrate(app, callback)
@@ -65,6 +67,27 @@ describe('Test API for users administration', function() {
       })
   })
 
+  it('should verify the email address of the user', function(done) {
+    var code = require('../lib/core/core-db-sql').lastEmailVerificationCode
+    request(app)
+      .api({
+        path: '/api/user/email/verify',
+        method: 'post',
+        shared: shared,
+        secret: secret,
+        form: {
+          code: code,
+        },
+      })
+      .end(function(err, res) {
+        assert.ifError(err)
+        assert.equal(res.statusCode, 200)
+        assert.ok(res.body)
+
+        done()
+      })
+  })
+
   it('should login a user', function(done) {
     request(app)
       .api({
@@ -84,6 +107,28 @@ describe('Test API for users administration', function() {
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.id)
         assert.ok(res.body.auth)
+
+        auth = res.body.auth
+        done()
+      })
+  })
+
+  it('should test the auth code', function(done) {
+    request(app)
+      .api({
+        path: '/api/data/user',
+        method: 'get',
+        shared: shared,
+        secret: secret,
+        qs: {
+          auth: auth,
+        },
+      })
+      .end(function(err, res) {
+        assert.ifError(err)
+        assert.equal(res.statusCode, 200)
+        assert.ok(res.body)
+        assert.equal(res.body.status, 'Success')
         done()
       })
   })
@@ -124,7 +169,6 @@ describe('Test API for users administration', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          console.log('res.text', res.text)
           assert.equal(res.statusCode, 200)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')

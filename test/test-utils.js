@@ -35,7 +35,7 @@ exports.request = function(app) {
     modify && modify(data)
 
     request = request[options.method](options.path)
-    request = request.set('Accept', 'application/json')
+    request = request.accept('application/json')
     if (options.form) {
       request = request.type('form')
       request = request.send(data)
