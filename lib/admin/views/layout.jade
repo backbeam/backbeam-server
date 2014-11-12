@@ -1,0 +1,65 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='./css/bootstrap.min.css', media='screen')
+    title Backbeam
+  body
+    .navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          a.navbar-brand(href='/admin') Backbeam
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-main')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        #navbar-main.navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li.dropdown
+              a#menu-entities.dropdown-toggle(data-toggle='dropdown', href='#') Entities 
+                span.caret
+              ul.dropdown-menu(aria-labelledby='menu-entities')
+                li
+                  a(href='#') New entity
+                li.divider
+                li
+                  a(href='#') Users
+                li
+                  a(href='#') Files
+            li.dropdown
+              a#menu-view.dropdown-toggle(data-toggle='dropdown', href='#') View
+                span.caret
+              ul.dropdown-menu(aria-labelledby='menu-view')
+                li
+                  a(href='#') Email templates
+                li
+                  a(href='#') Push notifications
+                li
+                  a(href='#') Logs
+                li
+                  a(href='#') Statistics
+            li
+              a(href='#') Web development
+            li
+              a#menu-configuration.dropdown-toggle(data-toggle='dropdown', href='#') Configuration
+                span.caret
+              ul.dropdown-menu(aria-labelledby='menu-configuration')
+                li
+                  a(href='#') General settings
+                li
+                  a(href='#') Users authentication
+                li
+                  a(href='#') Push notifications
+                li
+                  a(href='#') Email settings
+          //- ul.nav.navbar-nav.navbar-right
+          //-   li
+          //-     a(href='#') Log out
+
+    .container(style='margin-top: 60px')
+      block content
+
+
+    script(src='./js/jquery-1.11.1.min.js')
+    script(src='./js/bootstrap.min.js')
