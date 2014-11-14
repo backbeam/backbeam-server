@@ -3,12 +3,6 @@ var express = require('express')
 var _ = require('underscore')
 var domain = require('domain')
 
-function identity(options) {
-  return function(core) {
-    return options
-  }
-}
-
 function staticProject(options) {
   return function(req, res, next) {
     var core = req.core
@@ -22,7 +16,6 @@ var implementations = {
     'static': staticProject,
   },
   'db': {
-    'redis': identity,
     'sql': require('./lib/core/core-db-sql'),
   },
   'model': {
