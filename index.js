@@ -1,6 +1,7 @@
 var path = require('path')
 var express = require('express')
 var _ = require('underscore')
+var domain = require('domain')
 
 function identity(options) {
   return function(core) {
@@ -45,8 +46,24 @@ exports.createServer = function(options) {
     managers[str] = manager(opts)
   })
 
+  function domainWrapper() {
+    return function(req, res, next) {
+      var dmn = domain.create()
+      dmn.add(req)
+      dmn.add(res)
+      res.on('close', function() {
+        dmn.dispose()
+      })
+      dmn.on('error', function(err) {
+        next(err)
+      })
+      dmn.run(next)
+    }
+  }
+
   function createRouter() {
     var app = express.Router()
+    app.use(domainWrapper())
     app.use(function(req, res, next) {
       var core = {}
       req.core = core

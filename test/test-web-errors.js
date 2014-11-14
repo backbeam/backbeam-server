@@ -9,15 +9,15 @@ describe('Test web response errors', function() {
     done()
   })
 
-  // it('should return an error', function(done) {
-  //   request(app)
-  //     .get('/error/method')
-  //     .end(function(err, res) {
-  //       assert.ifError(err)
-  //       assert.equal(res.status, 500)
-  //       done()
-  //     })
-  // })
+  it('should return an error', function(done) {
+    request(app)
+      .get('/error/method')
+      .end(function(err, res) {
+        assert.ifError(err)
+        assert.equal(res.status, 500)
+        done()
+      })
+  })
 
   it('should return an error', function(done) {
     request(app)
