@@ -8,7 +8,7 @@ var app = require('./app')()
 var shared = 'foo'
 var secret = 'bar'
 
-describe('Test API for users administration', function() {
+describe('Test API for users', function() {
 
   var auth
 

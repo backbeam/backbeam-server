@@ -123,5 +123,10 @@
     "method": "GET",
     "path": "/misc/:action",
     "file": "misc-all.js"
+  },
+  {
+    "method": "POST",
+    "path": "/users/:action",
+    "file": "users-all.js"
   }
 ]
