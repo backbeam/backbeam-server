@@ -59,6 +59,7 @@ txain(function(callback) {
       inline: true,
     },
     authentication: {
+      sessionKey: crypto.randomBytes(32).toString('hex'),
       email: {
         confirmation: 'optional',
       }

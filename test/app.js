@@ -64,6 +64,7 @@ module.exports = function() {
       inline: true,
     },
     authentication: {
+      sessionKey: '82b121dcbf86f1c1313fa9270ba9c77372a86e19ac849402615745f3c6bd9178',
       email: {
         confirmation: 'optional',
       }
