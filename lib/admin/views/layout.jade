@@ -4,6 +4,10 @@ html
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='#{req.baseUrl}/css/bootstrap.min.css', media='screen')
+    link(rel='stylesheet', href='#{req.baseUrl}/css/datepicker3.css', media='screen')
+    link(rel='stylesheet', href='#{req.baseUrl}/css/font-awesome.min.css', media='screen')
+    link(rel='stylesheet', href='#{req.baseUrl}/css/summernote.css', media='screen')
+    link(rel='stylesheet', href='#{req.baseUrl}/css/codemirror.css', media='screen')
     title Backbeam
   body
     .navbar.navbar-inverse.navbar-fixed-top
@@ -62,3 +66,28 @@ html
 
     script(src='#{req.baseUrl}/js/jquery-1.11.1.min.js')
     script(src='#{req.baseUrl}/js/bootstrap.min.js')
+    script(src='#{req.baseUrl}/js/bootstrap-datepicker.js')
+    script(src='#{req.baseUrl}/js/summernote.min.js')
+    script(src='#{req.baseUrl}/js/codemirror.js')
+    script(src='#{req.baseUrl}/js/codemirror-modes/javascript/javascript.js')
+    script.
+      $(document).ready(function() {
+        $('.date-picker').datepicker({
+          todayHighlight: true
+        })
+        $('.summernote').summernote({
+          height: 150,
+        })
+        $('.code-editor').each(function() {
+          var mode = $(this).attr('data-mode')
+          var options = {
+            lineNumbers: true,
+            mode: mode
+          }
+          if (mode === 'json') {
+            options.mode = 'javascript'
+            options.json = true
+          }
+          CodeMirror.fromTextArea($(this).get(0), options)
+        })
+      })

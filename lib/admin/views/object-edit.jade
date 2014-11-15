@@ -22,6 +22,53 @@ block content
                     value=object.get(fieldid),
                     name='set-#{fieldid}'
                   )
+            when 'textarea'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  textarea.form-control(
+                    placeholder=_s.humanize(fieldid),
+                    value=object.get(fieldid),
+                    name='set-#{fieldid}',
+                    rows=5
+                  )
+            when 'richtextarea'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  .summernote= object.get(fieldid)
+            when 'json'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  textarea.form-control.code-editor(
+                    placeholder=_s.humanize(fieldid),
+                    value=object.get(fieldid),
+                    name='set-#{fieldid}',
+                    rows=5,
+                    data-mode='javascript'
+                  )
+            when 'date'
+            when 'day'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  input.form-control.date-picker(
+                    type='text',
+                    placeholder=_s.humanize(fieldid),
+                    value=object.get(fieldid),
+                    name='set-#{fieldid}'
+                  )
+            when 'number'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  input.form-control(
+                    type='number',
+                    placeholder=_s.humanize(fieldid),
+                    value=object.get(fieldid),
+                    name='set-#{fieldid}'
+                  )
             when 'location'
               .form-group
                 label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
@@ -30,6 +77,20 @@ block content
                     input.form-control(type='text')
                     span.input-group-btn
                       button.btn.btn-info(type='button') Search coordinates
+            when 'select'
+              .form-group
+                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                .col-sm-10
+                  select.form-control(name='set-#{fieldid}')
+                    option(value='') None
+                    each option in field.options
+                      option(value=option, selected=(object.get(fieldid) === option ? 'selected' : undefined))= option
+            when 'boolean'
+              .form-group
+                .col-sm-offset-2.col-sm-10
+                  label
+                    input(type='checkbox', name='set-#{fieldid}')
+                    |  #{_s.humanize(fieldid)}
             when 'relationship'
               .form-group
                 label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)

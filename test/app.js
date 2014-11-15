@@ -35,6 +35,33 @@ module.exports = function() {
             'description': {
               type: 'textarea',
             },
+            'rich description': {
+              "type": "richtextarea"
+            },
+            'date': {
+              'type': 'date'
+            },
+            'day': {
+              'type': 'day'
+            },
+            'number': {
+              'type': 'number'
+            },
+            'location': {
+              'type': 'location'
+            },
+            'select': {
+              'type': 'select',
+              'options': [
+                'red', 'white', 'green', 
+              ]
+            },
+            'json': {
+              'type': 'json'
+            },
+            'boolean': {
+              'type': 'boolean'
+            }
           }
         }
       }
