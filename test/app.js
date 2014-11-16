@@ -15,52 +15,65 @@ module.exports = function() {
       manager: 'static',
       entities: {
         'item': {
-          fields: {
-            'name': {
+          fields: [
+            {
+              id: 'name',
               type: 'text',
               mandatory: true,
               fulltext: true,
             },
-            'weight': {
+            {
+              id: 'weight',
               type: 'number',
             },
-            'price': {
+            {
+              id: 'price',
               type: 'number',
             },
-            'units': {
+            {
+              id: 'units',
               type: 'number',
             },
-            'description': {
+            {
+              id: 'description',
               type: 'textarea',
             },
-            'rich_description': {
+            {
+              id: 'rich_description',
               type: 'richtextarea'
             },
-            'date': {
+            {
+              id: 'date',
               type: 'date'
             },
-            'day': {
+            {
+              id: 'day',
               type: 'day'
             },
-            'number': {
+            {
+              id: 'number',
               type: 'number'
             },
-            'location': {
+            {
+              id: 'location',
               type: 'location'
             },
-            'select': {
+            {
+              id: 'select',
               type: 'select',
               'options': [
                 'red', 'white', 'green', 
               ]
             },
-            'json': {
+            {
+              id: 'json',
               type: 'json'
             },
-            'boolean': {
+            {
+              id: 'boolean',
               type: 'boolean'
             }
-          }
+          ]
         }
       }
     },

@@ -6,72 +6,70 @@ block content
       h1 Edit #{_s.humanize(req.params.entity)}
       hr
       - var entity = core.model.entities[req.params.entity]
-      - var fields = entity.fields
 
       form.form-horizontal(role='form', action='#{req.baseUrl}/object/#{req.params.entity}/#{req.params.id}', method='post')
-        each fieldid in _.keys(fields)
-          - var field = fields[fieldid]
+        each field in entity.fields
           case field.type
             when 'text'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   input.form-control(
                     type='text',
-                    placeholder=_s.humanize(fieldid),
-                    value=object.get(fieldid),
-                    name='set-#{fieldid}'
+                    placeholder=_s.humanize(field.id),
+                    value=object.get(field.id),
+                    name='set-#{field.id}'
                   )
             when 'textarea'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   textarea.form-control(
-                    placeholder=_s.humanize(fieldid),
-                    value=object.get(fieldid),
-                    name='set-#{fieldid}',
+                    placeholder=_s.humanize(field.id),
+                    value=object.get(field.id),
+                    name='set-#{field.id}',
                     rows=5
                   )
             when 'richtextarea'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
-                  .summernote= object.get(fieldid)
+                  .summernote= object.get(field.id)
             when 'json'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   textarea.form-control.code-editor(
-                    placeholder=_s.humanize(fieldid),
-                    value=object.get(fieldid),
-                    name='set-#{fieldid}',
+                    placeholder=_s.humanize(field.id),
+                    value=object.get(field.id),
+                    name='set-#{field.id}',
                     rows=5,
                     data-mode='javascript'
                   )
             when 'date'
             when 'day'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   input.form-control.date-picker(
                     type='text',
-                    placeholder=_s.humanize(fieldid),
-                    value=object.get(fieldid),
-                    name='set-#{fieldid}'
+                    placeholder=_s.humanize(field.id),
+                    value=object.get(field.id),
+                    name='set-#{field.id}'
                   )
             when 'number'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   input.form-control(
                     type='number',
-                    placeholder=_s.humanize(fieldid),
-                    value=object.get(fieldid),
-                    name='set-#{fieldid}'
+                    placeholder=_s.humanize(field.id),
+                    value=object.get(field.id),
+                    name='set-#{field.id}'
                   )
             when 'location'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   .input-group
                     input.form-control(type='text')
@@ -79,21 +77,21 @@ block content
                       button.btn.btn-info(type='button') Search coordinates
             when 'select'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
-                  select.form-control(name='set-#{fieldid}')
+                  select.form-control(name='set-#{field.id}')
                     option(value='') None
                     each option in field.options
-                      option(value=option, selected=(object.get(fieldid) === option ? 'selected' : undefined))= option
+                      option(value=option, selected=(object.get(field.id) === option ? 'selected' : undefined))= option
             when 'boolean'
               .form-group
                 .col-sm-offset-2.col-sm-10
                   label
-                    input(type='checkbox', name='set-#{fieldid}')
-                    |  #{_s.humanize(fieldid)}
+                    input(type='checkbox', name='set-#{field.id}')
+                    |  #{_s.humanize(field.id)}
             when 'relationship'
               .form-group
-                label.col-sm-2.control-label(for=fieldid)= _s.humanize(fieldid)
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   .input-group
                     input.form-control(type='text')

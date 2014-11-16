@@ -17,15 +17,15 @@ block content
             col.col-xs-7
           thead
             tr
-              each field in _.keys(fields)
-                th= _s.humanize(field)
+              each field in fields
+                th= _s.humanize(field.id)
               th
           tbody
             each id in ids
               - var object = objects[id]
               tr
-                each field in _.keys(fields)
-                  td= object.get(field)
+                each field in fields
+                  td= object.get(field.id)
                 td
                   .btn-group.pull-right
                     a.btn.btn-primary.btn-sm(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/#{id}') Edit

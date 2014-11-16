@@ -30,12 +30,13 @@ txain(function(callback) {
       manager: 'static',
       entities: {
         'item': {
-          fields: {
-            'name': {
+          fields: [
+            {
+              id: 'name',
               type: 'text',
               mandatory: true,
             }
-          }
+          ]
         }
       }
     },
@@ -72,10 +73,10 @@ txain(function(callback) {
   var dirs = [
     'push',
     'files',
-    'web/v1/assets',
-    'web/v1/views',
-    'web/v1/controllers',
-    'web/v1/libs',
+    'web/assets',
+    'web/views',
+    'web/controllers',
+    'web/libs',
     'email_templates',
   ]
   dirs = dirs.map(function(dir) {
@@ -101,7 +102,7 @@ txain(function(callback) {
 })
 .then(function(callback) {
   // routes
-  var routesFile = path.join(program.directory, 'web/v1/controllers/routes.json')
+  var routesFile = path.join(program.directory, 'web/controllers/routes.json')
   var exists = fs.existsSync(routesFile)
   if (exists) return callback()
   var data = [
@@ -115,7 +116,7 @@ txain(function(callback) {
 })
 .then(function(callback) {
   // home controller
-  var controllerFile = path.join(program.directory, 'web/v1/controllers/home.js')
+  var controllerFile = path.join(program.directory, 'web/controllers/home.js')
   var exists = fs.existsSync(controllerFile)
   if (exists) return callback()
   var code = 'response.send("Hello world")'
