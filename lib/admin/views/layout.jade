@@ -73,7 +73,10 @@ html
     script.
       $(document).ready(function() {
         $('.date-picker').datepicker({
-          todayHighlight: true
+          todayHighlight: true,
+          autoclose: true,
+          format: 'yyyy-mm-dd',
+          todayBtn: 'linked',
         })
         $('.summernote').summernote({
           height: 150,
@@ -91,3 +94,4 @@ html
           CodeMirror.fromTextArea($(this).get(0), options)
         })
       })
+    block scripts

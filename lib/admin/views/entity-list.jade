@@ -25,7 +25,26 @@ block content
               - var object = objects[id]
               tr
                 each field in fields
-                  td= object.get(field.id)
+                  - var value = object.get(field.id)
+                  case field.type
+                    when 'date'
+                      td= dateutils.formatDatetime(value, 'ymd', 'UTC')
+                    when 'day'
+                      td= dateutils.formatDay(value, 'ymd')
+                    when 'boolean'
+                      td
+                        if value === true
+                          | Yes
+                        else if value === false
+                          | No
+                    when 'json'
+                      td
+                        if _.isArray(value)
+                          | [Array]
+                        else if _.isObject(value)
+                          | [Object]
+                    default
+                      td= value
                 td
                   .btn-group.pull-right
                     a.btn.btn-primary.btn-sm(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/#{id}') Edit

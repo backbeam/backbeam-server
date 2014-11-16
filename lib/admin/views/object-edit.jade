@@ -7,8 +7,9 @@ block content
       hr
       - var entity = core.model.findEntity(req.params.entity)
 
-      form.form-horizontal(role='form', action='#{req.baseUrl}/object/#{req.params.entity}/#{req.params.id}', method='post')
+      form#object-edit.form-horizontal(role='form', action='#{req.baseUrl}/object/#{req.params.entity}/#{req.params.id}', method='post')
         each field in entity.fields
+          - var value = object.get(field.id)
           case field.type
             when 'text'
               .form-group
@@ -17,7 +18,7 @@ block content
                   input.form-control(
                     type='text',
                     placeholder=_s.humanize(field.id),
-                    value=object.get(field.id),
+                    value=value,
                     name='set-#{field.id}'
                   )
             when 'textarea'
@@ -26,7 +27,7 @@ block content
                 .col-sm-10
                   textarea.form-control(
                     placeholder=_s.humanize(field.id),
-                    value=object.get(field.id),
+                    value=value,
                     name='set-#{field.id}',
                     rows=5
                   )
@@ -34,29 +35,58 @@ block content
               .form-group
                 label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
-                  .summernote= object.get(field.id)
+                  input(type='hidden', name='set-#{field.id}')
+                  //- TODO: sanitize output
+                  .summernote!= value
             when 'json'
               .form-group
                 label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   textarea.form-control.code-editor(
                     placeholder=_s.humanize(field.id),
-                    value=object.get(field.id),
                     name='set-#{field.id}',
                     rows=5,
                     data-mode='javascript'
-                  )
+                  )= value ? JSON.stringify(value, null, 2) : ''
             when 'date'
+              .form-group
+                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
+                input(type='hidden' value='ymd' name='_format-#{field.id}')
+                input(type='hidden' value='UTC' name='_timezone-#{field.id}')
+                .col-sm-5
+                  .input-group
+                    input.form-control.date-picker(
+                      type='text',
+                      placeholder=_s.humanize(field.id),
+                      value=dateutils.formatDate(value, 'ymd', 'UTC'),
+                      name='_date-#{field.id}'
+                    )
+                    span.input-group-addon
+                      span.glyphicon.glyphicon-calendar
+                .col-sm-5
+                  .input-group
+                    input.form-control(
+                      type='text',
+                      placeholder=_s.humanize(field.id),
+                      value=dateutils.formatTime(value, 'ymd', 'UTC'),
+                      name='_time-#{field.id}'
+                    )
+                    span.input-group-addon
+                      span.glyphicon.glyphicon-time
             when 'day'
               .form-group
                 label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
+                input(type='hidden' value='ymd' name='_format-#{field.id}')
                 .col-sm-10
-                  input.form-control.date-picker(
-                    type='text',
-                    placeholder=_s.humanize(field.id),
-                    value=object.get(field.id),
-                    name='set-#{field.id}'
-                  )
+                  .input-group
+                    input.form-control.date-picker(
+                      type='text',
+                      placeholder=_s.humanize(field.id),
+                      value=dateutils.formatDay(value, 'ymd'),
+                      name='_day-#{field.id}'
+                    )
+                    span.input-group-addon
+                      span.glyphicon.glyphicon-calendar
             when 'number'
               .form-group
                 label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
@@ -64,7 +94,7 @@ block content
                   input.form-control(
                     type='number',
                     placeholder=_s.humanize(field.id),
-                    value=object.get(field.id),
+                    value=value,
                     name='set-#{field.id}'
                   )
             when 'location'
@@ -82,12 +112,12 @@ block content
                   select.form-control(name='set-#{field.id}')
                     option(value='') None
                     each option in field.options
-                      option(value=option, selected=(object.get(field.id) === option ? 'selected' : undefined))= option
+                      option(value=option, selected=(value === option ? 'selected' : undefined))= option
             when 'boolean'
               .form-group
                 .col-sm-offset-2.col-sm-10
                   label
-                    input(type='checkbox', name='set-#{field.id}')
+                    input(type='checkbox', name='set-#{field.id}', checked=(value ? 'checked' : undefined))
                     |  #{_s.humanize(field.id)}
             when 'relationship'
               .form-group
@@ -101,3 +131,13 @@ block content
         .form-group
           .col-sm-offset-2.col-sm-10
             button.btn.btn-primary(type='submit') Save changes
+
+block scripts
+  script.
+    var form = $('#object-edit')
+    form.on('submit', function(e) {
+      $('.summernote', form).each(function() {
+        var input = $(this).prev()
+        input.val($(this).code())
+      })
+    })
