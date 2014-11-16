@@ -36,7 +36,7 @@ There are many differences in the implementation.
 * Run `backbeam start`.
 * Browse `http://localhost:3000` in your browser.
 * Change controllers, assets, etc. You don't need to restart backbeam, just refresh your browser.
-* Anytime you cange the database model in `config.json` run the following: `backbeam migrate`. That will update your database schema to match your data model schema.
+* If you change the data model in `config.json` you need to run: `backbeam migrate` with the server running. That will update your database schema to match your data model schema.
 
 ## What does it support?
 
