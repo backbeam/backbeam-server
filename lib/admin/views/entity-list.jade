@@ -7,7 +7,7 @@ block content
         small: a.btn.btn-primary.btn-xs(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/_new') New #{_s.humanize(req.params.entity)}
       hr
 
-      - var entity = core.model.entities[req.params.entity]
+      - var entity = core.model.findEntity(req.params.entity)
       - var fields = entity.fields
 
       .table-responsive

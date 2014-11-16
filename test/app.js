@@ -13,8 +13,9 @@ module.exports = function() {
     },
     model: {
       manager: 'static',
-      entities: {
-        'item': {
+      entities: [
+        {
+          id: 'item',
           fields: [
             {
               id: 'name',
@@ -75,7 +76,7 @@ module.exports = function() {
             }
           ]
         }
-      }
+      ]
     },
     fs: {
       manager: 'local',

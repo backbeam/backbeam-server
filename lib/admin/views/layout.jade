@@ -27,9 +27,9 @@ html
                 //- li
                 //-   a(href='#{req.baseUrl}/entity/_new/edit') New entity
                 //- li.divider
-                each key in _.keys(core.model.entities)
+                each entity in core.model.entities
                   li
-                    a(href='#{req.baseUrl}/entity/#{key}')= _s.humanize(key)
+                    a(href='#{req.baseUrl}/entity/#{entity.id}')= _s.humanize(entity.id)
             li.dropdown
               a#menu-view.dropdown-toggle(data-toggle='dropdown', href='#') View
                 span.caret

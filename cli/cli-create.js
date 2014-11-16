@@ -28,8 +28,9 @@ txain(function(callback) {
     },
     model: {
       manager: 'static',
-      entities: {
-        'item': {
+      entities: [
+        {
+          id: 'item',
           fields: [
             {
               id: 'name',
@@ -38,7 +39,7 @@ txain(function(callback) {
             }
           ]
         }
-      }
+      ]
     },
     db: {
       manager: 'sql',

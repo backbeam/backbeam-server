@@ -5,7 +5,7 @@ block content
     .col-lg-12
       h1 Edit #{_s.humanize(req.params.entity)}
       hr
-      - var entity = core.model.entities[req.params.entity]
+      - var entity = core.model.findEntity(req.params.entity)
 
       form.form-horizontal(role='form', action='#{req.baseUrl}/object/#{req.params.entity}/#{req.params.id}', method='post')
         each field in entity.fields
