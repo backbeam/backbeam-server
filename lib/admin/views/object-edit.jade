@@ -68,7 +68,7 @@ block content
                     input.form-control(
                       type='text',
                       placeholder=_s.humanize(field.id),
-                      value=dateutils.formatTime(value, 'ymd', 'UTC'),
+                      value=dateutils.formatTime(value, 'UTC'),
                       name='_time-#{field.id}'
                     )
                     span.input-group-addon
