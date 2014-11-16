@@ -1,6 +1,7 @@
 var assert = require('assert')
 var utils = require('./test-utils')
 var txain  = require('txain')
+var path = require('path')
 var _ = require('underscore')
 
 describe('Test email support', function() {
@@ -21,7 +22,7 @@ describe('Test email support', function() {
     },
     fs: {
       manager: 'local',
-      root: __dirname,
+      root: path.join(__dirname, 'test-app'),
     },
   })
 

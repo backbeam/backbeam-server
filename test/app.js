@@ -8,9 +8,7 @@ module.exports = function() {
   var server = backbeam.createServer({
     project: {
       manager: 'static',
-      foo: 'bar',
       env: 'pro',
-      webVersion: 'v1',
       name: 'example',
     },
     model: {
@@ -36,31 +34,31 @@ module.exports = function() {
               type: 'textarea',
             },
             'rich_description': {
-              "type": "richtextarea"
+              type: 'richtextarea'
             },
             'date': {
-              'type': 'date'
+              type: 'date'
             },
             'day': {
-              'type': 'day'
+              type: 'day'
             },
             'number': {
-              'type': 'number'
+              type: 'number'
             },
             'location': {
-              'type': 'location'
+              type: 'location'
             },
             'select': {
-              'type': 'select',
+              type: 'select',
               'options': [
                 'red', 'white', 'green', 
               ]
             },
             'json': {
-              'type': 'json'
+              type: 'json'
             },
             'boolean': {
-              'type': 'boolean'
+              type: 'boolean'
             }
           }
         }
@@ -68,7 +66,7 @@ module.exports = function() {
     },
     fs: {
       manager: 'local',
-      root: __dirname,
+      root: path.join(__dirname, 'test-app'),
     },
     db: {
       manager: 'sql',

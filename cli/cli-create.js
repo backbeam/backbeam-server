@@ -24,7 +24,6 @@ txain(function(callback) {
   var data = {
     project: {
       manager: 'static',
-      webVersion: 'v1',
       name: projectName,
     },
     model: {
