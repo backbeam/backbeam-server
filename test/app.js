@@ -35,7 +35,7 @@ module.exports = function() {
             'description': {
               type: 'textarea',
             },
-            'rich description': {
+            'rich_description': {
               "type": "richtextarea"
             },
             'date': {
