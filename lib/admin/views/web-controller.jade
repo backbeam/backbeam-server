@@ -1,0 +1,33 @@
+br
+.row
+  .col-lg-12
+    form(role='form')
+      .form-group
+        .input-group
+          span.input-group-addon
+            - var methods = ['GET', 'POST', 'PUT', 'DELETE']
+            select
+              each method in methods
+                option(value=method, selected=(route.method === method ? 'selected' : undefined))= method
+          input.form-control(type='text', value=route.path)
+          span.input-group-btn
+            button.btn.btn-primary(type='button') Save changes
+            a.btn.btn-info Test
+
+.row
+  .col-lg-12
+    textarea.code-editor(data-mode='javascript')= source
+
+script.
+  $('.code-editor').each(function() {
+    var mode = $(this).attr('data-mode')
+    var options = {
+      lineNumbers: true,
+      mode: mode
+    }
+    if (mode === 'json') {
+      options.mode = 'javascript'
+      options.json = true
+    }
+    CodeMirror.fromTextArea($(this).get(0), options)
+  })
