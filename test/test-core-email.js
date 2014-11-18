@@ -16,7 +16,7 @@ describe('Test email support', function() {
     }
   }
 
-  var email = require('../lib/core/core-email')(options)({
+  var email = require('../lib/core/core-email')(options.email)({
     project: {
       name: 'shed'
     },

@@ -2,6 +2,8 @@ var path = require('path')
 var express = require('express')
 var _ = require('underscore')
 var domain = require('domain')
+var fs = require('fs')
+var txain = require('txain')
 
 function staticProject(options) {
   return function(req, res, next) {
@@ -11,33 +13,32 @@ function staticProject(options) {
   }
 }
 
-var implementations = {
-  'project': {
-    'static': staticProject,
-  },
-  'db': {
-    'sql': require('./lib/core/core-db-sql'),
-  },
-  'model': {
-    'static': require('./lib/core/core-model'),
-  },
-  'fs': {
-    'local': require('./lib/core/core-fs-local'),
-  },
-}
-
-exports.createServer = function(options) {
+exports.createServer = function(dir) {
   var server = {}
   var managers = {}
+  var directory = dir
+  var options = null
 
-  _.keys(implementations).forEach(function(str) {
-    var opts = options[str]
-    if (!opts) {
-      // TODO
+  server.loadConfiguration = function() {
+    var config = path.join(dir, '')
+    var conf = fs.readFileSync(path.join(directory, 'config.json'), 'utf8') // TODO: async?
+    options = JSON.parse(conf) // TODO: parsing exception
+
+    managers = {}
+    managers.project = staticProject(options.project)
+    managers.db = require('./lib/core/core-db-sql')(options.db)
+    managers.model = require('./lib/core/core-model')(options.model)
+    managers.fs = require('./lib/core/core-fs-local')({ root: dir })
+    managers.push = require('./lib/core/core-push')(options.push)
+    managers.users = require('./lib/core/core-users')(options.users)
+    managers.email = require('./lib/core/core-email')(options.email)
+
+    options.reloadConfiguration = function() {
+      server.loadConfiguration()
     }
-    var manager = implementations[str][opts.manager]
-    managers[str] = manager(opts)
-  })
+  }
+
+  server.loadConfiguration()
 
   function domainWrapper() {
     return function(req, res, next) {
@@ -65,12 +66,9 @@ exports.createServer = function(options) {
     app.use(managers.project)
     app.use(function(req, res, next) {
       var core = req.core
-      _.keys(implementations).forEach(function(str) {
+      _.keys(managers).forEach(function(str) {
         if (str === 'project') return
         core[str] = managers[str](core)
-        core.push = require('./lib/core/core-push')(options)(core)
-        core.users = require('./lib/core/core-users')(options)(core)
-        core.email = require('./lib/core/core-email')(options)(core)
       })
       core.config = options
       return next()

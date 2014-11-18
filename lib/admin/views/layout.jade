@@ -44,10 +44,14 @@ html
                   a(href='#{req.baseUrl}/stats') Statistics
             li
               a(href='#{req.baseUrl}/web') Web development
-            //- li
-            //-   a#menu-configuration.dropdown-toggle(data-toggle='dropdown', href='#') Configuration
-            //-     span.caret
-            //-   ul.dropdown-menu(aria-labelledby='menu-configuration')
+            li
+              a#menu-configuration.dropdown-toggle(data-toggle='dropdown', href='#') Configuration
+                span.caret
+              ul.dropdown-menu(aria-labelledby='menu-configuration')
+                li
+                  a(href='#{req.baseUrl}/configuration/view') View configuration
+                li
+                  a(href='#{req.baseUrl}/configuration/migrate') Schema changes
             //-     li
             //-       a(href='#{req.baseUrl}/configuration/general') General settings
             //-     li

@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  .row
+    .col-lg-12
+      form(action='#{req.baseUrl}/configuration/migrate', method='post')
+        h1 Schema changes
+          small
+            |  
+            a(href='#{req.baseUrl}/configuration/migrate?refresh=yes').btn.btn-primary.btn-xs Reload configuration
+            |  
+            button.btn.btn-primary.btn-xs(type='submit') Run SQL commands
+      hr
+
+      if commands.length === 0
+        p.text-center Schema is up to date
+      else
+        pre= commands.join('\n')

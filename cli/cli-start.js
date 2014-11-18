@@ -20,25 +20,7 @@ var server
 var app = express()
 
 txain(function(callback) {
-  try {
-    fs.readFile(path.join(program.directory, 'config.json'), 'utf8', callback)
-  } catch(err) {
-    return callback(err)
-  }
-})
-.then(function(conf, callback) {
-  try {
-    var config = JSON.parse(conf)
-  } catch(err) {
-    return callback(err)
-  }
-
-  config.fs = {
-    manager: 'local',
-    root: program.directory
-  }
-  
-  var server = backbeam.createServer(config)
+  var server = backbeam.createServer(program.directory)
 
   app.use(require('body-parser').urlencoded({ extended: true }))
 
