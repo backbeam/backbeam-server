@@ -42,156 +42,10 @@ block content
                   aria-controls='dropdown1') New asset…
               li.divider(role='presentation')
               li
-                a(href='#dropdown2', tabindex='-1', role='tab', data-toggle='tab', aria-controls='dropdown2') Close all
-          li.active(role='presentation')
-            a(href='#overview', aria-controls='home', role='tab', data-toggle='tab') Overview
-          li(role='presentation')
-            a(href='#assets', aria-controls='profile', role='tab', data-toggle='tab') Assets
-          li(role='presentation')
-            a(href='#playground', aria-controls='messages', role='tab', data-toggle='tab') Playground
+                a#close-all(href=nolink, tabindex='-1', role='tab', aria-controls='dropdown2') Close all
+          li#editor-latest-tab
 
-        #editor-content.tab-content
-          #overview.tab-pane.active(role='tabpanel')
-            .row
-              .col-lg-12
-                h2 Controllers
-                .table-responsive
-                  table.table.table-bordered.table-striped
-                    colgroup
-                      col.col-xs-1
-                      col.col-xs-7
-                    thead
-                      tr
-                        th Method
-                        th Path
-                        th File
-                        th
-                    tbody
-                      each route in routes
-                        tr
-                          td: span.label.label-success= route.method
-                          td: code= route.path
-                          td= route.file
-                          td
-                            .btn-group.pull-right
-                              a.btn.btn-primary.btn-sm.open-editor(
-                                type='button',
-                                href='#{req.baseUrl}/web/controller/#{route.file}'
-                              ) Edit
-                              a.btn.btn-info.btn-sm(type='button') Test
-            .row
-              .col-lg-6
-                h2 Views
-                .table-responsive
-                  table.table.table-bordered.table-striped
-                    colgroup
-                      col.col-xs-1
-                      col.col-xs-7
-                    thead
-                      tr
-                        th Name
-                    tbody
-                      each view in views
-                        tr
-                          td: a.open-editor(href='#{req.baseUrl}/web/view/#{view}')= view
-              .col-lg-6
-                h2 Libs
-                .table-responsive
-                  table.table.table-bordered.table-striped
-                    colgroup
-                      col.col-xs-1
-                      col.col-xs-7
-                    thead
-                      tr
-                        th Name
-                    tbody
-                      each lib in libs
-                        tr
-                          td: a.open-editor(href='#{req.baseUrl}/web/lib/#{lib}')= lib
-
-          #assets.tab-pane(role='tabpanel')
-            .row
-              .col-lg-12
-                br
-                ol.breadcrumb
-                  li
-                    a(href='#') Home
-                  li
-                    a(href='#') Library
-                  li.active Data
-                .table-responsive
-                  table.table.table-bordered.table-striped
-                    colgroup
-                      col.col-xs-1
-                      col.col-xs-7
-                    thead
-                      tr
-                        th Path
-                        th Mime
-                        th Size
-                        th MaxAge
-                        th
-                    tbody
-                      tr
-                        td: code /foo.jpg
-                        td image/jpeg
-                        td 1Mb
-                        td None
-                        td
-                          .btn-group.pull-right
-                            a.btn.btn-primary.btn-sm(type='button', href='#') Edit
-                            a.btn.btn-danger.btn-sm(type='button', href='#') Delete
-
-          #playground.tab-pane(role='tabpanel')
-            .row
-              .col-lg-5
-                br
-                .panel.panel-default
-                  .panel-heading Request
-                  .panel-body
-                    form(role='form')
-                      .form-group
-                        label(for='method') HTTP method
-                        select.form-control.input-sm(name='method')
-                          option(value='get') GET
-                          option(value='post') POST
-                          option(value='put') PUT
-                          option(value='delete') DELETE
-                      .form-group
-                        label(for='path') Path
-                        input.form-control.input-sm(type='text', name='path', placeholder='/path', value='/')
-                      .form-group
-                        label Request headers
-                        input.form-control.input-sm
-                      .form-group
-                        label Query string
-                        input.form-control.input-sm
-                      .form-group
-                        label Form params
-                        input.form-control.input-sm
-                      .form-group
-                        label Logged user
-                        .input-group
-                          input.form-control.input-sm(type='text')
-                          span.input-group-btn
-                            button.btn.btn-primary.btn-sm(type='button') Choose
-                            button.btn.btn-danger.btn-sm(type='button') No user
-                      button.btn.btn-primary.btn-sm(type='submit') Submit request
-              .col-lg-7
-                br
-                .panel.panel-default
-                  .panel-heading Response
-                  .panel-body
-                    p HTTP Status code
-                    p Response body
-                    textarea.code-editor(rows='5', placeholder='Here you will see the http response')
-                    br
-                    p Response headers
-                    table.table.table-condensed.table-striped
-                      tbody
-                        tr
-                          td Content-Type
-                          td image/jpeg
+      #editors
 
   #open-file.modal(tabindex='-1', role='dialog', aria-labelledby='open-file-label', aria-hidden='true')
     .modal-dialog
@@ -281,17 +135,12 @@ block content
 
 block scripts
   script.
+    backbeam.baseUrl = '#{req.baseUrl}'
+    var tabManager = backbeam.configureWebDevelopment({})
     $('#open-file').on('shown.bs.modal', function(e) {
       $('#quick-search').focus()
     })
-    $(document).on('click', '.open-editor', function(e) {
-      e.preventDefault()
-      var li = $('<li>')
-      var a = $('<a>').text('/foo').attr('data-toggle', 'tab').attr('href', '#foo')
-      li.append(a)
-      $('#editor-tabs').append(li)
-      var content = $('<div>').addClass('tab-pane').attr('id', 'foo')
-      content.load($(this).attr('href'))
-      $('#editor-content').append(content)
-      a.click()
+    $('#close-all').on('click', function(e) {
+      // TODO: prompt
+      tabManager.closeAll()
     })

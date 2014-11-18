@@ -1,0 +1,40 @@
+- var basePath = req.query.path ? req.query.path+'/' : ''
+.row
+  .col-lg-12
+    br
+    ol.breadcrumb
+      li: a.internal(href=nolink, data-href='#{req.baseUrl}/web/assets?') Home
+      - var arr = []
+      each component in basePath.split('/')
+        if component
+          - arr.push(component)
+          li
+            a.internal(href=nolink, data-href='#{req.baseUrl}/web/assets?path=#{arr.join("/")}')= component
+    .table-responsive
+      table.table.table-bordered.table-striped
+        colgroup
+          col.col-xs-1
+          col.col-xs-7
+        thead
+          tr
+            th Path
+            th Mime
+            th Size
+            th MaxAge
+            th
+        tbody
+          each file in files
+            tr
+              td
+                if file.isDirectory
+                  a.internal(href=nolink, data-href='#{req.baseUrl}/web/assets?path=#{basePath}#{file.name}')= file.name
+                else
+                  | #{file.name}
+              td image/jpeg
+              td= file.size
+              td None
+              td
+                .btn-group.pull-right
+                  a.btn.btn-primary.btn-sm(type='button', href='#') Edit
+                  a.btn.btn-danger.btn-sm(type='button', href='#') Delete
+

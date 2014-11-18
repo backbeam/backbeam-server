@@ -11,17 +11,3 @@ br
 .row
   .col-lg-12
     textarea.code-editor(data-mode='html')= source
-
-script.
-  $('.code-editor').each(function() {
-    var mode = $(this).attr('data-mode')
-    var options = {
-      lineNumbers: true,
-      mode: mode
-    }
-    if (mode === 'json') {
-      options.mode = 'javascript'
-      options.json = true
-    }
-    CodeMirror.fromTextArea($(this).get(0), options)
-  })

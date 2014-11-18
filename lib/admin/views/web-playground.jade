@@ -1,0 +1,50 @@
+.row
+  .col-lg-5
+    br
+    .panel.panel-default
+      .panel-heading Request
+      .panel-body
+        form(role='form')
+          .form-group
+            label(for='method') HTTP method
+            select.form-control.input-sm(name='method')
+              option(value='get') GET
+              option(value='post') POST
+              option(value='put') PUT
+              option(value='delete') DELETE
+          .form-group
+            label(for='path') Path
+            input.form-control.input-sm(type='text', name='path', placeholder='/path', value='/')
+          .form-group
+            label Request headers
+            input.form-control.input-sm
+          .form-group
+            label Query string
+            input.form-control.input-sm
+          .form-group
+            label Form params
+            input.form-control.input-sm
+          .form-group
+            label Logged user
+            .input-group
+              input.form-control.input-sm(type='text')
+              span.input-group-btn
+                button.btn.btn-primary.btn-sm(type='button') Choose
+                button.btn.btn-danger.btn-sm(type='button') No user
+          button.btn.btn-primary.btn-sm(type='submit') Submit request
+  .col-lg-7
+    br
+    .panel.panel-default
+      .panel-heading Response
+      .panel-body
+        p HTTP Status code
+        p Response body
+        textarea.code-editor(rows='5', placeholder='Here you will see the http response')
+        br
+        p Response headers
+        table.table.table-condensed.table-striped
+          tbody
+            tr
+              td Content-Type
+              td image/jpeg
+
