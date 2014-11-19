@@ -13,8 +13,11 @@
     .table-responsive
       table.table.table-bordered.table-striped
         colgroup
+          col.col-xs-5
+          col.col-xs-2
+          col.col-xs-2
           col.col-xs-1
-          col.col-xs-7
+          col.col-xs-2
         thead
           tr
             th Path
@@ -30,8 +33,8 @@
                   a.internal(href=nolink, data-href='#{req.baseUrl}/web/assets?path=#{basePath}#{file.name}')= file.name
                 else
                   | #{file.name}
-              td image/jpeg
-              td= file.size
+              td= file.mime
+              td= file.sizestr
               td None
               td
                 .btn-group.pull-right
