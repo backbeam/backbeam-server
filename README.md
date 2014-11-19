@@ -18,12 +18,8 @@ Another important reason is flexibility. Having the opportunity to host your own
 
 ### How does it differ from backbeam.io?
 
-There are many differences in the implementation.
-
-- Our plans for `backbeam-server` is to support many databases such as `redis`, `mysql` and `postgresql`.
-- `backbeam-server` doesn't come with a control panel but you can use your preferred database inspector for administration purposes.
-- In Backbeam.io you can change your data model in the control panel easily thanks to the schema-less nature of the NoSQL databases we use. In `backbeam-server` could be a little more manual.
-- Finally with `backbeam-server` you will have to implement your infrastructure to support scalability, backups, server configuration, security protection, etc.
+- With `backbeam-server` you will have to implement your infrastructure to support scalability, backups, server configuration, security protection, etc.
+- backbeam.io supports code versioning itself. With `backbeam-server` you just need to use your favorite version control tool.
 
 ## Usage
 
@@ -34,9 +30,10 @@ There are many differences in the implementation.
 * Check the database configuration in the generated `config.json` file.
 * Check that `mysql` is running
 * Run `backbeam start`.
-* Browse `http://localhost:3000` in your browser.
+* Browse `http://localhost:3000` in your browser and you will see an example web controller running.
+* Browse `http://localhost:3000/admin` in your browser and you will see the admin panel.
 * Change controllers, assets, etc. You don't need to restart backbeam, just refresh your browser.
-* If you change the data model in `config.json` you need to run: `backbeam migrate` with the server running. That will update your database schema to match your data model schema.
+* If you change the data model in `config.json` you need to run: `backbeam migrate` with the server running or you can go to the admin panel to refresh the configuration (`Configuration → Schmea changes` and then `Reload configuration`). That will show you the required SQL commands to update your database schema. You can run them by clicking on `Run SQL commands`.
 
 ## What does it support?
 
@@ -53,8 +50,7 @@ Both backbeam.io and `backbeam-server` provide the following features
 ## Roadmap
 
 - Almost full `bql` support on top of `mysql`
-- Implementation of email service
-- Users authentication
-- Push notifications
+- Implementation of admin panel
+- Implementation of all features (users authentication, push notifications,...)
 - Finish implementation of `bql` on top of `mysql`
 - Full implementation of `bql` on top of `redis`
