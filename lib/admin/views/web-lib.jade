@@ -1,13 +1,37 @@
+- var formid = 'form-'+id()
 br
-.row
-  .col-lg-12
-    form(role='form')
+form(
+    role='form',
+    method='post',
+    action='#{req.baseUrl}/web/lib/#{req.params.filename}',
+    id=formid
+  )
+  .row
+    .col-lg-12
       .form-group
         .input-group
           input.form-control(type='text', value=req.params.filename)
           span.input-group-btn
-            button.btn.btn-primary(type='button') Save changes
+            button.btn.btn-primary(type='submit') Save changes
 
-.row
-  .col-lg-12
-    textarea.code-editor.full-height(data-mode='javascript')= source
+  .row
+    .col-lg-12
+      textarea(name='source').code-editor.full-height(data-mode='javascript')= source
+
+script.
+  var form = $('##{formid}')
+  form.on('submit', function(e) {
+    e.preventDefault()
+    var textarea = form.find('textarea')
+    var editor = textarea.data('CodeMirrorInstance')
+    textarea.val(editor.getValue())
+
+    $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      data: form.serialize(),
+      dataType: 'json',
+      success: function(data) {
+      },
+    })
+  })

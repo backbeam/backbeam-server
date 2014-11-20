@@ -22,6 +22,8 @@ var app = express()
 txain(function(callback) {
   var server = backbeam.createServer(program.directory)
 
+  app.disable('x-powered-by')
+
   app.use(require('body-parser').urlencoded({ extended: true }))
 
   app.use(require('cookie-parser')('secret'))

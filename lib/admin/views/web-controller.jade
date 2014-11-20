@@ -1,19 +1,43 @@
+- var formid = 'form-'+id()
 br
-.row
-  .col-lg-12
-    form(role='form')
+form(
+    role='form',
+    method='post',
+    action='#{req.baseUrl}/web/controller/#{req.params.filename}',
+    id=formid
+  )
+  .row
+    .col-lg-12
       .form-group
         .input-group
           span.input-group-addon
             - var methods = ['GET', 'POST', 'PUT', 'DELETE']
-            select
+            select(name='method')
               each method in methods
                 option(value=method, selected=(route.method === method ? 'selected' : undefined))= method
-          input.form-control(type='text', value=route.path)
+          input.form-control(type='text', name='path', value=route.path)
           span.input-group-btn
-            button.btn.btn-primary(type='button') Save changes
+            button.btn.btn-primary(type='submit') Save changes
             a.btn.btn-info Test
 
-.row
-  .col-lg-12
-    textarea.code-editor.full-height(data-mode='javascript')= source
+  .row
+    .col-lg-12
+      textarea.code-editor.full-height(name='source', data-mode='javascript')= source
+
+script.
+  var form = $('##{formid}')
+  form.on('submit', function(e) {
+    e.preventDefault()
+    var textarea = form.find('textarea')
+    var editor = textarea.data('CodeMirrorInstance')
+    textarea.val(editor.getValue())
+
+    $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      data: form.serialize(),
+      dataType: 'json',
+      success: function(data) {
+      },
+    })
+  })

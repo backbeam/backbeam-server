@@ -13,18 +13,19 @@ describe('Test email support', function() {
       },
       from: 'user@example.com',
       inline: true,
-    }
-  }
-
-  var email = require('../lib/core/core-email')(options.email)({
-    project: {
-      name: 'shed'
     },
     fs: {
-      manager: 'local',
       root: path.join(__dirname, 'test-app'),
     },
-  })
+  }
+
+  var core = {
+    project: 'shed',
+  }
+
+  core.fs = require('../lib/core/core-fs-local')(options.fs)(core)
+
+  var email = require('../lib/core/core-email')(options.email)(core)
 
   it('#sendMail()', function(done) {
     email.sendMail('confirm', {}, function(err, result) {
