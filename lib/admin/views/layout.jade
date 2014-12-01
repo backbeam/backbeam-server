@@ -9,6 +9,8 @@ html
     link(rel='stylesheet', href='#{req.baseUrl}/css/summernote.css', media='screen')
     link(rel='stylesheet', href='#{req.baseUrl}/css/codemirror.css', media='screen')
     link(rel='stylesheet', href='#{req.baseUrl}/css/sweet-alert.css')
+    link(rel='stylesheet', href='#{req.baseUrl}/css/select2.css')
+    link(rel='stylesheet', href='#{req.baseUrl}/css/select2-bootstrap.css')
     script queue = []
     title Backbeam
   body
@@ -78,4 +80,6 @@ html
     script(src='#{req.baseUrl}/js/codemirror-modes/javascript/javascript.js')
     script(src='#{req.baseUrl}/js/backbeam.js')
     script(src='#{req.baseUrl}/js/sweet-alert.min.js')
+    script(src='#{req.baseUrl}/js/select2.min.js')
+    script(src='#{req.baseUrl}/js/mousetrap.min.js')
     block scripts

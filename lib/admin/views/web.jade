@@ -12,9 +12,7 @@ block content
             ul#options-contents.dropdown-menu(role='menu', aria-labelledby='options')
               li
                 a(data-target='#open-file', tabindex='-1', role='tab', data-toggle='modal', aria-controls='dropdown1') Open… 
-                  kbd: kbd cmd
-                    | + 
-                    kbd O
+                  kbd cmd+shift+o
               li.divider(role='presentation')
               li
                 a(data-target='#new-view',
@@ -50,11 +48,7 @@ block content
   #open-file.modal(tabindex='-1', role='dialog', aria-labelledby='open-file-label', aria-hidden='true')
     .modal-dialog
       .modal-content
-        .modal-body
-          form(role='form')
-            .form-group
-              label(for='quick-search') Start writing the name of any view, controller or lib
-              input#quick-search.form-control(type='text', placeholder='')
+        input#quick-search(style='width:100%')
 
   #new-view.modal(tabindex='-1', role='dialog', aria-labelledby='new-view-label', aria-hidden='true')
     form(role='form')
@@ -138,9 +132,61 @@ block scripts
     backbeam.baseUrl = '#{req.baseUrl}'
     var tabManager = backbeam.configureWebDevelopment({})
     $('#open-file').on('shown.bs.modal', function(e) {
-      $('#quick-search').focus()
+      $('#quick-search').select2('open')
     })
     $('#close-all').on('click', function(e) {
       // TODO: prompt
       tabManager.closeAll()
     })
+    $('#quick-search').select2({
+      placeholder: 'Start writing the name of any view, controller or lib',
+      query: function(q) {
+        var query = q.term
+        var quicksearch = backbeam.quicksearch || []
+
+        function matches(search) {
+          var str = search.toLowerCase()
+          var n = 0
+          for (var i=0; i<query.length; i++) {
+            n = str.indexOf(query.charAt(i), n)
+            if (n === -1) return false
+          }
+          return true
+        }
+
+        var data = []
+
+        if (query) {
+          quicksearch.forEach(function(item) {
+            var text = item.text
+            var search = item.search
+            if (matches(search)) {
+              data.push({
+                id: item.id,
+                text: text,
+              })
+            }
+          })
+        }
+
+        q.callback({results: data})
+      }
+    }).on('change', function(e) {
+      var url = e.val
+      var name = backbeam.quicksearchNames[e.val]
+      tabManager.addTab({
+        url: backbeam.baseUrl+url,
+        name: name,
+      })
+      $('#open-file').modal('hide')
+      $('#quick-search').select2('val', '')
+    }).on('select2-close', function(e) {
+      $('#open-file').modal('hide')
+      $('.navbar-brand').focus() // needed in safari to make the shortcut work next time
+    })
+
+    Mousetrap.bind(['mod+shift+o', 'mod+o'], function(e) {
+      e.preventDefault()
+      $('#open-file').modal('show')
+    })
+
