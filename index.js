@@ -21,7 +21,8 @@ exports.createServer = function(dir) {
 
   server.loadConfiguration = function() {
     var config = path.join(dir, '')
-    var conf = fs.readFileSync(path.join(directory, 'config.json'), 'utf8') // TODO: async?
+    var sufix = process.env.NODE_ENV ? '-'+process.env.NODE_ENV : ''
+    var conf = fs.readFileSync(path.join(directory, 'config'+sufix+'.json'), 'utf8') // TODO: async?
     options = JSON.parse(conf) // TODO: parsing exception
 
     managers = {}

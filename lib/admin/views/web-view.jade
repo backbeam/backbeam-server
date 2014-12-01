@@ -1,18 +1,15 @@
 - var formid = 'form-'+id()
 br
-form(
-    role='form',
-    method='post',
-    action='#{req.baseUrl}/web/view/#{req.params.filename}',
-    id=formid
-  )
+form(role='form', method='post', action='#{req.baseUrl}/web/view', id=formid)
+  input(type='hidden', name='oldfilename', value=req.params.filename)
   .row
     .col-lg-12
       .form-group
         .input-group
-          input.form-control(type='text', value=req.params.filename)
+          input.form-control(type='text', name='filename', value=req.params.filename)
           span.input-group-btn
             button.btn.btn-primary(type='submit') Save changes
+            a.btn.btn-danger(href=nolink, data-url='#{req.baseUrl}/web/view/#{req.params.filename}?_method=DELETE') Delete
 
   .row
     .col-lg-12
@@ -32,6 +29,36 @@ script.
       data: form.serialize(),
       dataType: 'json',
       success: function(data) {
+        var filename = form.find('[name=filename]').val()
+        form.find('[name=oldfilename]').val(filename)
+        tabManager.updateCurrentTabName(filename)
+        var url = backbeam.baseUrl+'/web/view/'+filename
+        tabManager.updateCurrentTabURL(url)
+        tabManager.refreshOverview()
       },
+    })
+  })
+
+  form.on('click', '.btn-danger', function(e) {
+    e.preventDefault()
+    var url = $(this).attr('data-url')
+    swal({
+      title: 'Are you sure?',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#DD6B55',
+      confirmButtonText: 'Yes, delete it!',
+      closeOnConfirm: false
+    }, function() {
+      $.ajax({
+        url: url,
+        type: 'post',
+        dataType: 'json',
+        success: function(data) {
+          swal('Deleted!', 'The file has been deleted', 'success')
+          tabManager.closeActiveTab()
+          tabManager.refreshOverview()
+        },
+      })
     })
   })
