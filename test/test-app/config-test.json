@@ -8,6 +8,18 @@
     "manager": "static",
     "entities": [
       {
+        "id": "user",
+        "fields": [
+          {
+            "id": "items",
+            "type": "reference",
+            "entity": "item",
+            "inverse": "author",
+            "relationship": "many-to-one"
+          }
+        ]
+      },
+      {
         "id": "item",
         "fields": [
           {
@@ -68,6 +80,13 @@
           {
             "id": "boolean",
             "type": "boolean"
+          },
+          {
+            "id": "author",
+            "type": "reference",
+            "entity": "user",
+            "inverse": "items",
+            "relationship": "one-to-many"
           }
         ]
       }
