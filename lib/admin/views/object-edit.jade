@@ -128,10 +128,41 @@ block content
                   .col-sm-10
                     .input-group
                       input(type='hidden', name='set-#{field.id}', value=(reference && reference._id))
-                      input.form-control(type='text', value=(reference && reference.description()))
+                      input.form-control(type='text', value=(reference && reference.description()), readonly)
                       span.input-group-btn
-                        button.btn.btn-primary.choose-object(type='button', data-entity=field.entity) Change
-                        //- button.btn.btn-info(type='button') Add
+                        button.btn.btn-primary.choose-object(type='button',
+                          data-entity=field.entity, data-title='Choose an object') Choose
+              else
+                .form-group
+                  label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
+                  .col-sm-10
+                    .input-group
+                      input.form-control(type='text', readonly)
+                      span.input-group-btn
+                        button.btn.btn-primary.browse-relationship(type='button',
+                          data-entity=field.entity, data-field=field.id, data-inverse=field.inverse,
+                          data-title='Browse relationship') Browse
+                        button.btn.btn-info.add-object(type='button',
+                          data-entity=field.entity, data-field=field.id,
+                          data-title='Choose an object') Add
+                .form-group(id='#{field.id}-objects-add', style='display:none')
+                  .col-sm-10.col-sm-offset-2
+                    p Objects to add
+                    .row.relationship-objects
+                      //- .col-md-3.col-sm-4
+                      //-   .input-group(style='margin-bottom: 5px')
+                      //-     input.form-control.input-sm(type='text', readonly)
+                      //-     span.input-group-btn
+                      //-       button.btn.btn-default.btn-sm(type='button', title='Do not remove'): span.glyphicon.glyphicon-remove
+                .form-group(id='#{field.id}-objects-rem', style='display:none')
+                  .col-sm-10.col-sm-offset-2
+                    p Objects to remove
+                    .row.relationship-objects
+                      //- .col-md-3.col-sm-4
+                      //-   .input-group(style='margin-bottom: 5px')
+                      //-     input.form-control.input-sm(type='text', readonly)
+                      //-     span.input-group-btn
+                      //-       button.btn.btn-default.btn-sm(type='button', title='Do not remove'): span.glyphicon.glyphicon-remove
         .form-group
           .col-sm-offset-2.col-sm-10
             button.btn.btn-primary(type='submit') Save changes
@@ -149,9 +180,75 @@ block scripts
       e.preventDefault()
       var btn = $(this)
       var entity = btn.attr('data-entity')
-      backbeam.objectChooser.show(entity, null, function(id, description) {
+      var title = btn.attr('data-title')
+      var params = 'action='+btn.text()
+      backbeam.objectChooser.show(entity, params, title, function(id, description) {
         var inputGroup = btn.closest('.input-group')
         inputGroup.find('input[type=hidden]').val(id)
         inputGroup.find('input[type=text]').val(description)
       })
+    })
+    form.on('click', '.browse-relationship', function(e) {
+      e.preventDefault()
+      var btn = $(this)
+      var entity = btn.attr('data-entity')
+      var title = btn.attr('data-title')
+      var field = btn.attr('data-field')
+      var inverse = btn.attr('data-inverse')
+      var params = 'action=Remove'
+      params += '&where='+inverse+'&value=#{req.params.id}'
+      backbeam.objectChooser.show(entity, params, title, function(id, description) {
+        var section = $('#'+field+'-objects-rem')
+        var html = [
+          '<div class="col-md-3 col-sm-4 group">',
+          '<div style="margin-bottom: 5px" class="input-group">',
+          '<input type="hidden" name="rem-'+field+'">',
+          '<input type="text" readonly="" class="form-control input-sm">',
+          '<span class="input-group-btn">',
+          '<button type="button" title="Do not remove" class="btn btn-default btn-sm">',
+          '<span class="glyphicon glyphicon-remove cancel-action">',
+          '</span></button></span></div></div>',
+        ].join(' ')
+        var div = $(html)
+        div.find('input[type=hidden]').val(id)
+        div.find('input[type=text]').val(description)
+        section.find('.relationship-objects').append(div)
+        section.show()
+      })
+    })
+    form.on('click', '.add-object', function(e) {
+      e.preventDefault()
+      var btn = $(this)
+      var entity = btn.attr('data-entity')
+      var title = btn.attr('data-title')
+      var field = btn.attr('data-field')
+      var params = 'action='+btn.text()
+      backbeam.objectChooser.show(entity, params, title, function(id, description) {
+        var section = $('#'+field+'-objects-add')
+        var html = [
+          '<div class="col-md-3 col-sm-4 group">',
+          '<div style="margin-bottom: 5px" class="input-group">',
+          '<input type="hidden" name="add-'+field+'">',
+          '<input type="text" readonly="" class="form-control input-sm">',
+          '<span class="input-group-btn">',
+          '<button type="button" title="Do not add" class="btn btn-default btn-sm">',
+          '<span class="glyphicon glyphicon-remove cancel-action">',
+          '</span></button></span></div></div>',
+        ].join(' ')
+        var div = $(html)
+        div.find('input[type=hidden]').val(id)
+        div.find('input[type=text]').val(description)
+        section.find('.relationship-objects').append(div)
+        section.show()
+      })
+    })
+    form.on('click', '.relationship-objects .cancel-action', function(e) {
+      e.preventDefault()
+      var div = $(this).closest('.group')
+      var objects = div.closest('.relationship-objects')
+      div.remove()
+      var size = objects.find('div').size()
+      if (size === 0) {
+        objects.closest('.form-group').hide()
+      }
     })

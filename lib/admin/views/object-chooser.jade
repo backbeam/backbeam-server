@@ -4,6 +4,8 @@ include cell-field-value
   .col-lg-12
     - var entity = core.model.findEntity(req.params.entity)
     - var fields = entity.fields
+    - var btnclass = req.query.where ? 'btn-danger' : 'btn-primary'
+    - var btntext = req.query.action
 
     .table-responsive
       table.table.table-bordered.table-striped
@@ -22,8 +24,8 @@ include cell-field-value
                 +field_cell_value(objects, field, value)
               td
                 .btn-group.pull-right
-                  a.btn.btn-primary.btn-sm.object-choose(type='button',
-                    href=nolink, data-id=object._id, data-description=object.description()) Choose
+                  a.btn.btn-sm.object-choose(type='button', class=btnclass,
+                    href=nolink, data-id=object._id, data-description=object.description())= btntext
 
     ul.pagination
       li.disabled
