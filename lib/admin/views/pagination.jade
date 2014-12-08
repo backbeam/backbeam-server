@@ -1,0 +1,24 @@
+- var pages = Math.ceil(count / req.query.limit)
+- function buildQuery(params) { return querystring.stringify(_.defaults(params, req.query)) }
+
+if pages > 1
+  ul.pagination
+    if req.query.offset === 0
+      li.disabled
+        a(href=nolink) «
+    else
+      li
+        a(href='#{req.baseUrl}#{req.path}?'+buildQuery({ offset: req.query.offset - req.query.limit })) «
+
+    - var n = 0
+    while n < pages
+      - var offset = n*req.query.limit
+      li(class=(offset === req.query.offset ? 'active' : void 0))
+        a(href='#{req.baseUrl}#{req.path}?'+buildQuery({ offset: offset }))= ++n
+
+    if req.query.offset + req.query.limit >= count
+      li.disabled
+        a(href=nolink) »
+    else
+      li
+        a(href='#{req.baseUrl}#{req.path}?'+buildQuery({ offset: req.query.offset + req.query.limit })) »
