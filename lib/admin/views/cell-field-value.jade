@@ -20,5 +20,8 @@ mixin field_cell_value(objects, field, value)
       if field.relationship.indexOf('one-') === 0
         - var reference = objects[value]
         td= reference ? reference.description() : value
+      else
+        //- TODO: count of objects
+        td
     default
       td= value

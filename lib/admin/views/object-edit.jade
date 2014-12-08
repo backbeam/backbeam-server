@@ -12,6 +12,7 @@ block content
           - var value = object.get(field.id)
           case field.type
             when 'text'
+              - value = field.id === 'password' && entity.id === 'user' ? void 0 : value
               .form-group
                 label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
