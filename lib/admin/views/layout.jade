@@ -71,6 +71,16 @@ html
     .container(style='margin-top: 60px')
       block content
 
+    #object-chooser.modal
+      .modal-dialog.modal-lg
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal')
+              span(aria-hidden='true') ×
+              span.sr-only Close
+            h4.modal-title Choose an object
+          .modal-body
+            p Loading…
 
     script(src='#{req.baseUrl}/js/jquery-1.11.1.min.js')
     script(src='#{req.baseUrl}/js/bootstrap.min.js')
@@ -82,4 +92,5 @@ html
     script(src='#{req.baseUrl}/js/sweet-alert.min.js')
     script(src='#{req.baseUrl}/js/select2.min.js')
     script(src='#{req.baseUrl}/js/mousetrap.min.js')
+    script backbeam.baseUrl = '#{req.baseUrl}'
     block scripts

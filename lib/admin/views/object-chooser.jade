@@ -1,0 +1,44 @@
+include cell-field-value
+
+.row
+  .col-lg-12
+    - var entity = core.model.findEntity(req.params.entity)
+    - var fields = entity.fields
+
+    .table-responsive
+      table.table.table-bordered.table-striped
+        thead
+          tr
+            each field in fields
+              th= _s.humanize(field.id)
+            th
+        tbody
+          each id in ids
+            - var object = objects[id]
+            tr
+              - var description
+              each field in fields
+                - var value = object.get(field.id)
+                +field_cell_value(objects, field, value)
+              td
+                .btn-group.pull-right
+                  a.btn.btn-primary.btn-sm.object-choose(type='button',
+                    href=nolink, data-id=object._id, data-description=object.description()) Choose
+
+    ul.pagination
+      li.disabled
+        a(href='#') «
+      li.active
+        a(href='#') 1
+      li
+        a(href='#') 2
+      li
+        a(href='#') 3
+      li
+        a(href='#') 4
+      li
+        a(href='#') 5
+      li
+        a(href='#') »
+
+

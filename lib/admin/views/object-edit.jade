@@ -119,15 +119,18 @@ block content
                   label
                     input(type='checkbox', name='set-#{field.id}', checked=(value ? 'checked' : undefined))
                     |  #{_s.humanize(field.id)}
-            when 'relationship'
-              .form-group
-                label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
-                .col-sm-10
-                  .input-group
-                    input.form-control(type='text')
-                    span.input-group-btn
-                      button.btn.btn-primary(type='button') Browse
-                      button.btn.btn-info(type='button') Add
+            when 'reference'
+              if field.relationship.indexOf('one-') === 0
+                - var reference = objects[value]
+                .form-group
+                  label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
+                  .col-sm-10
+                    .input-group
+                      input(type='hidden', name='set-#{field.id}', value=(reference && reference._id))
+                      input.form-control(type='text', value=(reference && reference.description()))
+                      span.input-group-btn
+                        button.btn.btn-primary.choose-object(type='button', data-entity=field.entity) Change
+                        //- button.btn.btn-info(type='button') Add
         .form-group
           .col-sm-offset-2.col-sm-10
             button.btn.btn-primary(type='submit') Save changes
@@ -139,5 +142,15 @@ block scripts
       $('.summernote', form).each(function() {
         var input = $(this).prev()
         input.val($(this).code())
+      })
+    })
+    form.on('click', '.choose-object', function(e) {
+      e.preventDefault()
+      var btn = $(this)
+      var entity = btn.attr('data-entity')
+      backbeam.objectChooser.show(entity, null, function(id, description) {
+        var inputGroup = btn.closest('.input-group')
+        inputGroup.find('input[type=hidden]').val(id)
+        inputGroup.find('input[type=text]').val(description)
       })
     })

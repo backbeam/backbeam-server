@@ -1,0 +1,24 @@
+mixin field_cell_value(objects, field, value)
+  case field.type
+    when 'date'
+      td= dateutils.formatDatetime(value, 'ymd', 'UTC')
+    when 'day'
+      td= dateutils.formatDay(value, 'ymd')
+    when 'boolean'
+      td
+        if value === true
+          | Yes
+        else if value === false
+          | No
+    when 'json'
+      td
+        if _.isArray(value)
+          | [Array]
+        else if _.isObject(value)
+          | [Object]
+    when 'reference'
+      if field.relationship.indexOf('one-') === 0
+        - var reference = objects[value]
+        td= reference ? reference.description() : value
+    default
+      td= value

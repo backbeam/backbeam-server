@@ -1,5 +1,7 @@
 extends layout
 
+include cell-field-value
+
 block content
   .row
     .col-lg-12
@@ -12,9 +14,6 @@ block content
 
       .table-responsive
         table.table.table-bordered.table-striped
-          colgroup
-            col.col-xs-1
-            col.col-xs-7
           thead
             tr
               each field in fields
@@ -26,25 +25,7 @@ block content
               tr
                 each field in fields
                   - var value = object.get(field.id)
-                  case field.type
-                    when 'date'
-                      td= dateutils.formatDatetime(value, 'ymd', 'UTC')
-                    when 'day'
-                      td= dateutils.formatDay(value, 'ymd')
-                    when 'boolean'
-                      td
-                        if value === true
-                          | Yes
-                        else if value === false
-                          | No
-                    when 'json'
-                      td
-                        if _.isArray(value)
-                          | [Array]
-                        else if _.isObject(value)
-                          | [Object]
-                    default
-                      td= value
+                  +field_cell_value(objects, field, value)
                 td
                   .btn-group.pull-right
                     a.btn.btn-primary.btn-sm(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/#{id}') Edit
