@@ -103,9 +103,10 @@ block content
                 label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   .input-group
-                    input.form-control(type='text')
+                    input(type='hidden')
+                    input.form-control(type='text', readonly)
                     span.input-group-btn
-                      button.btn.btn-info(type='button') Search coordinates
+                      button.btn.btn-info.choose-location(type='button') Search coordinates
             when 'select'
               .form-group
                 label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)

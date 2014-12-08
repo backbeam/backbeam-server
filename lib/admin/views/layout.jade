@@ -82,6 +82,31 @@ html
           .modal-body
             p Loading…
 
+    #location-chooser.modal
+      .modal-dialog.modal-lg
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal')
+              span(aria-hidden='true') ×
+              span.sr-only Close
+            h4.modal-title Choose a location
+          .modal-body
+            .row
+              .col-md-5
+                form.form-search
+                  .form-group
+                    .input-group
+                      input.form-control.input-sm(type='text', placeholder='Write an address here')
+                      span.input-group-btn
+                        button.btn.btn-default.btn-sm(type='submit')
+                          span.glyphicon.glyphicon-search
+                ul
+              .col-md-7
+                #location-chooser-map(style='height: 400px')
+          .modal-footer
+            a.btn.btn-default(href=nolink, data-dismiss='modal') Cancel
+
+
     script(src='#{req.baseUrl}/js/jquery-1.11.1.min.js')
     script(src='#{req.baseUrl}/js/bootstrap.min.js')
     script(src='#{req.baseUrl}/js/bootstrap-datepicker.js')
@@ -92,5 +117,6 @@ html
     script(src='#{req.baseUrl}/js/sweet-alert.min.js')
     script(src='#{req.baseUrl}/js/select2.min.js')
     script(src='#{req.baseUrl}/js/mousetrap.min.js')
+    script(src='https://maps.googleapis.com/maps/api/js')
     script backbeam.baseUrl = '#{req.baseUrl}'
     block scripts
