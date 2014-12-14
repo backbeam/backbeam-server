@@ -60,6 +60,7 @@ describe('Test API for data manipulation', function() {
           form: {
             'set-name': name1,
             'set-author': userid,
+            'set-units': 100,
           },
         })
         .end(function(err, res) {
@@ -97,7 +98,7 @@ describe('Test API for data manipulation', function() {
           assert.ok(res.body.objects[item1id])
           assert.ok(res.body.objects[item1id]['author#r'], userid)
           assert.ok(res.body.objects[userid]['email#t'], email)
-          
+
           done()
         })
     })
@@ -112,6 +113,7 @@ describe('Test API for data manipulation', function() {
           form: {
             'set-name': name2,
             'set-author': userid,
+            'set-units': 200,
           },
         })
         .end(function(err, res) {
@@ -126,7 +128,75 @@ describe('Test API for data manipulation', function() {
         })
     })
 
-    it('should perform a query with join to many', function(done) {
+    it('should perform a query with join to many using `first`', function(done) {
+      request(app)
+        .api({
+          path: '/api/data/user/',
+          method: 'get',
+          shared: shared,
+          secret: secret,
+          qs: {
+            q: 'join first 2 items',
+          },
+        })
+        .end(function(err, res) {
+          assert.ifError(err)
+          assert.equal(res.statusCode, 200)
+          assert.ok(res.body)
+          assert.equal(res.body.status, 'Success')
+          assert.ok(res.body.ids)
+          assert.equal(res.body.ids.length, 1)
+          assert.equal(res.body.ids[0], userid)
+          assert.ok(res.body.objects)
+          // main object
+          assert.ok(res.body.objects[userid])
+          assert.ok(res.body.objects[userid]['items#r'])
+          assert.ok(res.body.objects[userid]['items#r'].objects)
+          assert.ok(_.isEqual(res.body.objects[userid]['items#r'].objects, [item1id, item2id]))
+          // objects
+          assert.ok(res.body.objects[item1id])
+          assert.ok(res.body.objects[item1id]['author#r'], userid)
+          assert.ok(res.body.objects[item2id])
+          assert.ok(res.body.objects[item2id]['author#r'], userid)
+
+          done()
+        })
+    })
+
+    it('should perform a query with join to many using `first` limiting the output', function(done) {
+      request(app)
+        .api({
+          path: '/api/data/user/',
+          method: 'get',
+          shared: shared,
+          secret: secret,
+          qs: {
+            q: 'join first 1 items',
+          },
+        })
+        .end(function(err, res) {
+          assert.ifError(err)
+          assert.equal(res.statusCode, 200)
+          assert.ok(res.body)
+          assert.equal(res.body.status, 'Success')
+          assert.ok(res.body.ids)
+          assert.equal(res.body.ids.length, 1)
+          assert.equal(res.body.ids[0], userid)
+          assert.ok(res.body.objects)
+          // main object
+          assert.ok(res.body.objects[userid])
+          assert.ok(res.body.objects[userid]['items#r'])
+          assert.ok(res.body.objects[userid]['items#r'].objects)
+          assert.ok(_.isEqual(res.body.objects[userid]['items#r'].objects, [item1id]))
+          // objects
+          assert.ok(res.body.objects[item1id])
+          assert.ok(res.body.objects[item1id]['author#r'], userid)
+
+          done()
+        })
+    })
+
+    it('should perform a query with join to many using `last`', function(done) {
       request(app)
         .api({
           path: '/api/data/user/',
@@ -146,9 +216,50 @@ describe('Test API for data manipulation', function() {
           assert.equal(res.body.ids.length, 1)
           assert.equal(res.body.ids[0], userid)
           assert.ok(res.body.objects)
-          // assert.ok(res.body.objects[item1id])
-          // assert.ok(res.body.objects[item1id]['author#r'], userid)
-          // assert.ok(res.body.objects[userid]['email#t'], email)
+          // main object
+          assert.ok(res.body.objects[userid])
+          assert.ok(res.body.objects[userid]['items#r'])
+          assert.ok(res.body.objects[userid]['items#r'].objects)
+          assert.ok(_.isEqual(res.body.objects[userid]['items#r'].objects, [item2id, item1id]))
+          // objects
+          assert.ok(res.body.objects[item1id])
+          assert.ok(res.body.objects[item1id]['author#r'], userid)
+          assert.ok(res.body.objects[item2id])
+          assert.ok(res.body.objects[item2id]['author#r'], userid)
+
+          done()
+        })
+    })
+
+    it('should perform a query with join to many using having', function(done) {
+      request(app)
+        .api({
+          path: '/api/data/user/',
+          method: 'get',
+          shared: shared,
+          secret: secret,
+          qs: {
+            q: 'join last 2 items having units > ?',
+            params: [100],
+          },
+        })
+        .end(function(err, res) {
+          assert.ifError(err)
+          assert.equal(res.statusCode, 200)
+          assert.ok(res.body)
+          assert.equal(res.body.status, 'Success')
+          assert.ok(res.body.ids)
+          assert.equal(res.body.ids.length, 1)
+          assert.equal(res.body.ids[0], userid)
+          assert.ok(res.body.objects)
+          // main object
+          assert.ok(res.body.objects[userid])
+          assert.ok(res.body.objects[userid]['items#r'])
+          assert.ok(res.body.objects[userid]['items#r'].objects)
+          assert.ok(_.isEqual(res.body.objects[userid]['items#r'].objects, [item2id]))
+          // objects
+          assert.ok(res.body.objects[item2id])
+          assert.ok(res.body.objects[item2id]['author#r'], userid)
 
           done()
         })
