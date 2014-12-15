@@ -187,6 +187,7 @@ describe('Test API for data manipulation', function() {
           assert.ok(res.body.objects[userid])
           assert.ok(res.body.objects[userid]['items#r'])
           assert.ok(res.body.objects[userid]['items#r'].objects)
+          assert.equal(res.body.objects[userid]['items#r'].count, 2)
           assert.ok(_.isEqual(res.body.objects[userid]['items#r'].objects, [item1id]))
           // objects
           assert.ok(res.body.objects[item1id])
@@ -394,7 +395,6 @@ describe('Test API for data manipulation', function() {
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.body.id)
-          item2id = res.body.id
 
           done()
         })
@@ -420,9 +420,16 @@ describe('Test API for data manipulation', function() {
           assert.equal(res.body.ids.length, 1)
           assert.equal(res.body.ids[0], userid)
           assert.ok(res.body.objects)
-          // assert.ok(res.body.objects[item1id])
-          // assert.ok(res.body.objects[item1id]['author#r'], userid)
-          // assert.ok(res.body.objects[userid]['email#t'], email)
+          // main object
+          assert.ok(res.body.objects[userid])
+          assert.ok(res.body.objects[userid]['items#r'])
+          assert.ok(res.body.objects[userid]['items#r'].objects)
+          assert.ok(_.isEqual(res.body.objects[userid]['items#r'].objects, [item2id, item1id]))
+          // objects
+          assert.ok(res.body.objects[item1id])
+          assert.ok(res.body.objects[item1id]['author#r'], userid)
+          assert.ok(res.body.objects[item2id])
+          assert.ok(res.body.objects[item2id]['author#r'], userid)
 
           done()
         })
