@@ -293,6 +293,37 @@ describe('Test API for data manipulation', function() {
         })
     })
 
+    it('should perform a query with where this in ?.prop', function(done) {
+      request(app)
+        .api({
+          path: '/api/data/item/',
+          method: 'get',
+          shared: shared,
+          secret: secret,
+          qs: {
+            q: 'where this in ?.items join author',
+            params: ['user/'+userid],
+          },
+        })
+        .end(function(err, res) {
+          assert.ifError(err)
+          assert.equal(res.statusCode, 200)
+          assert.ok(res.body)
+          assert.equal(res.body.status, 'Success')
+          assert.ok(res.body.ids)
+          assert.equal(res.body.ids.length, 2)
+          assert.ok(_.isEqual(res.body.ids, [item1id, item2id]))
+          assert.ok(res.body.objects)
+          assert.ok(res.body.objects[item2id])
+          assert.equal(res.body.objects[item2id]['author#r'], userid)
+          assert.ok(res.body.objects[item1id])
+          assert.equal(res.body.objects[item1id]['author#r'], userid)
+          assert.ok(res.body.objects[userid])
+
+          done()
+        })
+    })
+
   })
 
   describe('Test using add and rem commands', function() {
