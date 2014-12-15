@@ -20,6 +20,22 @@
         ]
       },
       {
+        "id": "category",
+        "fields": [
+          {
+            "id": "name",
+            "type": "text"
+          },
+          {
+            "id": "items",
+            "type": "reference",
+            "entity": "item",
+            "inverse": "category",
+            "relationship": "many-to-one"
+          }
+        ]
+      },
+      {
         "id": "item",
         "fields": [
           {
@@ -85,6 +101,13 @@
             "id": "author",
             "type": "reference",
             "entity": "user",
+            "inverse": "items",
+            "relationship": "one-to-many"
+          },
+          {
+            "id": "category",
+            "type": "reference",
+            "entity": "category",
             "inverse": "items",
             "relationship": "one-to-many"
           }
