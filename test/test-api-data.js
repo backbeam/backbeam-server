@@ -32,6 +32,7 @@ describe('Test API for data manipulation', function() {
         secret: secret,
         form: {
           'set-name': name1,
+          'set-units': 100,
         },
       })
       .end(function(err, res) {
@@ -120,6 +121,7 @@ describe('Test API for data manipulation', function() {
         secret: secret,
         form: {
           'set-name': name1,
+          'incr-units': 1,
         },
       })
       .end(function(err, res) {
@@ -133,6 +135,7 @@ describe('Test API for data manipulation', function() {
         
         var object = res.body.objects[id1]
         assert.equal(object['name#t'], name1)
+        assert.equal(object['units#n'], 101)
         assert.ok(object.created_at)
         assert.ok(object.updated_at)
         assert.equal(object['type'], 'item')
