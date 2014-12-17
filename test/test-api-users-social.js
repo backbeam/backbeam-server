@@ -23,7 +23,7 @@ describe('Test API for social signups', function() {
     .end(done)
   })
 
-  it('should signup using facebook', function(done) {
+  it('should sign up using facebook', function(done) {
     utils.credentials.facebook(function(err, credentials) {
       assert.ifError(err)
       if (!credentials) return done()
@@ -49,6 +49,26 @@ describe('Test API for social signups', function() {
       })
       .end(done)
     })
+  })
+
+  it('should fail to sign up using facebook', function(done) {
+    request(app)
+      .api({
+        path: '/api/user/facebook/signup',
+        method: 'post',
+        shared: shared,
+        secret: secret,
+        form: {
+          access_token: 'xxxx',
+        },
+      })
+      .end(function(err, res) {
+        assert.ifError(err)
+        assert.equal(res.statusCode, 500)
+        assert.ok(res.body)
+        assert.equal(res.body.status, 'FacebookError')
+        done()
+      })
   })
 
   it('should signup using google plus', function(done) {
@@ -79,6 +99,26 @@ describe('Test API for social signups', function() {
     })
   })
 
+  it('should fail to sign up using google plus', function(done) {
+    request(app)
+      .api({
+        path: '/api/user/googleplus/signup',
+        method: 'post',
+        shared: shared,
+        secret: secret,
+        form: {
+          access_token: 'xxxx',
+        },
+      })
+      .end(function(err, res) {
+        assert.ifError(err)
+        assert.equal(res.statusCode, 500)
+        assert.ok(res.body)
+        assert.equal(res.body.status, 'GooglePlusError')
+        done()
+      })
+  })
+
   it('should signup using twitter', function(done) {
     utils.credentials.twitter(function(err, credentials) {
       assert.ifError(err)
@@ -105,6 +145,27 @@ describe('Test API for social signups', function() {
       })
       .end(done)
     })
+  })
+
+  it('should fail to sign up using twitter', function(done) {
+    request(app)
+      .api({
+        path: '/api/user/twitter/signup',
+        method: 'post',
+        shared: shared,
+        secret: secret,
+        form: {
+          oauth_token: 'xxxx',
+          oauth_token_secret: 'xxxx',
+        },
+      })
+      .end(function(err, res) {
+        assert.ifError(err)
+        assert.equal(res.statusCode, 500)
+        assert.ok(res.body)
+        assert.equal(res.body.status, 'TwitterError')
+        done()
+      })
   })
 
 })
