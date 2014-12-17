@@ -5,6 +5,8 @@ var domain = require('domain')
 var fs = require('fs')
 var txain = require('txain')
 
+require('node-errors').defineErrorType('external')
+
 function staticProject(options) {
   return function(req, res, next) {
     var core = req.core
@@ -13,7 +15,7 @@ function staticProject(options) {
   }
 }
 
-exports.createServer = function(dir) {
+exports.createServer = function(dir, extend) {
   var server = {}
   var managers = {}
   var directory = dir
@@ -24,6 +26,9 @@ exports.createServer = function(dir) {
     var sufix = process.env.NODE_ENV ? '-'+process.env.NODE_ENV : ''
     var conf = fs.readFileSync(path.join(directory, 'config'+sufix+'.json'), 'utf8') // TODO: async?
     options = JSON.parse(conf) // TODO: parsing exception
+    if (extend) {
+      options = _.extend(options, extend)
+    }
 
     managers = {}
     managers.project = staticProject(options.project)

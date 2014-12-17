@@ -2,10 +2,10 @@ var path = require('path')
 var backbeam = require('../index')
 var express = require('express')
 
-module.exports = function() {
+module.exports = function(extend) {
   var app = express()
 
-  var server = backbeam.createServer(path.join(__dirname, 'test-app'))
+  var server = backbeam.createServer(path.join(__dirname, 'test-app'), extend)
 
   app.use(require('body-parser').urlencoded({ extended: true }))
 

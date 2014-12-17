@@ -1,6 +1,6 @@
 {
   "name": "backbeam-server",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "Open Source backend platform compatible with backbeam.io",
   "main": "index.js",
   "scripts": {
@@ -50,13 +50,15 @@
     "txain": "^0.4.0",
     "underscore": "^1.7.0",
     "underscore.string": "^2.3.3",
-    "useragent": "^2.1.0"
+    "useragent": "^2.1.0",
+    "xamel": "^0.3.1"
   },
   "devDependencies": {
     "istanbul": "^0.3.2",
     "mocha": "^1.21.4",
     "mocha-lcov-reporter": "0.0.1",
     "nodemailer-stub-transport": "^0.1.4",
+    "refresh-token": "^0.1.0",
     "supertest": "^0.13.0"
   },
   "bin": {

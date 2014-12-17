@@ -14,13 +14,13 @@ program
   .parse(process.argv)
 
 console.log('Creating project at %s', program.directory)
+var projectName = path.basename(program.directory)
 
 txain(function(callback) {
   // configuration
   var configFile = path.join(program.directory, 'config.json')
   var exists = fs.existsSync(configFile)
   if (exists) return callback()
-  var projectName = path.basename(program.directory)
   var data = {
     project: {
       manager: 'static',
@@ -122,6 +122,30 @@ txain(function(callback) {
   if (exists) return callback()
   var code = 'response.send("Hello world")'
   fs.writeFile(controllerFile, code, 'utf8', callback)
+})
+.then(function(callback) {
+  var packageJson = path.join(program.directory, 'package.json')
+  var exists = fs.existsSync(packageJson)
+  if (exists) return callback()
+
+  var data = {
+    name: projectName,
+    version: '1.0.0',
+    description: 'Node.js app made with Backbeam',
+    scripts: {
+      start: './node_modules/backbeam-server/cli/index.js start',
+      test: 'echo \'Error: no test specified\' && exit 1',
+    },
+    author: {
+      name: process.env.USER || '',
+    },
+    license: 'ISC',
+    dependencies: {
+      'backbeam-server': '^'+version,
+    },
+    keywords: ['backbeam'],
+  }
+  fs.writeFile(packageJson, JSON.stringify(data, null, 2), 'utf8', callback)
 })
 .end(function(err) {
   if (err) {
