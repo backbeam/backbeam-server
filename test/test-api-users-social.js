@@ -47,28 +47,28 @@ describe('Test API for social signups', function() {
             callback()
           })
       })
+      .then(function(callback) {
+        // should fail with invalid credentials
+        request(app)
+          .api({
+            path: '/api/user/facebook/signup',
+            method: 'post',
+            shared: shared,
+            secret: secret,
+            form: {
+              access_token: 'xxxx',
+            },
+          })
+          .end(function(err, res) {
+            assert.ifError(err)
+            assert.equal(res.statusCode, 500)
+            assert.ok(res.body)
+            assert.equal(res.body.status, 'FacebookError')
+            callback()
+          })
+      })
       .end(done)
     })
-  })
-
-  it('should fail to sign up using facebook', function(done) {
-    request(app)
-      .api({
-        path: '/api/user/facebook/signup',
-        method: 'post',
-        shared: shared,
-        secret: secret,
-        form: {
-          access_token: 'xxxx',
-        },
-      })
-      .end(function(err, res) {
-        assert.ifError(err)
-        assert.equal(res.statusCode, 500)
-        assert.ok(res.body)
-        assert.equal(res.body.status, 'FacebookError')
-        done()
-      })
   })
 
   it('should signup using google plus', function(done) {
@@ -95,28 +95,28 @@ describe('Test API for social signups', function() {
             callback()
           })
       })
+      .then(function(callback) {
+        // should fail with invalid credentials
+        request(app)
+          .api({
+            path: '/api/user/googleplus/signup',
+            method: 'post',
+            shared: shared,
+            secret: secret,
+            form: {
+              access_token: 'xxxx',
+            },
+          })
+          .end(function(err, res) {
+            assert.ifError(err)
+            assert.equal(res.statusCode, 500)
+            assert.ok(res.body)
+            assert.equal(res.body.status, 'GooglePlusError')
+            callback()
+          })
+      })
       .end(done)
     })
-  })
-
-  it('should fail to sign up using google plus', function(done) {
-    request(app)
-      .api({
-        path: '/api/user/googleplus/signup',
-        method: 'post',
-        shared: shared,
-        secret: secret,
-        form: {
-          access_token: 'xxxx',
-        },
-      })
-      .end(function(err, res) {
-        assert.ifError(err)
-        assert.equal(res.statusCode, 500)
-        assert.ok(res.body)
-        assert.equal(res.body.status, 'GooglePlusError')
-        done()
-      })
   })
 
   it('should signup using twitter', function(done) {
@@ -143,29 +143,29 @@ describe('Test API for social signups', function() {
             callback()
           })
       })
+      .then(function(callback) {
+        // should fail with invalid credentials
+        request(app)
+          .api({
+            path: '/api/user/twitter/signup',
+            method: 'post',
+            shared: shared,
+            secret: secret,
+            form: {
+              oauth_token: 'xxxx',
+              oauth_token_secret: 'xxxx',
+            },
+          })
+          .end(function(err, res) {
+            assert.ifError(err)
+            assert.equal(res.statusCode, 500)
+            assert.ok(res.body)
+            assert.equal(res.body.status, 'TwitterError')
+            callback()
+          })
+      })
       .end(done)
     })
-  })
-
-  it('should fail to sign up using twitter', function(done) {
-    request(app)
-      .api({
-        path: '/api/user/twitter/signup',
-        method: 'post',
-        shared: shared,
-        secret: secret,
-        form: {
-          oauth_token: 'xxxx',
-          oauth_token_secret: 'xxxx',
-        },
-      })
-      .end(function(err, res) {
-        assert.ifError(err)
-        assert.equal(res.statusCode, 500)
-        assert.ok(res.body)
-        assert.equal(res.body.status, 'TwitterError')
-        done()
-      })
   })
 
 })

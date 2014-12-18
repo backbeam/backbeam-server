@@ -284,4 +284,92 @@ describe('Test API for data manipulation', function() {
       })
   })
 
+  it('insert a file and read it', function(done) {
+    utils.writeTestFile(function(filename, filepath) {
+      var id
+      var data = {
+        'set-name': 'Cute image',
+        'set-filename': filename,
+        'set-description': 'This is the description of the cute image',
+        'set-mime': 'image/jpeg'
+      }
+      txain(function(callback) {
+        request(app)
+          .api({
+            path: '/api/data/file/upload',
+            method: 'post',
+            shared: shared,
+            secret: secret,
+            form: {
+              'set-name': name1,
+              'set-units': 100,
+            },
+            multipart: true,
+          })
+          .attach('file', filepath)
+          .end(function(err, res) {
+            assert.ifError(err)
+            assert.equal(res.statusCode, 201)
+            assert.ok(res.body)
+            assert.equal(res.body.status, 'Success')
+            assert.ok(res.body.id)
+            id = res.body.id
+            assert.ok(res.body.objects)
+            var obj = res.body.objects[id]
+            assert.ok(obj)
+            assert.equal(obj['version#n'], 1)
+            assert.equal(obj['filename#t'], 'photo5.jpg_copy.jpg')
+            assert.equal(obj['mime#t'], 'image/jpeg')
+            assert.equal(obj['size#n'], 9471)
+            assert.equal(obj['width#n'], 200)
+            assert.equal(obj['height#n'], 127)
+            callback()
+          })
+      })
+      .then(function(callback) {
+        request(app)
+          .api({
+            path: '/api/data/file/download/'+id, // no version especified
+            method: 'get',
+            shared: shared,
+            secret: secret,
+          })
+          .end(function(err, res) {
+            assert.ifError(err)
+            assert.equal(res.statusCode, 200)
+
+            assert.equal(res.headers['content-type'], 'image/jpeg')
+            assert.equal(res.headers['cache-control'], 'public, max-age=604800')
+
+            // TODO: test content
+            callback()
+          })
+      })
+      .then(function(callback) {
+        request(app)
+          .api({
+            path: '/api/data/file/download/'+id+'/1', // version especified
+            method: 'get',
+            shared: shared,
+            secret: secret,
+          })
+          .end(function(err, res) {
+            assert.ifError(err)
+            assert.equal(res.statusCode, 200)
+
+            assert.equal(res.headers['content-type'], 'image/jpeg')
+            assert.equal(res.headers['cache-control'], 'public, max-age=31556926')
+
+            // TODO: test content
+            callback()
+          })
+      })
+      .then(function(callback) {
+        // TODO {width:100, height:100}
+        callback()
+      })
+      .end(done)
+    })
+  })
+
 })

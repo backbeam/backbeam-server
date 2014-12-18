@@ -6,6 +6,7 @@ var errors = require('node-errors')
 var nook = errors.nook
 var request = require('request')
 var _ = require('underscore')
+var fs = require('fs')
 
 function sign(options, shared, secret) {
   var shared = options.shared
@@ -42,8 +43,14 @@ exports.request = function(app) {
     request = request[options.method](options.path)
     request = request.accept('application/json')
     if (options.form) {
-      request = request.type('form')
-      request = request.send(data)
+      if (options.multipart) {
+        _.keys(form).forEach(function(key) {
+          request = request.field(key, form[key])
+        })
+      } else {
+        request = request.type('form')
+        request = request.send(data)
+      }
     } else {
       request = request.query(data)
     }
@@ -154,5 +161,17 @@ exports.credentials.twitter = function(callback) {
     oauth_token_secret: twittr.oauthSecret
   }
   return callback(null, credentials)
+}
 
+exports.writeTestFile = function(callback) {
+  var filename = 'photo5.jpg'
+  var _path = path.join(__dirname, filename)
+  var filepath = _path+'_copy.jpg'
+  fs.readFile(_path, 'binary', function(err, data) {
+    assert.ifError(err)
+    fs.writeFile(filepath, data, 'binary', function(err) {
+      assert.ifError(err)
+      callback(filename, filepath)
+    })
+  })
 }

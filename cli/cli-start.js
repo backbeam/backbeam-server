@@ -26,7 +26,9 @@ txain(function(callback) {
 
   app.use(require('body-parser').urlencoded({ extended: true }))
 
-  app.use(require('cookie-parser')('secret'))
+  app.use(require('multer')({ dest: './uploads/'}))
+
+  app.use(require('cookie-parser')('secret')) // TODO
 
   app.use('/admin', server.adminResources())
 

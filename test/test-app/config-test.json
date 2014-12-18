@@ -115,9 +115,6 @@
       }
     ]
   },
-  "fs": {
-    "manager": "local"
-  },
   "db": {
     "manager": "sql",
     "host": "localhost",
