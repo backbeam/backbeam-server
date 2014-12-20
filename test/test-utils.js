@@ -79,6 +79,9 @@ exports.migrate = function(app, done) {
     .post('/admin/migrate')
     .end(function(err, res) {
       assert.ifError(err)
+      if (res.status !== 200) {
+        console.log('DB migration failed', res.text)
+      }
       assert.equal(res.status, 200)
       done()
     })

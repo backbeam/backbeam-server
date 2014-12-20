@@ -16,6 +16,8 @@ mixin field_cell_value(objects, field, value)
           | [Array]
         else if _.isObject(value)
           | [Object]
+    when 'location'
+      td= value && value.addr
     when 'reference'
       if field.relationship.indexOf('one-') === 0
         - var reference = objects[value]

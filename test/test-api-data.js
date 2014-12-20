@@ -33,6 +33,7 @@ describe('Test API for data manipulation', function() {
         form: {
           'set-name': name1,
           'set-units': 100,
+          'set-location': '41.6488226,-0.8890853|Zaragoza, Spain',
         },
       })
       .end(function(err, res) {
@@ -47,6 +48,10 @@ describe('Test API for data manipulation', function() {
 
         var object = res.body.objects[id1]
         assert.equal(object['name#t'], name1)
+        assert.ok(object['location#l'])
+        assert.equal(object['location#l'].addr, 'Zaragoza, Spain')
+        assert.equal(object['location#l'].lat, 41.6488226)
+        assert.equal(object['location#l'].lon, -0.8890853)
         assert.ok(object.created_at)
         assert.ok(object.updated_at)
         assert.equal(object['type'], 'item')

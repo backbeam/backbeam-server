@@ -103,8 +103,10 @@ block content
                 label.col-sm-2.control-label(for=field.id)= _s.humanize(field.id)
                 .col-sm-10
                   .input-group
-                    input(type='hidden')
-                    input.form-control(type='text', readonly)
+                    - var addr = value && value.addr
+                    - if (value && value.lat && value.lon) { value = value.lat+','+value.lon+'|'+(value.addr || '') }
+                    input(type='hidden', name='set-#{field.id}', value=value)
+                    input.form-control(type='text', value=addr readonly)
                     span.input-group-btn
                       button.btn.btn-info.choose-location(type='button') Search coordinates
             when 'select'
