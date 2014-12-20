@@ -40,7 +40,7 @@ describe('Test API for social signups', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 200)
+            assert.equal(res.statusCode, 200, res.text)
             assert.ok(res.body)
             assert.equal(res.body.status, status)
             assert.ok(res.body.id)
@@ -61,7 +61,7 @@ describe('Test API for social signups', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 500)
+            assert.equal(res.statusCode, 500, res.text)
             assert.ok(res.body)
             assert.equal(res.body.status, 'FacebookError')
             callback()
@@ -88,7 +88,7 @@ describe('Test API for social signups', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 200)
+            assert.equal(res.statusCode, 200, res.text)
             assert.ok(res.body)
             assert.equal(res.body.status, status)
             assert.ok(res.body.id)
@@ -109,7 +109,7 @@ describe('Test API for social signups', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 500)
+            assert.equal(res.statusCode, 500, res.text)
             assert.ok(res.body)
             assert.equal(res.body.status, 'GooglePlusError')
             callback()
@@ -136,7 +136,7 @@ describe('Test API for social signups', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 200)
+            assert.equal(res.statusCode, 200, res.text)
             assert.ok(res.body)
             assert.equal(res.body.status, status)
             assert.ok(res.body.id)
@@ -158,7 +158,7 @@ describe('Test API for social signups', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 500)
+            assert.equal(res.statusCode, 500, res.text)
             assert.ok(res.body)
             assert.equal(res.body.status, 'TwitterError')
             callback()

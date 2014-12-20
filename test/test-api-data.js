@@ -38,7 +38,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 201)
+        assert.equal(res.statusCode, 201, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.id)
@@ -72,7 +72,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 201)
+        assert.equal(res.statusCode, 201, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.id)
@@ -99,7 +99,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.id)
@@ -131,7 +131,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.id)
@@ -158,7 +158,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.ids)
@@ -189,7 +189,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.ids)
@@ -222,7 +222,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.ids)
@@ -255,7 +255,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.ids)
@@ -275,7 +275,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.id)
@@ -314,7 +314,7 @@ describe('Test API for data manipulation', function() {
           .attach('file', filepath)
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 201)
+            assert.equal(res.statusCode, 201, res.text)
             assert.ok(res.body)
             assert.equal(res.body.status, 'Success')
             assert.ok(res.body.id)
@@ -341,7 +341,7 @@ describe('Test API for data manipulation', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 200)
+            assert.equal(res.statusCode, 200, res.text)
 
             assert.equal(res.headers['content-type'], 'image/jpeg')
             assert.equal(res.headers['cache-control'], 'public, max-age=604800')
@@ -360,7 +360,7 @@ describe('Test API for data manipulation', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 200)
+            assert.equal(res.statusCode, 200, res.text)
 
             assert.equal(res.headers['content-type'], 'image/jpeg')
             assert.equal(res.headers['cache-control'], 'public, max-age=31556926')

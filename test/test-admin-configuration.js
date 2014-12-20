@@ -14,7 +14,7 @@ describe('Test admin configuration', function() {
       .get('/admin/configuration/general')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         done()
       })
   })
@@ -24,7 +24,7 @@ describe('Test admin configuration', function() {
       .get('/admin/configuration/authentication')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         done()
       })
   })
@@ -34,7 +34,7 @@ describe('Test admin configuration', function() {
       .get('/admin/configuration/push')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         done()
       })
   })
@@ -44,7 +44,7 @@ describe('Test admin configuration', function() {
       .get('/admin/configuration/email')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         done()
       })
   })

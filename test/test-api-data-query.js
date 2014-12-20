@@ -80,7 +80,7 @@ describe('Test API for data manipulation', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.ok(res.body.ids)
         assert.ok(res.body.objects)
@@ -112,7 +112,7 @@ describe('Test API for data manipulation', function() {
           })
           .end(function(err, res) {
             assert.ifError(err)
-            assert.equal(res.statusCode, 201)
+            assert.equal(res.statusCode, 201, res.text)
             assert.ok(res.body)
             assert.equal(res.body.status, 'Success')
             assert.ok(res.body.id)

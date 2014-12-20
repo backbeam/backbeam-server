@@ -28,7 +28,7 @@ describe('Test admin object', function() {
         .get('/admin/object/item/_new')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 200)
+          assert.equal(res.statusCode, 200, res.text)
           callback()
         })
     })
@@ -41,7 +41,7 @@ describe('Test admin object', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 302)
+          assert.equal(res.statusCode, 302, res.text)
           callback()
         })
     })
@@ -55,7 +55,7 @@ describe('Test admin object', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 200)
+          assert.equal(res.statusCode, 200, res.text)
           var ids = res.body.ids
           var id = ids[0]
           var object = res.body.objects[id]
@@ -84,7 +84,7 @@ describe('Test admin object', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 201)
+          assert.equal(res.statusCode, 201, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.body.id)
@@ -97,7 +97,7 @@ describe('Test admin object', function() {
         .get('/admin/object/item/'+id)
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 200)
+          assert.equal(res.statusCode, 200, res.text)
           callback(null, id)
         })
     })
@@ -110,7 +110,7 @@ describe('Test admin object', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 302)
+          assert.equal(res.statusCode, 302, res.text)
           callback()
         })
     })
@@ -124,7 +124,7 @@ describe('Test admin object', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 200)
+          assert.equal(res.statusCode, 200, res.text)
           var ids = res.body.ids
           var id = ids[0]
           var object = res.body.objects[id]

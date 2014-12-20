@@ -14,7 +14,7 @@ describe('Test admin push', function() {
       .get('/admin/push')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         done()
       })
   })

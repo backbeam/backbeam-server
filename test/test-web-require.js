@@ -24,7 +24,7 @@ describe('Test web require', function() {
       .get('/require/error')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 500)
+        assert.equal(res.statusCode, 500, res.text)
         done()
       })
   })

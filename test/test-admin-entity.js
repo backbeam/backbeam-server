@@ -22,7 +22,7 @@ describe('Test admin entity', function() {
       .get('/admin/entity/user')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         done()
       })
   })

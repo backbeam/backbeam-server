@@ -14,7 +14,7 @@ describe('Test asset', function() {
       .get('/hello-world.txt')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.equal(res.text, 'hello world')
         done()
       })

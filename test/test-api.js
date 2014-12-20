@@ -15,7 +15,7 @@ describe('Test general API behavior', function() {
       .get('/api/hello-world.txt')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 404)
+        assert.equal(res.statusCode, 404, res.text)
         assert.equal(res.text, 'Not found')
         done()
       })
@@ -34,7 +34,7 @@ describe('Test general API behavior', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 400)
+        assert.equal(res.statusCode, 400, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'MissingTime')
         done()
@@ -54,7 +54,7 @@ describe('Test general API behavior', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 400)
+        assert.equal(res.statusCode, 400, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'MissingSignature')
         done()
@@ -74,7 +74,7 @@ describe('Test general API behavior', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 400)
+        assert.equal(res.statusCode, 400, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'MissingApiKey')
         done()
@@ -94,7 +94,7 @@ describe('Test general API behavior', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 400)
+        assert.equal(res.statusCode, 400, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'InvalidSignature')
         done()
@@ -114,7 +114,7 @@ describe('Test general API behavior', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 400)
+        assert.equal(res.statusCode, 400, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'InvalidApiKey')
         done()
@@ -136,7 +136,7 @@ describe('Test general API behavior', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 400)
+        assert.equal(res.statusCode, 400, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'MissingNonce')
         done()
@@ -156,7 +156,7 @@ describe('Test general API behavior', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 400)
+        assert.equal(res.statusCode, 400, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'InvalidNonce')
         done()
@@ -173,7 +173,7 @@ describe('Test general API behavior', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         done()

@@ -34,7 +34,7 @@ describe('Test web response errors', function() {
       .get('/unknown-route')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 404)
+        assert.equal(res.statusCode, 404, res.text)
         assert.equal(res.text, 'Not found')
         done()
       })
@@ -45,7 +45,7 @@ describe('Test web response errors', function() {
       .get('/route-without-code')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 500)
+        assert.equal(res.statusCode, 500, res.text)
         assert.ok(res.text.indexOf('ENOENT') >= 0)
         done()
       })
@@ -56,7 +56,7 @@ describe('Test web response errors', function() {
       .get('/../hello-world.txt')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 404)
+        assert.equal(res.statusCode, 404, res.text)
         assert.equal(res.text, 'Not found')
         done()
       })
@@ -67,7 +67,7 @@ describe('Test web response errors', function() {
       .get('/error/template-not-found')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 500)
+        assert.equal(res.statusCode, 500, res.text)
         done()
       })
   })

@@ -38,7 +38,7 @@ describe('Test API for push notifications', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         done()
@@ -59,7 +59,7 @@ describe('Test API for push notifications', function() {
       })
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.channels)
@@ -85,7 +85,7 @@ describe('Test API for push notifications', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 200)
+          assert.equal(res.statusCode, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           callback()
@@ -106,7 +106,7 @@ describe('Test API for push notifications', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 200)
+          assert.equal(res.statusCode, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.body.channels)
@@ -133,7 +133,7 @@ describe('Test API for push notifications', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 200)
+          assert.equal(res.statusCode, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           callback()
@@ -154,7 +154,7 @@ describe('Test API for push notifications', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.statusCode, 200)
+          assert.equal(res.statusCode, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.body.channels)
