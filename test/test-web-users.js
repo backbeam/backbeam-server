@@ -26,7 +26,7 @@ describe('Test web methods for users', function() {
         .set('x-backbeam-sdk', 'test')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.body.id)
@@ -47,7 +47,7 @@ describe('Test web methods for users', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.headers['x-backbeam-auth'])
@@ -61,7 +61,7 @@ describe('Test web methods for users', function() {
         .post('/users/login')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           done()
@@ -73,7 +73,7 @@ describe('Test web methods for users', function() {
         .post('/users/request-password-reset')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           done()
@@ -91,7 +91,7 @@ describe('Test web methods for users', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.headers['x-backbeam-auth'])
@@ -108,7 +108,7 @@ describe('Test web methods for users', function() {
         .set('x-backbeam-auth', auth)
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.equal(res.headers['x-backbeam-auth'], '')
@@ -139,7 +139,7 @@ describe('Test web methods for users', function() {
         .set('serialization', 'serialization')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.headers['x-backbeam-auth'])
@@ -160,7 +160,7 @@ describe('Test web methods for users', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.headers['x-backbeam-auth'])
@@ -175,7 +175,7 @@ describe('Test web methods for users', function() {
         .set('serialization', 'serialization')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           done()
@@ -188,7 +188,7 @@ describe('Test web methods for users', function() {
         .set('serialization', 'serialization')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           done()
@@ -207,7 +207,7 @@ describe('Test web methods for users', function() {
         })
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.headers['x-backbeam-auth'])

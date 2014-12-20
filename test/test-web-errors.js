@@ -14,7 +14,7 @@ describe('Test web response errors', function() {
       .get('/error/method')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 500)
+        assert.equal(res.status, 500, res.text)
         done()
       })
   })
@@ -24,7 +24,7 @@ describe('Test web response errors', function() {
       .get('/error/template')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 500)
+        assert.equal(res.status, 500, res.text)
         done()
       })
   })

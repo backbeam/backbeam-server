@@ -15,7 +15,7 @@ describe('Test web queries', function() {
       .post('/query/empty-save')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 201)
+        assert.equal(res.status, 201, res.text)
         assert.ok(res.body)
         assert.ok(res.body.id)
         done()
@@ -27,7 +27,7 @@ describe('Test web queries', function() {
       .get('/query/fetch')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.ok(res.body)
         assert.ok(res.body.ids)
         assert.ok(res.body.objects)
@@ -41,7 +41,7 @@ describe('Test web queries', function() {
       .get('/query/read')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.ok(res.body)
         assert.ok(res.body.objects)
         assert.equal(_.size(res.body.objects), 1)
@@ -55,7 +55,7 @@ describe('Test web queries', function() {
       .post('/query/remove')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.ok(res.body)
         assert.ok(res.body.id)
         done()

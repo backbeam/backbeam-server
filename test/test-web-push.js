@@ -22,7 +22,7 @@ describe('Test web methods for push notifications', function() {
       .post('/push/subscribe')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         done()
@@ -34,7 +34,7 @@ describe('Test web methods for push notifications', function() {
       .post('/push/subscribed-channels')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         assert.ok(res.body.channels)
@@ -48,7 +48,7 @@ describe('Test web methods for push notifications', function() {
       .post('/push/unsubscribe')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         done()
@@ -61,7 +61,7 @@ describe('Test web methods for push notifications', function() {
         .post('/push/unsubscribe-all')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           callback()
@@ -72,7 +72,7 @@ describe('Test web methods for push notifications', function() {
         .post('/push/subscribed-channels')
         .end(function(err, res) {
           assert.ifError(err)
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200, res.text)
           assert.ok(res.body)
           assert.equal(res.body.status, 'Success')
           assert.ok(res.body.channels)

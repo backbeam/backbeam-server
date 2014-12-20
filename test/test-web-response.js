@@ -13,7 +13,7 @@ describe('Test web response', function() {
       .get('/response/send')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 201)
+        assert.equal(res.status, 201, res.text)
         assert.equal(res.text, 'Hello world')
         assert.equal(res.header['x-custom-header'], 'value')
         assert.equal(res.header['content-type'], 'text/plain; charset=utf-8')
@@ -26,7 +26,7 @@ describe('Test web response', function() {
       .get('/response/redirect')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 302)
+        assert.equal(res.status, 302, res.text)
         assert.equal(res.header['location'], 'http://example.com')
         done()
       })
@@ -37,7 +37,7 @@ describe('Test web response', function() {
       .get('/response/json-string')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.equal(res.header['content-type'], 'application/json; charset=utf-8')
         assert.ok(res.body)
         assert.equal(res.text, '{}')
@@ -50,7 +50,7 @@ describe('Test web response', function() {
       .get('/response/json-object')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.equal(res.header['content-type'], 'application/json; charset=utf-8')
         assert.ok(res.body)
         assert.equal(res.text, '{"foo":"bar"}')
@@ -63,7 +63,7 @@ describe('Test web response', function() {
       .get('/response/render')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.equal(res.header['content-type'], 'text/html; charset=utf-8')
         assert.equal(res.text, '<p>1 category</p>')
         done()

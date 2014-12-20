@@ -9,7 +9,7 @@ describe('Test web misc methods', function() {
       .get('/misc/mail')
       .end(function(err, res) {
         assert.ifError(err)
-        assert.equal(res.status, 200)
+        assert.equal(res.status, 200, res.text)
         assert.ok(res.body)
         assert.equal(res.body.status, 'Success')
         done()
