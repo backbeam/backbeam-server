@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test node node_modules/.bin/_mocha --bail --reporter spec test/",
     "test-cov": "NODE_ENV=test node node_modules/istanbul/lib/cli.js cover -x bql.js node_modules/.bin/_mocha -- --bail --reporter dot test/",
-    "test-travis": "NODE_ENV=test node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- --bail --reporter mocha-lcov-reporter test/"
+    "test-travis": "npm test && NODE_ENV=test node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- --bail --reporter mocha-lcov-reporter test/"
   },
   "repository": {
     "type": "git",
