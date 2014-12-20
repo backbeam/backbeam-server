@@ -1,6 +1,5 @@
 node_modules
 coverage
-test/photo5.jpg
 test/photo5.jpg_copy.jpg
 test/storage/
 uploads
