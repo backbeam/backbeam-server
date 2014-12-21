@@ -206,6 +206,9 @@ describe('Test API for geo queries', function() {
   })
 
   it('should query using nearest', function(done) {
+    // The MySQL verison of travis does not support ST_Distance
+    if (process.env.TRAVIS) return done()
+
     var query = '', params = []
     var lat = 40.0495297, lon = -3.985908
     var point = {
