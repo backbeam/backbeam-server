@@ -324,6 +324,52 @@ describe('Test API for data manipulation', function() {
         })
     })
 
+    // test object removal with relationships
+
+    it('should remove an item', function(done) {
+      request(app)
+        .api({
+          path: '/api/data/item/'+item1id,
+          method: 'del',
+          shared: shared,
+          secret: secret,
+        })
+        .end(function(err, res) {
+          assert.ifError(err)
+          assert.equal(res.statusCode, 200, res.text)
+          assert.ok(res.body)
+          assert.equal(res.body.status, 'Success')
+          assert.ok(res.body.id)
+
+          done()
+        })
+    })
+
+    it('should read the user', function(done) {
+      request(app)
+        .api({
+          path: '/api/data/user/'+userid,
+          method: 'get',
+          shared: shared,
+          secret: secret,
+          qs: {
+            joins: 'join last 2 items',
+          }
+        })
+        .end(function(err, res) {
+          assert.ifError(err)
+          assert.equal(res.statusCode, 200, res.text)
+          assert.ok(res.body)
+          assert.equal(res.body.status, 'Success')
+          assert.ok(res.body.objects[userid]['items#r'])
+          assert.ok(res.body.objects[userid]['items#r'].objects)
+          assert.equal(res.body.objects[userid]['items#r'].objects.length, 1)
+          assert.equal(res.body.objects[userid]['items#r'].objects[0], item2id)
+
+          done()
+        })
+    })
+
   })
 
   describe('Test using add and rem commands', function() {
@@ -488,6 +534,47 @@ describe('Test API for data manipulation', function() {
           assert.equal(res.body.objects[item1id]['author#r'], userid)
           assert.ok(res.body.objects[item2id])
           assert.equal(res.body.objects[item2id]['author#r'], userid)
+
+          done()
+        })
+    })
+
+    // test object removal with relationships
+
+    it('should remove the user', function(done) {
+      request(app)
+        .api({
+          path: '/api/data/user/'+userid,
+          method: 'del',
+          shared: shared,
+          secret: secret,
+        })
+        .end(function(err, res) {
+          assert.ifError(err)
+          assert.equal(res.statusCode, 200, res.text)
+          assert.ok(res.body)
+          assert.equal(res.body.status, 'Success')
+          assert.ok(res.body.id)
+
+          done()
+        })
+    })
+
+    it('should read the first item', function(done) {
+      request(app)
+        .api({
+          path: '/api/data/item/'+item1id,
+          method: 'get',
+          shared: shared,
+          secret: secret,
+        })
+        .end(function(err, res) {
+          assert.ifError(err)
+          assert.equal(res.statusCode, 200, res.text)
+          assert.ok(res.body)
+          assert.equal(res.body.status, 'Success')
+          assert.ok(res.body.id)
+          assert.equal(res.body.objects[item1id]['author#r'], null)
 
           done()
         })
