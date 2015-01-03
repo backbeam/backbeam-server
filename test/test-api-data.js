@@ -3,6 +3,8 @@ var utils = require('./test-utils')
 var txain  = require('txain')
 var _ = require('underscore')
 var request = utils.request
+var fs = require('fs')
+var path = require('path')
 var app = require('./app')()
 
 var shared = 'foo'
@@ -289,7 +291,7 @@ describe('Test API for data manipulation', function() {
       })
   })
 
-  it('insert a file and read it', function(done) {
+  it('insert a file, read it and delete it', function(done) {
     utils.writeTestFile(function(filename, filepath) {
       var id
       var data = {
@@ -365,9 +367,32 @@ describe('Test API for data manipulation', function() {
             assert.equal(res.headers['content-type'], 'image/jpeg')
             assert.equal(res.headers['cache-control'], 'public, max-age=31556926')
 
+            var filepath = path.join(__dirname, 'storage', id, '1')
+            assert.ok(fs.existsSync(filepath))
+
             // TODO: test content
             callback()
           })
+      })
+      .then(function(callback) {
+        request(app)
+          .api({
+            path: '/api/data/file/'+id,
+            method: 'del',
+            shared: shared,
+            secret: secret,
+          })
+          .end(function(err, res) {
+            assert.ifError(err)
+            assert.equal(res.statusCode, 200, res.text)
+
+            callback()
+          })
+      })
+      .then(function(callback) {
+        var filepath = path.join(__dirname, 'storage', id, '1')
+        assert.ok(!fs.existsSync(filepath))
+        callback()
       })
       .then(function(callback) {
         // TODO {width:100, height:100}
