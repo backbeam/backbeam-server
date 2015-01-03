@@ -11,6 +11,10 @@ html
     link(rel='stylesheet', href='#{req.baseUrl}/css/sweet-alert.css')
     link(rel='stylesheet', href='#{req.baseUrl}/css/select2.css')
     link(rel='stylesheet', href='#{req.baseUrl}/css/select2-bootstrap.css')
+    style.
+      .inline {
+        display: inline
+      }
     script queue = []
     title Backbeam
   body
@@ -28,12 +32,13 @@ html
               a#menu-entities.dropdown-toggle(data-toggle='dropdown', href='#') Entities 
                 span.caret
               ul.dropdown-menu(aria-labelledby='menu-entities')
-                //- li
-                //-   a(href='#{req.baseUrl}/entity/_new/edit') New entity
-                //- li.divider
                 each entity in core.model.entities
                   li
                     a(href='#{req.baseUrl}/entity/#{entity.id}')= _s.humanize(entity.id)
+                li.divider
+                li
+                  a(data-target='#new-entity',
+                    data-toggle='modal') New entity
             li.dropdown
               a#menu-view.dropdown-toggle(data-toggle='dropdown', href='#') View
                 span.caret
@@ -105,6 +110,23 @@ html
                 #location-chooser-map(style='height: 400px')
           .modal-footer
             a.btn.btn-default(href=nolink, data-dismiss='modal') Cancel
+
+    #new-entity.modal(tabindex='-1', role='dialog', aria-labelledby='new-entity-label', aria-hidden='true')
+      form(role='form', method='post', action='#{req.baseUrl}/entity/edit')
+        input(type='hidden', name='oldIdentifier')
+        .modal-dialog
+          .modal-content
+            .modal-header
+              button.close(type='button', data-dismiss='modal')
+                span(aria-hidden='true') ×
+                span.sr-only Close
+              h4#new-entity-label.modal-title New entity
+            .modal-body
+              .form-group
+                label.control-label(for='identifier') Identifier:
+                input.form-control(type='text', name='identifier', placeholder='entity-identifier')
+            .modal-footer
+              button.btn.btn-primary(type='submit') Create entity
 
 
     script(src='#{req.baseUrl}/js/jquery-1.11.1.min.js')

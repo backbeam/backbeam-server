@@ -6,7 +6,11 @@ block content
   .row
     .col-lg-12
       h1 List #{_s.humanize(req.params.entity)} 
-        small: a.btn.btn-primary.btn-xs(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/_new') New #{_s.humanize(req.params.entity)}
+        small
+          a.btn.btn-primary.btn-xs(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/_new')
+            | New #{_s.humanize(req.params.entity)}
+          a.btn.btn-info.btn-xs(type='button', href='#{req.baseUrl}/entity/#{req.params.entity}/edit')
+            | Edit model
       hr
 
       - var entity = core.model.findEntity(req.params.entity)

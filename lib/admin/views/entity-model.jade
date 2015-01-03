@@ -1,0 +1,181 @@
+extends layout
+
+block content
+  - var divId = 'model-'+id()
+  .row(id=divId)
+    .col-lg-12
+      h1 Model #{_s.humanize(req.params.entity)} 
+        small
+          a.btn.btn-primary.btn-xs(type='button',
+            data-target='#edit-entity',
+            data-toggle='modal') Edit name
+          form.inline(action='#{req.baseUrl}/entity/#{entity.id}?_method=DELETE', method='post')
+            button.btn.btn-danger.btn-xs(type='submit') Remove entity
+      hr
+
+    - var fields = entity.fields
+    table.table.table-bordered.table-striped
+      colgroup
+        col.col-xs-4
+        col.col-xs-3
+        col.col-xs-3
+        col.col-xs-2
+      thead
+        th Name
+        th Identifier
+        th Type
+        th
+      tbody
+      each field in fields
+        tr
+          td= _s.humanize(field.id)
+          td: code= field.id
+          td= field.type
+          td
+            .pull-right
+              if field.type === 'reference'
+                a.btn.btn-primary.btn-sm.edit-relationship(
+                  href=nolink,
+                  data-id=field.id,
+                  data-type=field.relationship,
+                  data-entity=field.entity,
+                  data-inverse=field.inverse) Edit
+                form.inline(action='#{req.baseUrl}/entity/#{entity.id}/field?_method=DELETE', method='post')
+                  input(type='hidden', name='field', value=field.id)
+                  button.btn.btn-danger.btn-sm(type='submit') Remove
+              else
+                a.btn.btn-primary.btn-sm.edit-field(
+                  href=nolink,
+                  data-id=field.id,
+                  data-type=field.type) Edit
+                form.inline(action='#{req.baseUrl}/entity/#{entity.id}/field?_method=DELETE', method='post')
+                  input(type='hidden', name='field', value=field.id)
+                  button.btn.btn-danger.btn-sm(type='submit') Remove
+
+    p
+      a.btn.btn-primary.btn.edit-field(
+        type='button',
+        data-toggle='modal') Add new field
+      small  
+      a.btn.btn-primary.btn.edit-relationship(
+        type='button',
+        data-toggle='modal') Add new relationship
+
+  #edit-field.modal(tabindex='-1', role='dialog', aria-labelledby='edit-field-label', aria-hidden='true')
+    form(role='form', method='post', action='#{req.baseUrl}/entity/#{entity.id}/field')
+      input(type='hidden', name='oldIdentifier')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal')
+              span(aria-hidden='true') ×
+              span.sr-only Close
+            h4#edit-field-label.modal-title New field
+          .modal-body
+            .form-group
+              label.control-label(for='identifier') Identifier:
+              input.form-control(type='text', name='identifier', placeholder='field-identifier')
+            .form-group
+              label.control-label(for='type') Type:
+              select.form-control(name='type')
+                each field in fieldTypes
+                  option(value=field)= field
+          .modal-footer
+            button.btn.btn-primary(type='submit') Create field
+
+  #edit-relationship.modal(tabindex='-1', role='dialog', aria-labelledby='edit-relationship-label', aria-hidden='true')
+    form(role='form', method='post', action='#{req.baseUrl}/entity/#{entity.id}/relationship')
+      input(type='hidden', name='oldIdentifier')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal')
+              span(aria-hidden='true') ×
+              span.sr-only Close
+            h4#edit-relationship-label.modal-title New relationship
+          .modal-body
+            .form-group
+              label.control-label(for='identifier') Identifier:
+              input.form-control(type='text', name='identifier', placeholder='field-identifier')
+            .form-group
+              label.control-label(for='type') Type:
+              select.form-control(name='type')
+                option one-to-many
+                option many-to-one
+                option many-to-many
+                option one-to-one
+            .form-group
+              label.control-label(for='entity') Entity:
+              select.form-control(name='entity')
+                each entity in req.core.model.entities
+                  option(value=entity.id) #{_s.humanize(entity.id)}
+            .form-group
+              label.control-label(for='inverse') Inverse identifier:
+              input.form-control(type='text', name='inverse', placeholder='field-identifier')
+          .modal-footer
+            button.btn.btn-primary(type='submit') Create relationship
+
+  #edit-entity.modal(tabindex='-1', role='dialog', aria-labelledby='edit-entity-label', aria-hidden='true')
+    form(role='form', method='post', action='#{req.baseUrl}/entity/edit')
+      input(type='hidden', name='oldIdentifier', value=req.params.entity)
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal')
+              span(aria-hidden='true') ×
+              span.sr-only Close
+            h4#edit-entity-label.modal-title Edit entity
+          .modal-body
+            .form-group
+              label.control-label(for='identifier') Identifier:
+              input.form-control(type='text', name='identifier', placeholder='entity-identifier', value=req.params.entity)
+          .modal-footer
+            button.btn.btn-primary(type='submit') Update entity
+
+block scripts
+  script.
+    $('##{divId}').on('click', '.edit-field', function() {
+      var btn = $(this)
+      var modal = $('#edit-field')
+      var oldIdentifier = btn.attr('data-id')
+      var type = btn.attr('data-type')
+      modal.find('[name=oldIdentifier]').val(oldIdentifier)
+      if (oldIdentifier) {
+        modal.find('.modal-title').text('Edit field')
+        modal.find('[type=submit]').text('Update field')
+        modal.find('[name=identifier]').val(oldIdentifier)
+        modal.find('[name=type]').val(type)
+      } else {
+        modal.find('.modal-title').text('New field')
+        modal.find('[type=submit]').text('Create field')
+        modal.find('[name=identifier]').val('')
+        modal.find('[name=type]').val('text')
+      }
+      modal.modal('show')
+    })
+
+    $('##{divId}').on('click', '.edit-relationship', function() {
+      var btn = $(this)
+      var modal = $('#edit-relationship')
+      var oldIdentifier = btn.attr('data-id')
+      var type = btn.attr('data-type')
+      var inverse = btn.attr('data-inverse')
+      var entity = btn.attr('data-entity')
+      modal.find('[name=oldIdentifier]').val(oldIdentifier)
+      if (oldIdentifier) {
+        modal.find('.modal-title').text('Edit relationship')
+        modal.find('[type=submit]').text('Update relationship')
+        modal.find('[name=identifier]').val(oldIdentifier)
+        modal.find('[name=type]').val(type)
+        modal.find('[name=inverse]').val(inverse)
+        modal.find('[name=entity]').val(entity).attr('disabled', 'disabled')
+      } else {
+        modal.find('.modal-title').text('New relationship')
+        modal.find('[type=submit]').text('Create relationship')
+        modal.find('[name=identifier]').val('')
+        modal.find('[name=type]').val('one-to-many')
+        modal.find('[name=inverse]').val('')
+        modal.find('[name=entity]').removeAttr('disabled')
+      }
+      modal.modal('show')
+    })

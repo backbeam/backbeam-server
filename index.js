@@ -21,10 +21,14 @@ exports.createServer = function(dir, extend) {
   var directory = dir
   var options = null
 
-  server.loadConfiguration = function() {
+  function configFilePath() {
     var config = path.join(dir, '')
     var sufix = process.env.NODE_ENV ? '-'+process.env.NODE_ENV : ''
-    var conf = fs.readFileSync(path.join(directory, 'config'+sufix+'.json'), 'utf8') // TODO: async?
+    return path.join(directory, 'config'+sufix+'.json')
+  }
+
+  server.loadConfiguration = function() {
+    var conf = fs.readFileSync(configFilePath(), 'utf8') // TODO: async?
     options = JSON.parse(conf) // TODO: parsing exception
     if (extend) {
       options = _.extend(options, extend)
@@ -41,6 +45,10 @@ exports.createServer = function(dir, extend) {
 
     options.reloadConfiguration = function() {
       server.loadConfiguration()
+    }
+    
+    options.saveConfiguration = function(callback) {
+      fs.writeFile(configFilePath(), JSON.stringify(options, null, 2), 'utf8', callback)
     }
   }
 

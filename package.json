@@ -1,6 +1,6 @@
 {
   "name": "backbeam-server",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Open Source backend platform compatible with backbeam.io",
   "main": "index.js",
   "scripts": {

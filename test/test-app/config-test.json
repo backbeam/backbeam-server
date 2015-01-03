@@ -110,6 +110,11 @@
             "entity": "category",
             "inverse": "items",
             "relationship": "one-to-many"
+          },
+          {
+            "id": "foo",
+            "type": "text",
+            "formerly": ["bar"]
           }
         ]
       }
