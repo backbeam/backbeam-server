@@ -10,7 +10,7 @@ var _ = require('underscore')
 
 program
   .version(version)
-  .option('-d, --directory [<s>]', 'Directory where the project have to be created', process.cwd())
+  .option('-d, --directory [<s>]', 'Directory where the project has to be created', process.cwd())
   .parse(process.argv)
 
 console.log('Creating project at %s', program.directory)
