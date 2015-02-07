@@ -16,25 +16,10 @@ program
 
 console.log('Starting project with base directory: %s', program.directory)
 
-var server
-var app = express()
-
 txain(function(callback) {
-  var server = backbeam.createServer(program.directory)
-
-  app.disable('x-powered-by')
-
-  app.use(require('body-parser').urlencoded({ extended: true }))
-
-  app.use(require('multer')({ dest: './uploads/'}))
-
-  app.use(require('cookie-parser')('secret')) // TODO
-
-  app.use('/admin', server.adminResources())
-
-  app.use('/api', server.apiResources())
-
-  app.use(server.webResources())
+  var app = backbeam.createExpressApp({
+    directory: program.directory,
+  })
 
   http.createServer(app).listen(program.port)
 

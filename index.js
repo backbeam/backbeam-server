@@ -110,3 +110,23 @@ exports.createServer = function(dir, extend) {
 
   return server
 }
+
+exports.createExpressApp = function(options) {
+
+  _.defaults(options, {
+    directory: process.cwd(),
+    adminPath: '/admin',
+    apiPath: '/api',
+  })
+
+  var app = express()
+  var server = exports.createServer(options.directory)
+  app.disable('x-powered-by')
+  app.use(require('body-parser').urlencoded({ extended: true }))
+  app.use(require('multer')({ dest: './uploads/'}))
+  app.use(require('cookie-parser')('secret')) // TODO
+  app.use(options.adminPath, server.adminResources())
+  app.use(options.apiPath, server.apiResources())
+  app.use(server.webResources())
+  return app
+}
