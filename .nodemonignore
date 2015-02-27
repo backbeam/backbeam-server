@@ -1,2 +1,3 @@
 lib/admin/public/
 *.jade
+uploads

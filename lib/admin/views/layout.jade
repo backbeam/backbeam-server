@@ -32,7 +32,8 @@ html
               a#menu-entities.dropdown-toggle(data-toggle='dropdown', href='#') Entities 
                 span.caret
               ul.dropdown-menu(aria-labelledby='menu-entities')
-                each entity in core.model.entities
+                - var entities = core.model.entities.sort(function(a, b) { return a.id < b.id ? -1 : 1 })
+                each entity in entities
                   li
                     a(href='#{req.baseUrl}/entity/#{entity.id}')= _s.humanize(entity.id)
                 li.divider

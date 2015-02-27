@@ -95,6 +95,11 @@
     "file": "query-remove.js"
   },
   {
+    "method": "POST",
+    "path": "/query/save-file",
+    "file": "query-save-file.js"
+  },
+  {
     "method": "GET",
     "path": "/error/method",
     "file": "error-method.js"

@@ -24,7 +24,7 @@ describe('Test web request', function() {
         assert.equal(res.body.protocol, 'http')
         assert.equal(res.body.method, 'POST')
         assert.equal(res.body.url, '/request/post/xxx/yyy?query-key=query-value')
-        assert.equal(res.body.ip, '127.0.0.1')
+        assert.ok(['::ffff:127.0.0.1', '127.0.0.1'].indexOf(res.body.ip) >= 0)
         assert.equal(res.body.headers['x-custom-header'], 'foobar')
         assert.ok(_.isEqual(res.body.params, { foo: 'xxx', bar: 'yyy' }))
         assert.ok(_.isEqual(res.body.body, { 'post-key': 'post-value' }))
