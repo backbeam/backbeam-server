@@ -33,6 +33,9 @@ exports.createServer = function(dir, extend) {
     if (extend) {
       options = _.extend(options, extend)
     }
+    if (options.fs && options.fs.storage) {
+      options.fs.storage = path.resolve(dir, options.fs.storage)
+    }
 
     managers = {}
     managers.project = staticProject(options.project)

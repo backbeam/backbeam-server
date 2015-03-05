@@ -23,7 +23,6 @@ mixin field_cell_value(objects, field, value)
         - var reference = objects[value]
         td= reference ? reference.description() : value
       else
-        //- TODO: count of objects
-        td
+        td= value ? value.count : '0'
     default
       td= value
