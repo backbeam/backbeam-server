@@ -703,4 +703,20 @@ describe('Parse bql queries', function() {
     assert.ok(_.isEqual(query, expected))
   })
 
+  it('parses a query with constraints over joins', function() {
+    var query = bql.parse('where foo.bar=? join foo')
+    assert.ok(_.isEqual(query, {
+      "where": {
+        "field": "foo",
+        "op": "=",
+        "subfield": "bar"
+      },
+      "join": [
+        {
+          "field": "foo"
+        }
+      ]
+    }))
+  })
+
 })

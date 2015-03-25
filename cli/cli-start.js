@@ -1,5 +1,3 @@
-var fs = require('fs')
-var path = require('path')
 var colors = require('colors')
 var program = require('commander')
 var version = require('../package.json').version
