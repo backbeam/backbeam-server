@@ -9,6 +9,7 @@ var cliOptions = [
   { short: 'f', key: 'filename', type: 's', name: 'File name', required: true },
   { short: 'o', key: 'open', name: 'Open controller in text editor' },
   { short: 't', key: 'template', type: 's', name: 'File template', values: ['query', 'create', 'read', 'update', 'delete'] },
+  { short: 'x', key: 'js-method', type: 's', name: 'Action', required: true },
 ]
 
 utils.cliOptions(cliOptions, function(values) {
@@ -16,6 +17,7 @@ utils.cliOptions(cliOptions, function(values) {
   var source = ''
   if (values.template) {
     source = fs.readFileSync(path.join(__dirname, 'templates', 'controller-'+values.template+'.js'), 'utf8')
+    source = source.replace(/#action#/g, values['js-method'])
   }
 
   var options = {

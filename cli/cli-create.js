@@ -23,23 +23,7 @@ txain(function(callback) {
   if (exists) return callback()
   var data = {
     project: {
-      manager: 'static',
       name: projectName,
-    },
-    model: {
-      manager: 'static',
-      entities: [
-        {
-          id: 'item',
-          fields: [
-            {
-              id: 'name',
-              type: 'text',
-              mandatory: true,
-            }
-          ]
-        }
-      ]
     },
     db: {
       manager: 'sql',
@@ -68,6 +52,65 @@ txain(function(callback) {
   }
   data.api.keys[randomToken(16)] = randomToken(32)
   fs.writeFile(configFile, JSON.stringify(data, null, 2), 'utf8', callback)
+})
+.then(function(callback) {
+  // test configuration
+  var configFile = path.join(program.directory, 'config-test.json')
+  var exists = fs.existsSync(configFile)
+  if (exists) return callback()
+  var data = {
+    project: {
+      name: projectName,
+    },
+    db: {
+      manager: 'sql',
+      host: 'localhost',
+      port: 3306,
+      user: 'root',
+      pass: '',
+      database: projectName,
+    },
+    api: {
+      keys: {}
+    },
+    email: {
+      transport: {
+        service: 'stub',
+      },
+      from: 'user@example.com',
+      inline: true,
+    },
+    authentication: {
+      sessionKey: crypto.randomBytes(32).toString('hex'),
+      email: {
+        confirmation: 'optional',
+      }
+    }
+  }
+  data.api.keys[randomToken(16)] = randomToken(32)
+  fs.writeFile(configFile, JSON.stringify(data, null, 2), 'utf8', callback)
+})
+
+})
+.then(function(callback) {
+  var modelFile = path.join(program.directory, 'model.json')
+  var exists = fs.existsSync(modelFile)
+  if (exists) return callback()
+  var model = {
+    entities: [
+      {
+        id: 'item',
+        fields: [
+          {
+            id: 'name',
+            type: 'text',
+            mandatory: true,
+          }
+        ]
+      }
+    ]
+  }
+  fs.writeFile(modelFile, JSON.stringify(model, null, 2), 'utf8', callback)
 })
 .then(function(callback) {
   // directories
@@ -110,7 +153,8 @@ txain(function(callback) {
     {
       method: 'GET',
       path: '/',
-      file: 'home.js'
+      file: 'home.js',
+      action: 'run',
     }
   ]
   fs.writeFile(routesFile, JSON.stringify(data, null, 2), 'utf8', callback)
@@ -120,7 +164,11 @@ txain(function(callback) {
   var controllerFile = path.join(program.directory, 'web/controllers/home.js')
   var exists = fs.existsSync(controllerFile)
   if (exists) return callback()
-  var code = 'response.send("Hello world")'
+  var code = [
+    'exports.run = function(backbeam, req, res, libs) {',
+    '  res.send(\'Hello world\')'
+    '}'
+  ].join('\n')
   fs.writeFile(controllerFile, code, 'utf8', callback)
 })
 .then(function(callback) {
@@ -133,8 +181,8 @@ txain(function(callback) {
     version: '1.0.0',
     description: 'Node.js app made with Backbeam',
     scripts: {
-      start: './node_modules/backbeam-server/cli/index.js start',
-      test: 'echo \'Error: no test specified\' && exit 1',
+      start: 'backbeam start',
+      test: 'NODE_ENV=test mocha --bail --reporter spec test/',
     },
     author: {
       name: process.env.USER || '',
@@ -143,6 +191,9 @@ txain(function(callback) {
     dependencies: {
       'backbeam-server': '^'+version,
     },
+    devDependencies: {
+      'mocha': '^1.21.4',
+    }
     keywords: ['backbeam'],
   }
   fs.writeFile(packageJson, JSON.stringify(data, null, 2), 'utf8', callback)

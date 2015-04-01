@@ -53,4 +53,5 @@ Both backbeam.io and `backbeam-server` provide the following features
 - Implementation of admin panel
 - Implementation of all features (users authentication, push notifications,...)
 - Finish implementation of `bql` on top of `mysql`
-- Full implementation of `bql` on top of `redis`
+- Custom `bql` functionlity for `mysql`
+- Plugin system

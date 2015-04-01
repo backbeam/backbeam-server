@@ -41,8 +41,9 @@ exports.cliOptions = function(options, callback) {
 
     var question = option.name+': '
     if (option.values) {
+      var i = 0
       question += '\n'+option.values.map(function(value) {
-        return '* '+value
+        return (++i)+') '+value
       }).join('\n')+'\n'
     }
 
@@ -55,6 +56,9 @@ exports.cliOptions = function(options, callback) {
     }
 
     rl.question(question, function(answer) {
+      if (option.values && +answer == answer) {
+        answer = option.values[+answer-1]
+      }
       values[option.key] = answer
       callback()
     })

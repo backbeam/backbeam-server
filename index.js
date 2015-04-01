@@ -7,17 +7,9 @@ var txain = require('txain')
 
 require('node-errors').defineErrorType('external')
 
-function staticProject(options) {
-  return function(req, res, next) {
-    var core = req.core
-    core.project = options
-    next()
-  }
-}
-
 exports.createServer = function(dir, extend) {
   var server = {}
-  var managers = {}
+  var core = {}
   var directory = dir
   var options = null
 
@@ -27,9 +19,15 @@ exports.createServer = function(dir, extend) {
     return path.join(directory, 'config'+sufix+'.json')
   }
 
+  function modelFilePath() {
+    return path.join(dir, 'model.json')
+  }
+
   server.loadConfiguration = function() {
     var conf = fs.readFileSync(configFilePath(), 'utf8') // TODO: async?
+    var model = fs.readFileSync(modelFilePath(), 'utf8') // TODO: async?
     options = JSON.parse(conf) // TODO: parsing exception
+    options.model = JSON.parse(model)
     if (extend) {
       options = _.extend(options, extend)
     }
@@ -37,21 +35,30 @@ exports.createServer = function(dir, extend) {
       options.fs.storage = path.resolve(dir, options.fs.storage)
     }
 
-    managers = {}
-    managers.project = staticProject(options.project)
-    managers.db = require('./lib/core/core-db-sql')(options.db)
-    managers.model = require('./lib/core/core-model')(options.model)
-    managers.fs = require('./lib/core/core-fs-local')({ root: dir })
-    managers.push = require('./lib/core/core-push')(options.push)
-    managers.users = require('./lib/core/core-users')(options.users)
-    managers.email = require('./lib/core/core-email')(options.email)
+    core = {}
+    core.project = options.project
+    core.db = require('./lib/core/core-db-sql')(options.db)(core)
+    core.model = require('./lib/core/core-model')(options.model)(core)
+    core.fs = require('./lib/core/core-fs-local')({ root: dir })(core)
+    core.push = require('./lib/core/core-push')(options.push)(core)
+    core.users = require('./lib/core/core-users')(options.users)(core)
+    core.email = require('./lib/core/core-email')(options.email)(core)
+    core.config = options
+    core.env = process.env.NODE_ENV
 
     options.reloadConfiguration = function() {
       server.loadConfiguration()
     }
     
     options.saveConfiguration = function(callback) {
-      fs.writeFile(configFilePath(), JSON.stringify(options, null, 2), 'utf8', callback)
+      var noModel = _.omit(options, 'model')
+      txain(function(callback) {
+        fs.writeFile(configFilePath(), JSON.stringify(noModel, null, 2), 'utf8', callback)
+      })
+      .then(function(callback) {
+        fs.writeFile(modelFilePath(), JSON.stringify(options.model, null, 2), 'utf8', callback)
+      })
+      .end(callback)
     }
   }
 
@@ -76,18 +83,7 @@ exports.createServer = function(dir, extend) {
     var app = express.Router()
     app.use(domainWrapper())
     app.use(function(req, res, next) {
-      var core = {}
       req.core = core
-      return next()
-    })
-    app.use(managers.project)
-    app.use(function(req, res, next) {
-      var core = req.core
-      _.keys(managers).forEach(function(str) {
-        if (str === 'project') return
-        core[str] = managers[str](core)
-      })
-      core.config = options
       return next()
     })
     return app
@@ -115,14 +111,18 @@ exports.createServer = function(dir, extend) {
 }
 
 exports.createExpressApp = function(options) {
+  var app = express()
+  exports.configureExpressApp(app, options)
+  return app
+}
 
+exports.configureExpressApp = function(app, options) {
   _.defaults(options, {
     directory: process.cwd(),
     adminPath: '/admin',
     apiPath: '/api',
   })
 
-  var app = express()
   var server = exports.createServer(options.directory)
   app.disable('x-powered-by')
   app.use(require('body-parser').urlencoded({ extended: true }))
@@ -131,5 +131,4 @@ exports.createExpressApp = function(options) {
   app.use(options.adminPath, server.adminResources())
   app.use(options.apiPath, server.apiResources())
   app.use(server.webResources())
-  return app
 }
