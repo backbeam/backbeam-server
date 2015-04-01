@@ -1,0 +1,33 @@
+{
+  "project": {
+    "manager": "static",
+    "env": "pro",
+    "name": "example"
+  },
+  "db": {
+    "manager": "sql",
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "pass": "",
+    "database": "shed"
+  },
+  "api": {
+    "keys": {
+      "foo": "bar"
+    }
+  },
+  "email": {
+    "transport": {
+      "service": "stub"
+    },
+    "from": "user@example.com",
+    "inline": true
+  },
+  "authentication": {
+    "sessionKey": "82b121dcbf86f1c1313fa9270ba9c77372a86e19ac849402615745f3c6bd9178",
+    "email": {
+      "confirmation": "optional"
+    }
+  }
+}
