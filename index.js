@@ -69,7 +69,7 @@ exports.createServer = function(dir, extend) {
       var dmn = domain.create()
       dmn.add(req)
       dmn.add(res)
-      res.on('close', function() {
+      res.on('finish', function() {
         dmn.dispose()
       })
       dmn.on('error', function(err) {
@@ -84,6 +84,9 @@ exports.createServer = function(dir, extend) {
     app.use(domainWrapper())
     app.use(function(req, res, next) {
       req.core = core
+      res.on('finish', function() {
+        delete req.core
+      })
       return next()
     })
     return app

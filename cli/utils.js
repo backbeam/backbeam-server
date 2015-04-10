@@ -6,7 +6,7 @@ var txain = require('txain')
 var readline = require('readline')
 var util = require('util')
 
-exports.cliOptions = function(options, callback) {
+exports.cliOptions = function(argv, options, callback) {
   var interactive = false
   var rl
 
@@ -28,7 +28,7 @@ exports.cliOptions = function(options, callback) {
     }
     p = p.option(argument, option.name, option.def)
   })
-  p.parse(process.argv)
+  p.parse(argv || process.argv)
 
   txain(options)
   .each(function(option, callback) {
