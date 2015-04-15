@@ -81,12 +81,7 @@ exports.createServer = function(dir, extend) {
       var dmn = domain.create()
       dmn.add(req)
       dmn.add(res)
-      res.on('finish', function() {
-        dmn.dispose()
-      })
-      dmn.on('error', function(err) {
-        next(err)
-      })
+      dmn.on('error', next)
       dmn.run(next)
     }
   }
