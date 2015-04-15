@@ -46,7 +46,7 @@
     "nodemailer-stub-transport": "^0.1.5",
     "nunjucks": "^1.1.0",
     "open-text-editor": "^1.0.0",
-    "request": "^2.44.0",
+    "request": "^2.55.0",
     "rimraf": "^2.2.8",
     "serve-static": "^1.7.1",
     "socket.io": "^1.1.0",

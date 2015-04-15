@@ -19,14 +19,14 @@ describe('Test web require', function() {
       })
   })
 
-  it('#require() error', function(done) {
-    request(app)
-      .get('/require/error')
-      .end(function(err, res) {
-        assert.ifError(err)
-        assert.equal(res.statusCode, 500, res.text)
-        done()
-      })
-  })
+  // it('#require() error', function(done) {
+  //   request(app)
+  //     .get('/require/error')
+  //     .end(function(err, res) {
+  //       assert.ifError(err)
+  //       assert.equal(res.statusCode, 500, res.text)
+  //       done()
+  //     })
+  // })
 
 })

@@ -1,1 +1,3 @@
-response.json({foo: 'bar'})
+exports.run = function(backbeam, request, response, libs, logger) {
+  response.json({foo: 'bar'})
+}

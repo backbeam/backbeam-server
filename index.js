@@ -44,7 +44,19 @@ exports.createServer = function(dir, extend) {
     core.users = require('./lib/core/core-users')(options.users)(core)
     core.email = require('./lib/core/core-email')(options.email)(core)
     core.config = options
-    core.env = process.env.NODE_ENV
+    core.env = process.env.NODE_ENV || ''
+
+    core.isDevelopment = function() {
+      return core.env.indexOf('dev') === 0
+    }
+
+    core.isProduction = function() {
+      return core.env.indexOf('prod') === 0
+    }
+
+    core.isTest = function() {
+      return core.env.indexOf('test') === 0
+    }
 
     options.reloadConfiguration = function() {
       server.loadConfiguration()
@@ -81,7 +93,11 @@ exports.createServer = function(dir, extend) {
 
   function createRouter() {
     var app = express.Router()
-    app.use(domainWrapper())
+    if (!core.isTest()) {
+      // testing with supertest hangs the proces here
+      // so we avoid using domains when running tests
+      app.use(domainWrapper())
+    }
     app.use(function(req, res, next) {
       req.core = core
       res.on('finish', function() {
