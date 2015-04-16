@@ -47,7 +47,7 @@ exports.createServer = function(dir, extend) {
     core.env = process.env.NODE_ENV || ''
 
     core.isDevelopment = function() {
-      return core.env.indexOf('dev') === 0
+      return !core.isProduction() && !core.isTest()
     }
 
     core.isProduction = function() {
@@ -88,11 +88,7 @@ exports.createServer = function(dir, extend) {
 
   function createRouter() {
     var app = express.Router()
-    if (!core.isTest()) {
-      // testing with supertest hangs the proces here
-      // so we avoid using domains when running tests
-      app.use(domainWrapper())
-    }
+    app.use(domainWrapper())
     app.use(function(req, res, next) {
       req.core = core
       res.on('finish', function() {
