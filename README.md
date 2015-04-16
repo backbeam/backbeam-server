@@ -6,6 +6,10 @@ Backbeam-server is a compatible implementation of [Backbeam.io](http://backbeam.
 
 ## Introduction
 
+### Migrating
+
+If you are upgrading from 0.5.x to 0.6.x, please see the CHANGELOG
+
 ### Why an Open Source version?
 
 We want our customers to be happy and one of the things that most worry our customers is the vendor-lockin problem. Providing an Open Source implementation solves this problem.
