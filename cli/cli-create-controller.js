@@ -3,7 +3,7 @@ var utils = require('./utils')
 var fs = require('fs')
 var path = require('path')
 
-exports.run = function(argv) {
+exports.run = function(argv, callback) {
   var cliOptions = [
     { short: 'm', key: 'method', type: 's', name: 'HTTP method', required: true, values: ['GET', 'POST', 'PUT', 'DELETE'] },
     { short: 'p', key: 'path', type: 's', name: 'Path', required: true },
@@ -32,6 +32,7 @@ exports.run = function(argv) {
     utils.request(values, '/web/controller', options, function(body) {
       if (values.open) {
         require('open-text-editor').open(body.controller, 0, function(err) {})
+        callback()
       }
     })
   })

@@ -11,5 +11,7 @@ var fullpath = path.join(__dirname, 'cli-'+command+'.js')
 if (!fs.existsSync(fullpath)) {
   console.log(util.format('Command not found `%s`', command).red)
 } else {
-  require('./cli-'+command).run()
+  require('./cli-'+command).run(process.argv, function(err) {
+    if (err) return console.log('err', err.stack)
+  })
 }

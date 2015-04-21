@@ -7,17 +7,21 @@ var program = require('commander')
 var version = require('../package.json').version
 var crypto = require('crypto')
 var _ = require('underscore')
+var multiline = require('multiline')
 
-exports.run = function(argv) {
+exports.run = function(argv, callback) {
   program
     .version(version)
-    .option('-d, --directory [<s>]', 'Directory where the project has to be created', process.cwd())
-    .parse(argv || process.argv)
+    .option('--directory [<s>]', 'Directory where the project has to be created', process.cwd())
+    .parse(argv)
 
   console.log('Creating project at %s', program.directory)
   var projectName = path.basename(program.directory)
 
   txain(function(callback) {
+    mkdirp(program.directory, callback)
+  })
+  .then(function(callback) {
     // configuration
     var configFile = path.join(program.directory, 'config.json')
     var exists = fs.existsSync(configFile)
@@ -90,8 +94,6 @@ exports.run = function(argv) {
     }
     data.api.keys[randomToken(16)] = randomToken(32)
     fs.writeFile(configFile, JSON.stringify(data, null, 2), 'utf8', callback)
-  })
-
   })
   .then(function(callback) {
     var modelFile = path.join(program.directory, 'model.json')
@@ -166,12 +168,32 @@ exports.run = function(argv) {
     var controllerFile = path.join(program.directory, 'web/controllers/home.js')
     var exists = fs.existsSync(controllerFile)
     if (exists) return callback()
-    var code = [
-      'exports.run = function(backbeam, req, res, libs) {',
-      '  res.send(\'Hello world\')'
-      '}'
-    ].join('\n')
+    var code = multiline.stripIndent(function() {/*
+      exports.run = function(backbeam, req, res, libs, logger) {
+        res.send('Hello world')
+      }
+    */})
     fs.writeFile(controllerFile, code, 'utf8', callback)
+  })
+  .then(function(callback) {
+    var appjs = path.join(program.directory, 'app.js')
+    var exists = fs.existsSync(appjs)
+    if (exists) return callback()
+
+    var code = multiline.stripIndent(function() {/*
+      var http = require('http')
+      var backbeam = require('backbeam-server')
+
+      var app = backbeam.createExpressApp({ directory: __dirname })
+      exports.app = app
+
+      if (module.id === require.main.id) {
+        var port = 3000
+        http.createServer(app).listen(port)
+        console.log('Started server at port %d', port)
+      }
+    */})
+    fs.writeFile(appjs, code, 'utf8', callback)
   })
   .then(function(callback) {
     var packageJson = path.join(program.directory, 'package.json')
@@ -195,7 +217,7 @@ exports.run = function(argv) {
       },
       devDependencies: {
         'mocha': '^1.21.4',
-      }
+      },
       keywords: ['backbeam'],
     }
     fs.writeFile(packageJson, JSON.stringify(data, null, 2), 'utf8', callback)
@@ -205,46 +227,41 @@ exports.run = function(argv) {
     var exists = fs.existsSync(testUtils)
     if (exists) return callback()
 
-    var code = [
-      'var txain = require(\'txain\')',
-      'var assert = require(\'assert\')',
-      '',
-      'var request = require(\'supertest\')(require(\'../app\').app)',
-      'exports.request = request',
-      '',
-      'exports.cleanDatabase = function(callback) {',
-      '  txain(function(callback) {',
-      '    request',
-      '      .post(\'/admin/delete-data\')',
-      '      .end(function(err, res) {',
-      '        assert.ifError(err)',
-      '        assert.equal(200, res.statusCode, res.text)',
-      '        callback()',
-      '      })',
-      '  })',
-      '  .then(function(callback) {',
-      '    request',
-      '      .post(\'/admin/migrate\')',
-      '      .end(function(err, res) {',
-      '        assert.ifError(err)',
-      '        assert.equal(200, res.statusCode, res.text)',
-      '        callback()',
-      '      })',
-      '  })',
-      '  .end(function(err) {',
-      '    assert.ifError(err)',
-      '    callback()',
-      '  })',
-      '}',
-    ].join('\n')
+    var code = multiline.stripIndent(function() {/*
+      var txain = require('txain')
+      var assert = require('assert')
+
+      var request = require('supertest')(require('../app').app)
+      exports.request = request
+
+      exports.cleanDatabase = function(callback) {
+        txain(function(callback) {
+          request
+            .post('/admin/delete-data')
+            .end(function(err, res) {
+              assert.ifError(err)
+              assert.equal(200, res.statusCode, res.text)
+              callback()
+            })
+        })
+        .then(function(callback) {
+          request
+            .post('/admin/migrate')
+            .end(function(err, res) {
+              assert.ifError(err)
+              assert.equal(200, res.statusCode, res.text)
+              callback()
+            })
+        })
+        .end(function(err) {
+          assert.ifError(err)
+          callback()
+        })
+      }
+    */})
     fs.writeFile(testUtils, code, 'utf8', callback)
   })
-  .end(function(err) {
-    if (err) {
-      return console.error(err.stack.red)
-    }
-    console.log('Done')
-  })
+  .end(callback)
 
   function randomToken(len) {
     return crypto.randomBytes(len).toString('hex')

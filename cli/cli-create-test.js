@@ -4,7 +4,7 @@ var fs = require('fs')
 var path = require('path')
 var readline = require('readline')
 
-exports.run = function(argv) {
+exports.run = function(argv, callback) {
   var cliOptions = [
     { short: 'f', key: 'filename', type: 's', name: 'File name', required: true },
   ]
@@ -31,6 +31,7 @@ exports.run = function(argv) {
         }
         utils.request(values, '/recording-finish', options, function(body) {
           rl.close()
+          callback()
         })
       })
 

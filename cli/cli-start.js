@@ -6,12 +6,12 @@ var backbeam = require('../')
 var txain = require('txain')
 var http = require('http')
 
-exports.run = function(argv) {
+exports.run = function(argv, callback) {
   program
     .version(version)
     .option('-d, --directory [<s>]', 'Directory where the project have to be created', process.cwd())
     .option('-p, --port [<d>]', 'Server port', 3000)
-    .parse(argv || process.argv)
+    .parse(argv)
 
   console.log('Starting project with base directory: %s', program.directory)
 
@@ -26,11 +26,7 @@ exports.run = function(argv) {
 
     callback()
   })
-  .end(function(err) {
-    if (err) {
-      console.log('Error', err.stack.red)
-    }
-  })
+  .end(callback)
 }
 
 if (module.id === require.main.id) {
