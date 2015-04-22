@@ -145,7 +145,7 @@ html
     //- script !{interactiveScript}
     script.
       $('.modal').on('shown.bs.modal', function() {
-        $(this).find('input[type=text]').focus()
+        $(this).find('select,textarea,input').not('[type=hidden]').first().focus()
       })
 
     block scripts

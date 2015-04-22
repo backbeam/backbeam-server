@@ -6,13 +6,15 @@
         colgroup
           col.col-xs-1
           col.col-xs-5
-          col.col-xs-4
+          col.col-xs-3
+          col.col-xs-1
           col.col-xs-2
         thead
           tr
             th Method
             th Path
             th File
+            th Action
             th
         tbody
           each route in routes
@@ -20,6 +22,7 @@
               td: span.label.label-success= route.method
               td: code= route.path
               td= route.file
+              td= route.action || 'run'
               td
                 .btn-group.pull-right
                   a.btn.btn-primary.btn-sm.opens-tab(
