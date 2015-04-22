@@ -38,6 +38,7 @@
               td None
               td
                 .btn-group.pull-right
-                  a.btn.btn-primary.btn-sm(type='button', href='#') Edit
+                  if !file.isDirectory
+                    a.btn.btn-primary.btn-sm.opens-editor(type='button', data-file=fullpath('assets', basePath+'/'+file.name)) Edit
                   a.btn.btn-danger.btn-sm(type='button', href='#') Delete
 

@@ -1,19 +1,20 @@
 extends layout
 
 block content
+  style.
+    .playground-btn-icon {
+      line-height: 28px
+    }
+
   .row
     .col-lg-12
       div(role='tabpanel')
-        ul.nav.nav-tabs#editor-tabs(role='tablist')
+        ul.nav.nav-tabs#tabs(role='tablist')
           li.dropdown(role='presentation')
             a#options.dropdown-toggle(href='#', data-toggle='dropdown', aria-controls='options-contents', aria-expanded='false')
               | Options 
               span.caret
             ul#options-contents.dropdown-menu(role='menu', aria-labelledby='options')
-              li
-                a(data-target='#open-file', tabindex='-1', role='tab', data-toggle='modal', aria-controls='dropdown1') Open… 
-                  kbd cmd+shift+o
-              li.divider(role='presentation')
               li
                 a(data-target='#new-view',
                   data-toggle='modal',
@@ -38,12 +39,157 @@ block content
                   tabindex='-1',
                   role='tab',
                   aria-controls='dropdown1') New asset…
-              li.divider(role='presentation')
-              li
-                a#close-all(href=nolink, tabindex='-1', role='tab', aria-controls='dropdown2') Close all
-          li#editor-latest-tab
+          li.active(role='presentation')
+            a(href='#controllers', aria-controls='controllers', role='tab', data-toggle='tab')
+              | Controllers
+          li(role='presentation')
+            a(href='#views', aria-controls='views', role='tab', data-toggle='tab')
+              | Views
+          li(role='presentation')
+            a(href='#libs', aria-controls='libs', role='tab', data-toggle='tab')
+              | Libs
+          li(role='presentation')
+            a(href='#assets', aria-controls='assets', role='tab', data-toggle='tab')
+              | Assets
+          li(role='presentation')
+            a(href='#playground', aria-controls='playground', role='tab', data-toggle='tab')
+              | Playground
 
-      #editors
+
+      .tab-content
+        #controllers.tab-pane.active(role='tabpanel')
+          br
+          .table-responsive
+            table.table.table-bordered.table-striped
+              colgroup
+                col.col-xs-1
+                col.col-xs-5
+                col.col-xs-3
+                col.col-xs-1
+                col.col-xs-2
+              thead
+                tr
+                  th Method
+                  th Path
+                  th File
+                  th Action
+                  th
+              tbody
+                each route in routes
+                  tr
+                    td: span.label.label-success= route.method
+                    td: code= route.path
+                    td= route.file
+                    td= route.action || 'run'
+                    td
+                      .btn-group.pull-right
+                        a.btn.btn-primary.btn-sm.opens-editor(
+                          type='button',
+                          data-file=fullpath('controllers', route.file)
+                        ) Edit
+                        a.btn.btn-info.btn-sm(type='button') Test
+                        a.btn.btn-danger.btn-sm(href='#{req.baseUrl}/web/controller/#{route.file}?_method=DELETE') Delete
+        #views.tab-pane(role='tabpanel')
+          br
+          .table-responsive
+            table.table.table-bordered.table-striped
+              thead
+                tr
+                  th Name
+                  th
+              tbody
+                each view in views
+                  tr
+                    td: a.opens-editor(
+                      href=nolink,
+                      data-file=fullpath('views', view),
+                    )= view
+                    td
+                      .btn-group.pull-right
+                        a.btn.btn-danger.btn-sm(href='#{req.baseUrl}/web/view/#{view}?_method=DELETE') Delete
+        #libs.tab-pane(role='tabpanel')
+          br
+          .table-responsive
+            table.table.table-bordered.table-striped
+              thead
+                tr
+                  th Name
+                  th
+              tbody
+                each lib in libs
+                  tr
+                    td: a.opens-editor(
+                      href=nolink,
+                      data-file=fullpath('libs', lib),
+                    )= lib
+                    td
+                      .btn-group.pull-right
+                        a.btn.btn-danger.btn-sm(href='#{req.baseUrl}/web/lib/#{lib}?_method=DELETE') Delete
+        #assets.internal-base.tab-pane(role='tabpanel')
+          include ./web-assets.jade
+        #playground.tab-pane(role='tabpanel')
+          mixin playground-entry(title, type)
+            .row
+              .col-xs-11
+                label= title
+              .col-xs-1
+                a.glyphicon.glyphicon-plus.add-entry.playground-btn-icon(href=nolink, data-entry-type=type)
+            .form-group.row
+
+          .row
+            .col-md-5
+              br
+              .panel.panel-default
+                .panel-heading Request
+                .panel-body
+                  form(role='form', action='#{req.baseUrl}/web/playground', method='post')
+                    input#playground-base(type='hidden', name='base')
+                    .form-group
+                      label(for='method') HTTP method
+                      select.form-control.input-sm(name='method')
+                        option(value='get') GET
+                        option(value='post') POST
+                        option(value='put') PUT
+                        option(value='delete') DELETE
+                    .form-group
+                      label(for='path', name='path') Path
+                      input.form-control.input-sm(type='text', name='path', placeholder='/path', value='/')
+                    .form-group.playground-group
+                      +playground-entry('Request headers', 'header')
+                    .form-group.playground-group
+                      +playground-entry('Query string', 'query')
+                    .form-group.playground-group
+                      +playground-entry('Form params', 'form')
+                    //- .form-group
+                    //-   label Logged user
+                    //-   .input-group
+                    //-     input.form-control.input-sm(type='text')
+                    //-     span.input-group-btn
+                    //-       button.btn.btn-primary.btn-sm(type='button') Choose
+                    //-       button.btn.btn-danger.btn-sm(type='button') No user
+                    button.btn.btn-primary.btn-sm(type='submit') Submit request
+            .col-md-7
+              br
+              .panel.panel-default
+                .panel-heading Response
+                .panel-body
+                  .row
+                    .col-xs-3
+                      p.text-right HTTP Status code:
+                    .col-xs-9
+                      strong#playground-response-status
+                  .row
+                    .col-xs-3
+                      p.text-right Response date:
+                    .col-xs-9
+                      strong#playground-response-time
+                  h3 Response body
+                  textarea.code-editor(rows='5', placeholder='Here you will see the http response')
+                  h3 Response headers
+                  table#playground-response-headers.table.table-condensed.table-striped
+                    tbody
+
+
 
   #open-file.modal(tabindex='-1', role='dialog', aria-labelledby='open-file-label', aria-hidden='true')
     .modal-dialog
@@ -63,7 +209,7 @@ block content
           .modal-body
             .form-group
               label.control-label(for='filename') File name:
-              input.form-control(type='text', name='filename', placeholder='index.html')
+              input.form-control(type='text', name='filename', placeholder='index.jade')
           .modal-footer
             button.btn.btn-primary(type='submit') Create view
 
@@ -132,131 +278,59 @@ block content
 
 block scripts
   script.
-    var tabManager = backbeam.configureWebDevelopment({})
-    $('#open-file').on('shown.bs.modal', function(e) {
-      $('#quick-search').select2('open')
-    })
-    $('#close-all').on('click', function(e) {
-      // TODO: prompt
-      tabManager.closeAll()
-    })
-    $('#quick-search').select2({
-      placeholder: 'Start writing the name of any view, controller or lib',
-      query: function(q) {
-        var query = q.term
-        var quicksearch = backbeam.quicksearch || []
+    $('#playground form [name=base]').val(window.location.href)
 
-        function matches(search) {
-          var str = search.toLowerCase()
-          var n = 0
-          for (var i=0; i<query.length; i++) {
-            n = str.indexOf(query.charAt(i), n)
-            if (n === -1) return false
-          }
-          return true
-        }
-
-        var data = []
-
-        if (query) {
-          quicksearch.forEach(function(item) {
-            var text = item.text
-            var search = item.search
-            if (matches(search)) {
-              data.push({
-                id: item.id,
-                text: text,
-              })
-            }
-          })
-        }
-
-        q.callback({results: data})
+    $('#playground').on('click', '.add-entry', function(e) {
+      e.preventDefault()
+      var type = $(this).attr('data-entry-type')
+      var group = $(this).closest('.playground-group')
+      var inputKey = '<div class="col-xs-5"><input placeholder="Key" name="'+type+'-key" class="form-control input-sm"></div>'
+      var inputValue = '<div class="col-xs-6"><input placeholder="Value" name="'+type+'-value" class="form-control input-sm"></div>'
+      var removeBtn = '<div class="col-xs-1"><a href="javascript:void(0)" class="glyphicon glyphicon-remove playground-btn-icon remove-entry"></a></div>'
+      var gr = $(['<div class="form-group row">', inputKey, inputValue, removeBtn, '</div>'].join(''))
+      group.append(gr)
+      if (e.originalEvent) {
+        // generated by the user
+        gr.find('input').get(0).focus()
       }
-    }).on('change', function(e) {
-      var url = e.val
-      var name = backbeam.quicksearchNames[e.val]
-      tabManager.addTab({
-        url: backbeam.baseUrl+url,
-        name: name,
-      })
-      $('#open-file').modal('hide')
-      $('#quick-search').select2('val', '')
-    }).on('select2-close', function(e) {
-      $('#open-file').modal('hide')
-      $('.navbar-brand').focus() // needed in safari to make the shortcut work next time
     })
 
-    Mousetrap.stopCallback = function(e, element, combo) {
-      return false
+    $('#playground').on('click', '.remove-entry', function(e) {
+      e.preventDefault()
+      $(this).closest('.row').remove()
+    })
+
+    $('#playground form').on('submit', function(e) {
+      e.preventDefault()
+      var form = $(this)
+      $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function(data) {
+          $('#playground-response-status').text(data.status)
+          $('#playground-response-time').text(data.time)
+          var tbody = $('#playground-response-headers tbody')
+          tbody.empty()
+          var headers = data.headers
+          for (var key in headers) {
+            if (headers.hasOwnProperty(key)) {
+              var value = headers[key]
+              var tdKey = $('<td>').text(key)
+              var tdVal = $('<td>').text(value)
+              var tr = $('<tr>').append(tdKey).append(tdVal)
+              tbody.append(tr)
+            }
+          }
+          $('#playground .code-editor').data('CodeMirrorInstance').setValue(data.body)
+          // TODO: mode, time
+        },
+      })
+    })
+
+    var hash = window.location.hash
+    if (hash) {
+      $('#tabs a[href="'+hash+'"]').tab('show')
     }
-
-    Mousetrap.bind(['mod+shift+o', 'mod+o'], function(e) {
-      e.preventDefault()
-      $('#open-file').modal('show')
-    })
-
-    $('#new-controller form').on('submit', function(e) {
-      e.preventDefault()
-      var form = $(this)
-      $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: form.serialize(),
-        dataType: 'json',
-        success: function(data) {
-          var name = form.find('[name=method]').val()+' '+form.find('[name=path]').val()
-          var filename = form.find('[name=filename]').val()
-          var url = backbeam.baseUrl+'/web/controller/'+filename
-          tabManager.addTab({
-            url: url,
-            name: name,
-          })
-          $('#new-controller').modal('hide')
-          tabManager.refreshOverview()
-        },
-      })
-    })
-
-    $('#new-lib form').on('submit', function(e) {
-      e.preventDefault()
-      var form = $(this)
-      $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: form.serialize(),
-        dataType: 'json',
-        success: function(data) {
-          var filename = form.find('[name=filename]').val()
-          var url = backbeam.baseUrl+'/web/lib/'+filename
-          tabManager.addTab({
-            url: url,
-            name: filename,
-          })
-          $('#new-lib').modal('hide')
-          tabManager.refreshOverview()
-        },
-      })
-    })
-
-    $('#new-view form').on('submit', function(e) {
-      e.preventDefault()
-      var form = $(this)
-      $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: form.serialize(),
-        dataType: 'json',
-        success: function(data) {
-          var filename = form.find('[name=filename]').val()
-          var url = backbeam.baseUrl+'/web/view/'+filename
-          tabManager.addTab({
-            url: url,
-            name: filename,
-          })
-          $('#new-view').modal('hide')
-          tabManager.refreshOverview()
-        },
-      })
-    })
 
