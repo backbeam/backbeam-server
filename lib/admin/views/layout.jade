@@ -15,6 +15,9 @@ html
       .inline {
         display: inline
       }
+      .opens-editor:after {
+        content: ' ➚'
+      }
     script queue = []
     title Backbeam
   body
@@ -137,6 +140,7 @@ html
     script(src='#{req.baseUrl}/js/codemirror.js')
     script(src='#{req.baseUrl}/js/codemirror-modes/javascript/javascript.js')
     script(src='#{req.baseUrl}/js/backbeam.js')
+    script(src='#{req.baseUrl}/js/mississippi.js')
     script(src='#{req.baseUrl}/js/sweet-alert.min.js')
     script(src='#{req.baseUrl}/js/select2.min.js')
     script(src='#{req.baseUrl}/js/mousetrap.min.js')
