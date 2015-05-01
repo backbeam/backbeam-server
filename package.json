@@ -1,12 +1,13 @@
 {
   "name": "backbeam-server",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "Open Source backend platform compatible with backbeam.io",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test node node_modules/.bin/_mocha --bail --reporter spec test/",
-    "test-cov": "NODE_ENV=test node node_modules/istanbul/lib/cli.js cover -x bql.js node_modules/.bin/_mocha -- --bail --reporter dot test/",
-    "test-travis": "npm test && NODE_ENV=test node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- --bail --reporter mocha-lcov-reporter test/"
+    "test-cov": "NODE_ENV=test istanbul cover -x bql.js node_modules/.bin/_mocha",
+    "test-travis": "npm test",
+    "test-travis-old": "npm test && NODE_ENV=test istanbul cover node_modules/.bin/_mocha -- --bail --reporter mocha-lcov-reporter test/"
   },
   "repository": {
     "type": "git",
@@ -62,9 +63,9 @@
     "xamel": "^0.3.1"
   },
   "devDependencies": {
-    "istanbul": "^0.3.2",
-    "mocha": "^1.21.4",
-    "mocha-lcov-reporter": "0.0.1",
+    "istanbul": "^0.3.13",
+    "mocha": "^2.2.4",
+    "mocha-lcov-reporter": "0.0.2",
     "refresh-token": "^0.1.0",
     "supertest": "^0.13.0"
   },

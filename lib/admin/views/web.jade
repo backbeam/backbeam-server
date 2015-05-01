@@ -5,6 +5,9 @@ block content
     .playground-btn-icon {
       line-height: 28px
     }
+    .help {
+      cursor: help
+    }
 
   .row
     .col-lg-12
@@ -82,10 +85,15 @@ block content
                   tr
                     td: span.label.label-success= route.method
                     td: code= route.path
-                    td: a.opens-editor(href=nolink,
-                        type='button',
-                        data-file=fullpath('controllers', route.file)
-                      )= route.file
+                    td
+                      if !route.exists
+                        | #{route.file} 
+                        span.help.text-danger.glyphicon.glyphicon-exclamation-sign(title='This file does not exist!')
+                      else
+                        a.opens-editor(href=nolink,
+                          type='button',
+                          data-file=fullpath('controllers', route.file)
+                        )= route.file
                     td= route.action || 'run'
                     td
                       form.mspi-confirm(action='#{req.baseUrl}/web/controller/delete',
@@ -103,9 +111,11 @@ block content
                             data-mspi-form='#edit-controller form',
                             data-mspi-field-path=route.path,
                             data-mspi-field-filename=route.file,
-                            data-mspi-field-oldfilename=route.file,
                             data-mspi-field-action=route.action,
                             data-mspi-field-method=route.method,
+                            data-mspi-field-oldfilename=route.file,
+                            data-mspi-field-oldpath=route.path,
+                            data-mspi-field-oldmethod=route.method,
                           ) Edit
                           a.btn.btn-info.btn-sm.opens-playground(href=nolink,
                             data-path=route.path,
@@ -279,6 +289,8 @@ block content
   #edit-controller.modal(tabindex='-1', role='dialog', aria-labelledby='new-controller-label', aria-hidden='true')
     form(role='form', method='post', action='#{req.baseUrl}/web/controller')
       input(type='hidden', name='oldfilename', value='')
+      input(type='hidden', name='oldpath', value='')
+      input(type='hidden', name='oldmethod', value='')
       .modal-dialog
         .modal-content
           .modal-header
