@@ -4,6 +4,7 @@ var _ = require('underscore')
 var domain = require('domain')
 var fs = require('fs')
 var txain = require('txain')
+var request = require('request')
 
 require('node-errors').defineErrorType('external')
 
@@ -83,6 +84,24 @@ exports.createServer = function(dir, extend) {
       dmn.add(res)
       dmn.on('error', next)
       dmn.run(next)
+
+      if (core.isProduction()) {
+        dmn.on('error', function(err) {
+          var webhook = options.slack && options.slack.incomingWebhook
+          if (webhook) {
+            var text = err.stack || err.message || String(err)
+            var opts = {
+              url: webhook,
+              body: JSON.stringify({
+                text: text,
+              })
+            }
+            request(opts, function(err, res, body) {
+              if (err) return console.log('Error while sending slack message', err, body)
+            })
+          }
+        })
+      }
     }
   }
 
@@ -115,6 +134,16 @@ exports.createServer = function(dir, extend) {
     var app = createRouter()
     require('./lib/admin').configure(app)
     return app
+  }
+
+  if (core.isProduction()) {
+    core.db.migrateSchema(true, function(err, commands) {
+      if (err) return console.log('critial error', err.stack) // TODO: properly warn of this
+      if (commands.length > 0) {
+        console.log('Migrated db schema')
+        console.log(commands.join('\n'))
+      }
+    })
   }
 
   return server

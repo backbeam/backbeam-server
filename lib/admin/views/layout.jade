@@ -43,18 +43,6 @@ html
                 li
                   a(data-target='#new-entity',
                     data-toggle='modal') New entity
-            li.dropdown
-              a#menu-view.dropdown-toggle(data-toggle='dropdown', href='#') View
-                span.caret
-              ul.dropdown-menu(aria-labelledby='menu-view')
-                li
-                  a(href='#{req.baseUrl}/email-templates') Email templates
-                li
-                  a(href='#{req.baseUrl}/push') Push notifications
-                li
-                  a(href='#{req.baseUrl}/logs') Logs
-                li
-                  a(href='#{req.baseUrl}/stats') Statistics
             li
               a(href='#{req.baseUrl}/web') Web development
             li
@@ -65,17 +53,6 @@ html
                   a(href='#{req.baseUrl}/configuration/view') View configuration
                 li
                   a(href='#{req.baseUrl}/configuration/migrate') Schema changes
-            //-     li
-            //-       a(href='#{req.baseUrl}/configuration/general') General settings
-            //-     li
-            //-       a(href='#{req.baseUrl}/configuration/authentication') Users authentication
-            //-     li
-            //-       a(href='#{req.baseUrl}/configuration/push') Push notifications
-            //-     li
-            //-       a(href='#{req.baseUrl}/configuration/email') Email settings
-          //- ul.nav.navbar-nav.navbar-right
-          //-   li
-          //-     a(href='#') Log out
 
     .container(style='margin-top: 60px')
       block content

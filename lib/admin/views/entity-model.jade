@@ -6,10 +6,13 @@ block content
     .col-lg-12
       h1 Model #{_s.humanize(req.params.entity)} 
         small
+          a.btn.btn-info.btn-xs(type='button', href='#{req.baseUrl}/entity/#{req.params.entity}') List objects
           a.btn.btn-primary.btn-xs(type='button',
             data-target='#edit-entity',
             data-toggle='modal') Edit name
-          form.inline(action='#{req.baseUrl}/entity/#{entity.id}?_method=DELETE', method='post')
+          form.inline.mspi-confirm(action='#{req.baseUrl}/entity/#{entity.id}?_method=DELETE', method='post',
+            data-mspi-confirm-title='Confirm',
+            data-mspi-confirm-text='Are you sure you want to delete this entity?')
             button.btn.btn-danger.btn-xs(type='submit') Remove entity
       hr
 
@@ -48,9 +51,12 @@ block content
                   href=nolink,
                   data-id=field.id,
                   data-type=field.type) Edit
-                form.inline(action='#{req.baseUrl}/entity/#{entity.id}/field?_method=DELETE', method='post')
+                form.inline.mspi-confirm(action='#{req.baseUrl}/entity/#{entity.id}/field?_method=DELETE', method='post',
+                  data-mspi-confirm-title='Confirm',
+                  data-mspi-confirm-text='Are you sure you want to delete this field?')
                   input(type='hidden', name='field', value=field.id)
                   button.btn.btn-danger.btn-sm(type='submit') Remove
+
 
     p
       a.btn.btn-primary.btn.edit-field(
