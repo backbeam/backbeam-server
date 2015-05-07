@@ -6,7 +6,7 @@ var txain = require('txain')
 var readline = require('readline')
 var util = require('util')
 
-exports.cliOptions = function(options, callback) {
+exports.cliOptions = function(argv, options, callback) {
   var interactive = false
   var rl
 
@@ -28,7 +28,7 @@ exports.cliOptions = function(options, callback) {
     }
     p = p.option(argument, option.name, option.def)
   })
-  p.parse(process.argv)
+  p.parse(argv || process.argv)
 
   txain(options)
   .each(function(option, callback) {
@@ -41,8 +41,9 @@ exports.cliOptions = function(options, callback) {
 
     var question = option.name+': '
     if (option.values) {
+      var i = 0
       question += '\n'+option.values.map(function(value) {
-        return '* '+value
+        return (++i)+') '+value
       }).join('\n')+'\n'
     }
 
@@ -55,6 +56,9 @@ exports.cliOptions = function(options, callback) {
     }
 
     rl.question(question, function(answer) {
+      if (option.values && +answer == answer) {
+        answer = option.values[+answer-1]
+      }
       values[option.key] = answer
       callback()
     })

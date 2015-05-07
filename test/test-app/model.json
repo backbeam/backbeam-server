@@ -1,0 +1,116 @@
+{
+  "manager": "static",
+  "entities": [
+    {
+      "id": "user",
+      "fields": [
+        {
+          "id": "items",
+          "type": "reference",
+          "entity": "item",
+          "inverse": "author",
+          "relationship": "many-to-one"
+        }
+      ]
+    },
+    {
+      "id": "category",
+      "fields": [
+        {
+          "id": "name",
+          "type": "text"
+        },
+        {
+          "id": "items",
+          "type": "reference",
+          "entity": "item",
+          "inverse": "category",
+          "relationship": "many-to-one"
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "fields": [
+        {
+          "id": "name",
+          "type": "text",
+          "mandatory": true,
+          "fulltext": true
+        },
+        {
+          "id": "weight",
+          "type": "number"
+        },
+        {
+          "id": "price",
+          "type": "number"
+        },
+        {
+          "id": "units",
+          "type": "number"
+        },
+        {
+          "id": "description",
+          "type": "textarea"
+        },
+        {
+          "id": "rich_description",
+          "type": "richtextarea"
+        },
+        {
+          "id": "date",
+          "type": "date"
+        },
+        {
+          "id": "day",
+          "type": "day"
+        },
+        {
+          "id": "number",
+          "type": "number"
+        },
+        {
+          "id": "location",
+          "type": "location"
+        },
+        {
+          "id": "select",
+          "type": "select",
+          "options": [
+            "red",
+            "white",
+            "green"
+          ]
+        },
+        {
+          "id": "json",
+          "type": "json"
+        },
+        {
+          "id": "boolean",
+          "type": "boolean"
+        },
+        {
+          "id": "author",
+          "type": "reference",
+          "entity": "user",
+          "inverse": "items",
+          "relationship": "one-to-many"
+        },
+        {
+          "id": "category",
+          "type": "reference",
+          "entity": "category",
+          "inverse": "items",
+          "relationship": "one-to-many"
+        },
+        {
+          "id": "foo",
+          "type": "text",
+          "formerly": ["bar"]
+        }
+      ]
+    }
+  ]
+}

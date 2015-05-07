@@ -1,6 +1,5 @@
 var assert = require('assert')
 var utils = require('./test-utils')
-var async  = require('async')
 var _ = require('underscore')
 var request = utils.request
 var app = require('./app')()

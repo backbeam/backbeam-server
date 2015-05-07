@@ -1,4 +1,6 @@
-var opts = {
-  foo: 'bar'
+exports.run = function(backbeam, request, response, libs, logger) {
+  var opts = {
+    foo: 'bar'
+  }
+  response.render('error.html', opts, true)
 }
-response.render('error.html', opts, true)

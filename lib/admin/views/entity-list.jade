@@ -33,6 +33,9 @@ block content
                 td
                   .btn-group.pull-right
                     a.btn.btn-primary.btn-sm(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/#{id}') Edit
-                    a.btn.btn-danger.btn-sm(type='button', href='#{req.baseUrl}/object/#{req.params.entity}/#{id}?_method=DELETE') Delete
+                    a.btn.btn-danger.btn-sm.mspi-confirm(type='button',
+                      href='#{req.baseUrl}/object/#{req.params.entity}/#{id}?_method=DELETE',
+                      data-mspi-confirm-title='Confirm',
+                      data-mspi-confirm-text='Are you sure you want to delete this object?') Delete
 
       include pagination

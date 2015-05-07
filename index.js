@@ -4,20 +4,13 @@ var _ = require('underscore')
 var domain = require('domain')
 var fs = require('fs')
 var txain = require('txain')
+var request = require('request')
 
 require('node-errors').defineErrorType('external')
 
-function staticProject(options) {
-  return function(req, res, next) {
-    var core = req.core
-    core.project = options
-    next()
-  }
-}
-
 exports.createServer = function(dir, extend) {
   var server = {}
-  var managers = {}
+  var core = {}
   var directory = dir
   var options = null
 
@@ -27,9 +20,15 @@ exports.createServer = function(dir, extend) {
     return path.join(directory, 'config'+sufix+'.json')
   }
 
+  function modelFilePath() {
+    return path.join(dir, 'model.json')
+  }
+
   server.loadConfiguration = function() {
     var conf = fs.readFileSync(configFilePath(), 'utf8') // TODO: async?
+    var model = fs.readFileSync(modelFilePath(), 'utf8') // TODO: async?
     options = JSON.parse(conf) // TODO: parsing exception
+    options.model = JSON.parse(model)
     if (extend) {
       options = _.extend(options, extend)
     }
@@ -37,21 +36,42 @@ exports.createServer = function(dir, extend) {
       options.fs.storage = path.resolve(dir, options.fs.storage)
     }
 
-    managers = {}
-    managers.project = staticProject(options.project)
-    managers.db = require('./lib/core/core-db-sql')(options.db)
-    managers.model = require('./lib/core/core-model')(options.model)
-    managers.fs = require('./lib/core/core-fs-local')({ root: dir })
-    managers.push = require('./lib/core/core-push')(options.push)
-    managers.users = require('./lib/core/core-users')(options.users)
-    managers.email = require('./lib/core/core-email')(options.email)
+    core = {}
+    core.project = options.project
+    core.db = require('./lib/core/core-db-sql')(options.db)(core)
+    core.model = require('./lib/core/core-model')(options.model)(core)
+    core.fs = require('./lib/core/core-fs-local')({ root: dir })(core)
+    core.push = require('./lib/core/core-push')(options.push)(core)
+    core.users = require('./lib/core/core-users')(options.users)(core)
+    core.email = require('./lib/core/core-email')(options.email)(core)
+    core.config = options
+    core.env = process.env.NODE_ENV || ''
+
+    core.isDevelopment = function() {
+      return !core.isProduction() && !core.isTest()
+    }
+
+    core.isProduction = function() {
+      return core.env.indexOf('prod') === 0
+    }
+
+    core.isTest = function() {
+      return core.env.indexOf('test') === 0
+    }
 
     options.reloadConfiguration = function() {
       server.loadConfiguration()
     }
     
     options.saveConfiguration = function(callback) {
-      fs.writeFile(configFilePath(), JSON.stringify(options, null, 2), 'utf8', callback)
+      var noModel = _.omit(options, 'model')
+      txain(function(callback) {
+        fs.writeFile(configFilePath(), JSON.stringify(noModel, null, 2), 'utf8', callback)
+      })
+      .then(function(callback) {
+        fs.writeFile(modelFilePath(), JSON.stringify(options.model, null, 2), 'utf8', callback)
+      })
+      .end(callback)
     }
   }
 
@@ -62,13 +82,26 @@ exports.createServer = function(dir, extend) {
       var dmn = domain.create()
       dmn.add(req)
       dmn.add(res)
-      res.on('close', function() {
-        dmn.dispose()
-      })
-      dmn.on('error', function(err) {
-        next(err)
-      })
+      dmn.on('error', next)
       dmn.run(next)
+
+      if (core.isProduction()) {
+        dmn.on('error', function(err) {
+          var webhook = options.slack && options.slack.incomingWebhook
+          if (webhook) {
+            var text = err.stack || err.message || String(err)
+            var opts = {
+              url: webhook,
+              body: JSON.stringify({
+                text: text,
+              })
+            }
+            request(opts, function(err, res, body) {
+              if (err) return console.log('Error while sending slack message', err, body)
+            })
+          }
+        })
+      }
     }
   }
 
@@ -76,18 +109,10 @@ exports.createServer = function(dir, extend) {
     var app = express.Router()
     app.use(domainWrapper())
     app.use(function(req, res, next) {
-      var core = {}
       req.core = core
-      return next()
-    })
-    app.use(managers.project)
-    app.use(function(req, res, next) {
-      var core = req.core
-      _.keys(managers).forEach(function(str) {
-        if (str === 'project') return
-        core[str] = managers[str](core)
+      res.on('finish', function() {
+        delete req.core
       })
-      core.config = options
       return next()
     })
     return app
@@ -111,18 +136,32 @@ exports.createServer = function(dir, extend) {
     return app
   }
 
+  if (core.isProduction()) {
+    core.db.migrateSchema(true, function(err, commands) {
+      if (err) return console.log('critial error', err.stack) // TODO: properly warn of this
+      if (commands.length > 0) {
+        console.log('Migrated db schema')
+        console.log(commands.join('\n'))
+      }
+    })
+  }
+
   return server
 }
 
 exports.createExpressApp = function(options) {
+  var app = express()
+  exports.configureExpressApp(app, options)
+  return app
+}
 
+exports.configureExpressApp = function(app, options) {
   _.defaults(options, {
     directory: process.cwd(),
     adminPath: '/admin',
     apiPath: '/api',
   })
 
-  var app = express()
   var server = exports.createServer(options.directory)
   app.disable('x-powered-by')
   app.use(require('body-parser').urlencoded({ extended: true }))
@@ -131,5 +170,4 @@ exports.createExpressApp = function(options) {
   app.use(options.adminPath, server.adminResources())
   app.use(options.apiPath, server.apiResources())
   app.use(server.webResources())
-  return app
 }

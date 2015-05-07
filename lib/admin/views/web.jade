@@ -1,82 +1,303 @@
 extends layout
 
 block content
+  style.
+    .playground-btn-icon {
+      line-height: 28px
+    }
+    .help {
+      cursor: help
+    }
+
   .row
     .col-lg-12
       div(role='tabpanel')
-        ul.nav.nav-tabs#editor-tabs(role='tablist')
+        ul.nav.nav-tabs#tabs(role='tablist')
           li.dropdown(role='presentation')
             a#options.dropdown-toggle(href='#', data-toggle='dropdown', aria-controls='options-contents', aria-expanded='false')
               | Options 
               span.caret
             ul#options-contents.dropdown-menu(role='menu', aria-labelledby='options')
               li
-                a(data-target='#open-file', tabindex='-1', role='tab', data-toggle='modal', aria-controls='dropdown1') Open… 
-                  kbd cmd+shift+o
-              li.divider(role='presentation')
-              li
-                a(data-target='#new-view',
+                a.mspi-form-reset(data-target='#edit-controller',
                   data-toggle='modal',
-                  tabindex='-1',
-                  role='tab',
-                  aria-controls='dropdown1') New view…
-              li
-                a(data-target='#new-controller',
-                  data-toggle='modal',
+                  data-mspi-form='#edit-controller form',
                   tabindex='-1',
                   role='tab',
                   aria-controls='dropdown1') New controller…
               li
-                a(data-target='#new-lib',
+                a.mspi-form-reset(data-target='#edit-view',
                   data-toggle='modal',
+                  data-mspi-form='#edit-view form',
+                  tabindex='-1',
+                  role='tab',
+                  aria-controls='dropdown1') New view…
+              li
+                a.mspi-form-reset(data-target='#edit-lib',
+                  data-toggle='modal',
+                  data-mspi-form='#edit-lib form',
                   tabindex='-1',
                   role='tab',
                   aria-controls='dropdown1') New lib…
               li
-                a(data-target='#new-asset',
+                a.mspi-form-reset(data-target='#edit-asset',
                   data-toggle='modal',
                   tabindex='-1',
                   role='tab',
                   aria-controls='dropdown1') New asset…
-              li.divider(role='presentation')
-              li
-                a#close-all(href=nolink, tabindex='-1', role='tab', aria-controls='dropdown2') Close all
-          li#editor-latest-tab
+          li.active(role='presentation')
+            a(href='#controllers', aria-controls='controllers', role='tab', data-toggle='tab')
+              | Controllers
+          li(role='presentation')
+            a(href='#views', aria-controls='views', role='tab', data-toggle='tab')
+              | Views
+          li(role='presentation')
+            a(href='#libs', aria-controls='libs', role='tab', data-toggle='tab')
+              | Libs
+          li(role='presentation')
+            a(href='#assets', aria-controls='assets', role='tab', data-toggle='tab')
+              | Assets
+          li(role='presentation')
+            a(href='#playground', aria-controls='playground', role='tab', data-toggle='tab')
+              | Playground
 
-      #editors
+
+      .tab-content
+        #controllers.tab-pane.active(role='tabpanel')
+          br
+          .table-responsive
+            table.table.table-bordered.table-striped
+              colgroup
+                col.col-xs-1
+                col.col-xs-5
+                col.col-xs-3
+                col.col-xs-1
+                col.col-xs-2
+              thead
+                tr
+                  th Method
+                  th Path
+                  th File
+                  th Action
+                  th
+              tbody
+                each route in routes
+                  tr
+                    td: span.label.label-success= route.method
+                    td: code= route.path
+                    td
+                      if !route.exists
+                        | #{route.file} 
+                        span.help.text-danger.glyphicon.glyphicon-exclamation-sign(title='This file does not exist!')
+                      else
+                        a.opens-editor(href=nolink,
+                          type='button',
+                          data-file=fullpath('controllers', route.file)
+                        )= route.file
+                    td= route.action || 'run'
+                    td
+                      form.mspi-confirm(action='#{req.baseUrl}/web/controller/delete',
+                        method='POST',
+                        data-mspi-confirm-title='Confirm',
+                        data-mspi-confirm-text='Are you sure you want to delete the controller #{route.method} #{route.path}?')
+                        input(type='hidden', name='filename', value=route.file)
+                        input(type='hidden', name='path', value=route.path)
+                        input(type='hidden', name='method', value=route.method)
+                        .btn-group.pull-right
+                          a.btn.btn-primary.btn-sm.mspi-form-fill(
+                            type='button',
+                            data-target='#edit-controller',
+                            data-toggle='modal',
+                            data-mspi-form='#edit-controller form',
+                            data-mspi-field-path=route.path,
+                            data-mspi-field-filename=route.file,
+                            data-mspi-field-action=route.action,
+                            data-mspi-field-method=route.method,
+                            data-mspi-field-oldfilename=route.file,
+                            data-mspi-field-oldpath=route.path,
+                            data-mspi-field-oldmethod=route.method,
+                          ) Edit
+                          a.btn.btn-info.btn-sm.opens-playground(href=nolink,
+                            data-path=route.path,
+                            data-method=route.method,
+                            ) Test
+                          button.btn.btn-danger.btn-sm(type='submit') Delete
+        #views.tab-pane(role='tabpanel')
+          br
+          .table-responsive
+            table.table.table-bordered.table-striped
+              thead
+                tr
+                  th Name
+                  th
+              tbody
+                each view in views
+                  tr
+                    td: a.opens-editor(
+                      href=nolink,
+                      data-file=fullpath('views', view),
+                    )= view
+                    td
+                      form.mspi-confirm(action='#{req.baseUrl}/web/view/delete',
+                        method='POST',
+                        data-mspi-confirm-title='Confirm',
+                        data-mspi-confirm-text='Are you sure you want to delete the view #{view}?')
+                        input(type='hidden', name='filename', value=view)
+
+                        .btn-group.pull-right
+                          a.btn.btn-primary.btn-sm.mspi-form-fill(
+                            type='button',
+                            data-target='#edit-view',
+                            data-toggle='modal',
+                            data-mspi-form='#edit-view form',
+                            data-mspi-field-filename=view,
+                            data-mspi-field-oldfilename=view,
+                          ) Edit
+                          button.btn.btn-danger.btn-sm(type='submit') Delete
+        #libs.tab-pane(role='tabpanel')
+          br
+          .table-responsive
+            table.table.table-bordered.table-striped
+              thead
+                tr
+                  th Name
+                  th
+              tbody
+                each lib in libs
+                  tr
+                    td: a.opens-editor(
+                      href=nolink,
+                      data-file=fullpath('libs', lib),
+                    )= lib
+                    td
+                      form.mspi-confirm(action='#{req.baseUrl}/web/lib/delete',
+                        method='POST',
+                        data-mspi-confirm-title='Confirm',
+                        data-mspi-confirm-text='Are you sure you want to delete the lib #{lib}?')
+                        input(type='hidden', name='filename', value=lib)
+
+                        .btn-group.pull-right
+                          a.btn.btn-primary.btn-sm.mspi-form-fill(
+                            type='button',
+                            data-target='#edit-lib',
+                            data-toggle='modal',
+                            data-mspi-form='#edit-lib form',
+                            data-mspi-field-filename=lib,
+                            data-mspi-field-oldfilename=lib,
+                          ) Edit
+                          button.btn.btn-danger.btn-sm(type='submit') Delete
+        #assets.internal-base.tab-pane(role='tabpanel')
+          include ./web-assets.jade
+        #playground.tab-pane(role='tabpanel')
+          mixin playground-entry(title, type)
+            .row
+              .col-xs-11
+                label= title
+              .col-xs-1
+                a.glyphicon.glyphicon-plus.add-entry.playground-btn-icon(href=nolink, data-entry-type=type)
+            .form-group.row
+
+          .row
+            .col-md-5
+              br
+              .panel.panel-default
+                .panel-heading Request
+                .panel-body
+                  form(role='form', action='#{req.baseUrl}/web/playground', method='post')
+                    input#playground-base(type='hidden', name='base')
+                    .form-group
+                      label(for='method') HTTP method
+                      select.form-control.input-sm(name='method')
+                        option(value='GET') GET
+                        option(value='POST') POST
+                        option(value='PUT') PUT
+                        option(value='DELETE') DELETE
+                    .form-group
+                      label(for='path', name='path') Path
+                      input.form-control.input-sm(type='text', name='path', placeholder='/path', value='/')
+                    .form-group.playground-group
+                      +playground-entry('Request headers', 'header')
+                    .form-group.playground-group
+                      +playground-entry('Query string', 'query')
+                    .form-group.playground-group
+                      +playground-entry('Form params', 'form')
+                    //- .form-group
+                    //-   label Logged user
+                    //-   .input-group
+                    //-     input.form-control.input-sm(type='text')
+                    //-     span.input-group-btn
+                    //-       button.btn.btn-primary.btn-sm(type='button') Choose
+                    //-       button.btn.btn-danger.btn-sm(type='button') No user
+                    button.btn.btn-primary.btn-sm(type='submit') Submit request
+            .col-md-7
+              br
+              .panel.panel-default
+                .panel-heading Response
+                .panel-body
+                  .row
+                    .col-xs-3
+                      p.text-right HTTP Status code:
+                    .col-xs-9
+                      strong#playground-response-status
+                  .row
+                    .col-xs-3
+                      p.text-right Response date:
+                    .col-xs-9
+                      strong#playground-response-time
+                  h3 Response body
+                  textarea.code-editor(rows='5', placeholder='Here you will see the http response')
+                  h3 Response headers
+                  table#playground-response-headers.table.table-condensed.table-striped
+                    tbody
+
+      .alert.alert-info(role='alert')
+        p: strong Text editor integration
+
+        p Backbeam uses 
+          strong: a(href='https://github.com/gimenete/open-text-editor', style='color:white', target='_blank') open-text-editor
+          |  to be integrated with your favorite text editor. 
+          | To enjoy this integration you just need to create a 
+          em ~/.open-text-editor
+          |  file following the instructions in the README document
+        p If configured properly all the links with an arrow (➚) will be opened in your text editor
+
+
+
 
   #open-file.modal(tabindex='-1', role='dialog', aria-labelledby='open-file-label', aria-hidden='true')
     .modal-dialog
       .modal-content
         input#quick-search(style='width:100%')
 
-  #new-view.modal(tabindex='-1', role='dialog', aria-labelledby='new-view-label', aria-hidden='true')
+  #edit-view.modal(tabindex='-1', role='dialog', aria-labelledby='new-view-label', aria-hidden='true')
     form(role='form', method='post', action='#{req.baseUrl}/web/view')
-      input(type='hidden', name='source', value='')
+      input(type='hidden', name='oldfilename', value='')
       .modal-dialog
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal')
               span(aria-hidden='true') ×
               span.sr-only Close
-            h4#new-view-label.modal-title New view
+            h4#edit-view-label.modal-title New view
           .modal-body
             .form-group
               label.control-label(for='filename') File name:
-              input.form-control(type='text', name='filename', placeholder='index.html')
+              input.form-control(type='text', name='filename', placeholder='index.jade')
           .modal-footer
-            button.btn.btn-primary(type='submit') Create view
+            button.btn.btn-primary(type='submit') Save view
 
-  #new-controller.modal(tabindex='-1', role='dialog', aria-labelledby='new-controller-label', aria-hidden='true')
+  #edit-controller.modal(tabindex='-1', role='dialog', aria-labelledby='new-controller-label', aria-hidden='true')
     form(role='form', method='post', action='#{req.baseUrl}/web/controller')
-      input(type='hidden', name='source', value='')
+      input(type='hidden', name='oldfilename', value='')
+      input(type='hidden', name='oldpath', value='')
+      input(type='hidden', name='oldmethod', value='')
       .modal-dialog
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal')
               span(aria-hidden='true') ×
               span.sr-only Close
-            h4#new-controller-label.modal-title New controller
+            h4#edit-controller-label.modal-title New controller
           .modal-body
             .form-group
               label.control-label(for='method') HTTP method:
@@ -90,27 +311,30 @@ block content
             .form-group
               label.control-label(for='filename') File name:
               input.form-control(type='text', name='filename', placeholder='controller.js')
+            .form-group
+              label.control-label(for='action') Action:
+              input.form-control(type='text', name='action', placeholder='run')
           .modal-footer
-            button.btn.btn-primary(type='submit') Create controller
+            button.btn.btn-primary(type='submit') Save controller
 
-  #new-lib.modal(tabindex='-1', role='dialog', aria-labelledby='new-lib-label', aria-hidden='true')
+  #edit-lib.modal(tabindex='-1', role='dialog', aria-labelledby='new-lib-label', aria-hidden='true')
     form(role='form', method='post', action='#{req.baseUrl}/web/lib')
-      input(type='hidden', name='source', value='')
+      input(type='hidden', name='oldfilename', value='')
       .modal-dialog
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal')
               span(aria-hidden='true') ×
               span.sr-only Close
-            h4#new-lib-label.modal-title New lib
+            h4#edit-lib-label.modal-title New lib
           .modal-body
             .form-group
               label.control-label(for='filename') File name:
               input.form-control(type='text', name='filename', placeholder='utils.js')
           .modal-footer
-            button.btn.btn-primary(type='submit') Create lib
+            button.btn.btn-primary(type='submit') Save lib
 
-  #new-asset.modal(tabindex='-1', role='dialog', aria-labelledby='new-asset-label', aria-hidden='true')
+  #edit-asset.modal(tabindex='-1', role='dialog', aria-labelledby='new-asset-label', aria-hidden='true')
     form(role='form', method='post', action='#{req.baseUrl}/web/asset')
       input(type='hidden', name='source', value='')
       .modal-dialog
@@ -119,141 +343,102 @@ block content
             button.close(type='button', data-dismiss='modal')
               span(aria-hidden='true') ×
               span.sr-only Close
-            h4#new-asset-label.modal-title New asset
+            h4#edit-asset-label.modal-title New asset
           .modal-body
             .form-group
               label.control-label(for='filename') File name:
               input.form-control(type='text', name='filename', placeholder='/css/style.css')
           .modal-footer
-            button.btn.btn-primary(type='submit') Create asset
+            button.btn.btn-primary(type='submit') Save asset
 
 block scripts
   script.
-    var tabManager = backbeam.configureWebDevelopment({})
-    $('#open-file').on('shown.bs.modal', function(e) {
-      $('#quick-search').select2('open')
-    })
-    $('#close-all').on('click', function(e) {
-      // TODO: prompt
-      tabManager.closeAll()
-    })
-    $('#quick-search').select2({
-      placeholder: 'Start writing the name of any view, controller or lib',
-      query: function(q) {
-        var query = q.term
-        var quicksearch = backbeam.quicksearch || []
+    $('#playground form [name=base]').val(window.location.href)
 
-        function matches(search) {
-          var str = search.toLowerCase()
-          var n = 0
-          for (var i=0; i<query.length; i++) {
-            n = str.indexOf(query.charAt(i), n)
-            if (n === -1) return false
-          }
-          return true
-        }
-
-        var data = []
-
-        if (query) {
-          quicksearch.forEach(function(item) {
-            var text = item.text
-            var search = item.search
-            if (matches(search)) {
-              data.push({
-                id: item.id,
-                text: text,
-              })
-            }
-          })
-        }
-
-        q.callback({results: data})
+    $('#playground').on('click', '.add-entry', function(e) {
+      e.preventDefault()
+      var type = $(this).attr('data-entry-type')
+      var group = $(this).closest('.playground-group')
+      var inputKey = '<div class="col-xs-5"><input placeholder="Key" name="'+type+'-key" class="form-control input-sm"></div>'
+      var inputValue = '<div class="col-xs-6"><input placeholder="Value" name="'+type+'-value" class="form-control input-sm"></div>'
+      var removeBtn = '<div class="col-xs-1"><a href="javascript:void(0)" class="glyphicon glyphicon-remove playground-btn-icon remove-entry"></a></div>'
+      var gr = $(['<div class="form-group row">', inputKey, inputValue, removeBtn, '</div>'].join(''))
+      group.append(gr)
+      if (e.originalEvent) {
+        // generated by the user
+        gr.find('input').get(0).focus()
       }
-    }).on('change', function(e) {
-      var url = e.val
-      var name = backbeam.quicksearchNames[e.val]
-      tabManager.addTab({
-        url: backbeam.baseUrl+url,
-        name: name,
-      })
-      $('#open-file').modal('hide')
-      $('#quick-search').select2('val', '')
-    }).on('select2-close', function(e) {
-      $('#open-file').modal('hide')
-      $('.navbar-brand').focus() // needed in safari to make the shortcut work next time
     })
 
-    Mousetrap.stopCallback = function(e, element, combo) {
-      return false
+    $('#playground').on('click', '.remove-entry', function(e) {
+      e.preventDefault()
+      $(this).closest('.row').remove()
+    })
+
+    $('#playground form').on('submit', function(e) {
+      e.preventDefault()
+      var form = $(this)
+      $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function(data) {
+          $('#playground-response-status').text(data.status)
+          $('#playground-response-time').text(data.time)
+          var tbody = $('#playground-response-headers tbody')
+          tbody.empty()
+          var headers = data.headers
+          for (var key in headers) {
+            if (headers.hasOwnProperty(key)) {
+              var value = headers[key]
+              var tdKey = $('<td>').text(key)
+              var tdVal = $('<td>').text(value)
+              var tr = $('<tr>').append(tdKey).append(tdVal)
+              tbody.append(tr)
+            }
+          }
+          $('#playground .code-editor').data('CodeMirrorInstance').setValue(data.body)
+          // TODO: mode, time
+        },
+      })
+    })
+
+    var hash = location.hash
+    if (hash) {
+      $('#tabs a[href="'+hash+'"]').tab('show')
     }
 
-    Mousetrap.bind(['mod+shift+o', 'mod+o'], function(e) {
-      e.preventDefault()
-      $('#open-file').modal('show')
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+      return location.hash = $(e.target).attr('href').substr(1);
     })
 
-    $('#new-controller form').on('submit', function(e) {
-      e.preventDefault()
-      var form = $(this)
-      $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: form.serialize(),
-        dataType: 'json',
-        success: function(data) {
-          var name = form.find('[name=method]').val()+' '+form.find('[name=path]').val()
-          var filename = form.find('[name=filename]').val()
-          var url = backbeam.baseUrl+'/web/controller/'+filename
-          tabManager.addTab({
-            url: url,
-            name: name,
-          })
-          $('#new-controller').modal('hide')
-          tabManager.refreshOverview()
-        },
-      })
+    $('#edit-controller form').on('mspi.form-will-fill', function(e, data) {
+      data.form.find('.modal-title').text('Edit controller')
+    })
+    $('#edit-controller form').on('mspi.form-will-reset', function(e, data) {
+      data.form.find('.modal-title').text('New controller')
     })
 
-    $('#new-lib form').on('submit', function(e) {
-      e.preventDefault()
-      var form = $(this)
-      $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: form.serialize(),
-        dataType: 'json',
-        success: function(data) {
-          var filename = form.find('[name=filename]').val()
-          var url = backbeam.baseUrl+'/web/lib/'+filename
-          tabManager.addTab({
-            url: url,
-            name: filename,
-          })
-          $('#new-lib').modal('hide')
-          tabManager.refreshOverview()
-        },
-      })
+    $('#edit-view form').on('mspi.form-will-fill', function(e, data) {
+      data.form.find('.modal-title').text('Edit view')
+    })
+    $('#edit-view form').on('mspi.form-will-reset', function(e, data) {
+      data.form.find('.modal-title').text('New view')
     })
 
-    $('#new-view form').on('submit', function(e) {
+    $('#edit-lib form').on('mspi.form-will-fill', function(e, data) {
+      data.form.find('.modal-title').text('Edit lib')
+    })
+    $('#edit-lib form').on('mspi.form-will-reset', function(e, data) {
+      data.form.find('.modal-title').text('New lib')
+    })
+
+    $(document).on('click', '.opens-playground', function(e) {
       e.preventDefault()
-      var form = $(this)
-      $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: form.serialize(),
-        dataType: 'json',
-        success: function(data) {
-          var filename = form.find('[name=filename]').val()
-          var url = backbeam.baseUrl+'/web/view/'+filename
-          tabManager.addTab({
-            url: url,
-            name: filename,
-          })
-          $('#new-view').modal('hide')
-          tabManager.refreshOverview()
-        },
-      })
+      var btn = $(this)
+      $('#tabs a[href="#playground"]').tab('show')
+      $('#playground [name=method]').val(btn.attr('data-method'))
+      $('#playground [name=path]').val(btn.attr('data-path'))
     })
 

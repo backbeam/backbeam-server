@@ -32,12 +32,9 @@
                 if file.isDirectory
                   a.internal(href=nolink, data-href='#{req.baseUrl}/web/assets?path=#{basePath}#{file.name}')= file.name
                 else
-                  | #{file.name}
+                  a.opens-editor(href=nolink, data-file=fullpath('assets', basePath+'/'+file.name))= file.name
               td= file.mime
               td= file.sizestr
               td None
               td
-                .btn-group.pull-right
-                  a.btn.btn-primary.btn-sm(type='button', href='#') Edit
-                  a.btn.btn-danger.btn-sm(type='button', href='#') Delete
 

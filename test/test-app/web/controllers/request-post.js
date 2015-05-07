@@ -1,12 +1,14 @@
-response.json({
-  method: request.method,
-  params: request.params,
-  body: request.body,
-  query: request.query,
-  url: request.url,
-  ip: request.ip,
-  acceptedLanguages: request.acceptedLanguages,
-  headers: request.headers,
-  protocol: request.protocol,
-  sdk: backbeam.sdk(),
-})
+exports.run = function(backbeam, request, response, libs, logger) {
+  response.json({
+    method: request.method,
+    params: request.params,
+    body: request.body,
+    query: request.query,
+    url: request.url,
+    ip: request.ip,
+    acceptedLanguages: request.acceptedLanguages,
+    headers: request.headers,
+    protocol: request.protocol,
+    sdk: backbeam.sdk(),
+  })
+}
