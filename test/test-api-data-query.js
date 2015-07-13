@@ -8,7 +8,7 @@ var txain = require('txain')
 var shared = 'foo'
 var secret = 'bar'
 
-describe('Test API for data manipulation', function() {
+describe('Test API for data querying', function() {
 
   var records = [
     {
