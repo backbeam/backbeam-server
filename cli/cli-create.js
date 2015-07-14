@@ -188,7 +188,7 @@ exports.run = function(argv, callback) {
       exports.app = app
 
       if (module.id === require.main.id) {
-        var port = 3000
+        var port = process.env.PORT || 3000
         http.createServer(app).listen(port)
         console.log('Started server at port %d', port)
       }
@@ -205,7 +205,7 @@ exports.run = function(argv, callback) {
       version: '1.0.0',
       description: 'Node.js app made with Backbeam',
       scripts: {
-        start: 'backbeam start',
+        start: 'node app',
         test: 'NODE_ENV=test mocha --bail --reporter spec test/',
       },
       author: {
@@ -260,6 +260,10 @@ exports.run = function(argv, callback) {
       }
     */})
     fs.writeFile(testUtils, code, 'utf8', callback)
+  })
+  .then(function(callback) {
+    console.log('Project created. Run `npm install` to install dependencies')
+    callback()
   })
   .end(callback)
 
