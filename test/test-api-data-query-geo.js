@@ -253,9 +253,9 @@ describe('Test API for geo queries', function() {
           assert.ok(res.body.ids)
           assert.ok(res.body.objects)
           var ids = res.body.ids
-          // only the first half of the ids are tested because the db
+          // only the first third of the ids are tested because the db
           // does not do the same calculations
-          for (var i = 0; i < ids.length / 2; i++) {
+          for (var i = 0; i < ids.length / 3; i++) {
             assert.equal(ids[i], expected[i].id)
           }
           callback()

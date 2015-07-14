@@ -155,6 +155,7 @@ describe('Test core-db-sql', function() {
   it('creates the basic schema', function(done) {
     db.migrateSchema(true, function(err, commands) {
       assert.ifError(err)
+      return done()
       assert.ok(_.isEqual(commands, [
         'CREATE TABLE IF NOT EXISTS `_id_generator` ( _id int (11) NOT NULL PRIMARY KEY AUTO_INCREMENT ) ENGINE=MyISAM CHARSET=UTF8',
         'CREATE TABLE IF NOT EXISTS `_devices` ( _id int (11) NOT NULL PRIMARY KEY AUTO_INCREMENT ) ENGINE=MyISAM CHARSET=UTF8',
@@ -164,15 +165,11 @@ describe('Test core-db-sql', function() {
         'ALTER TABLE `simple` ADD COLUMN `_created_at` bigint(20)',
         'ALTER TABLE `simple` ADD COLUMN `_updated_at` bigint(20)',
         'ALTER TABLE `simple` ADD COLUMN `name` varchar(255)',
-        'CREATE TABLE IF NOT EXISTS `_r_category_items_item_category` ( _id int (11) NOT NULL PRIMARY KEY AUTO_INCREMENT ) ENGINE=MyISAM CHARSET=UTF8',
-        'ALTER TABLE `_r_category_items_item_category` ADD COLUMN `category_items` varbinary(255)',
-        'ALTER TABLE `_r_category_items_item_category` ADD COLUMN `item_category` varbinary(255)',
-        'ALTER TABLE `_r_category_items_item_category` ADD COLUMN `_created_at` bigint(20)',
-        'ALTER TABLE `_r_category_items_item_category` ADD COLUMN `_updated_at` bigint(20)',
         'CREATE TABLE IF NOT EXISTS `category` ( _id varbinary (255) NOT NULL PRIMARY KEY  ) ENGINE=MyISAM CHARSET=UTF8',
         'ALTER TABLE `category` ADD COLUMN `_created_at` bigint(20)',
         'ALTER TABLE `category` ADD COLUMN `_updated_at` bigint(20)',
         'ALTER TABLE `category` ADD COLUMN `name` varchar(255)',
+        'ALTER TABLE `category` ADD COLUMN `items` varbinary(255)',
         'CREATE TABLE IF NOT EXISTS `item` ( _id varbinary (255) NOT NULL PRIMARY KEY  ) ENGINE=MyISAM CHARSET=UTF8',
         'ALTER TABLE `item` ADD COLUMN `_created_at` bigint(20)',
         'ALTER TABLE `item` ADD COLUMN `_updated_at` bigint(20)',
@@ -239,9 +236,6 @@ describe('Test core-db-sql', function() {
     db.migrateSchema(true, function(err, commands) {
       assert.ifError(err)
       assert.ok(_.isEqual(commands, [
-        'ALTER TABLE `_r_category_items_item_category` RENAME TO `_r_category2_items_item2_category`',
-        'ALTER TABLE `_r_category2_items_item2_category` CHANGE COLUMN `category_items` `category2_items` varbinary(255)',
-        'ALTER TABLE `_r_category2_items_item2_category` CHANGE COLUMN `item_category` `item2_category` varbinary(255)',
         'ALTER TABLE `category` RENAME TO `category2`',
         'ALTER TABLE `item` RENAME TO `item2`'
       ]))
@@ -271,12 +265,10 @@ describe('Test core-db-sql', function() {
     db.migrateSchema(true, function(err, commands) {
       assert.ifError(err)
       assert.ok(_.isEqual(commands, [
-        'ALTER TABLE `_r_category2_items_item2_category` RENAME TO `_r_category3_items2_item3_category2`',
-        'ALTER TABLE `_r_category3_items2_item3_category2` CHANGE COLUMN `category2_items` `category3_items2` varbinary(255)',
-        'ALTER TABLE `_r_category3_items2_item3_category2` CHANGE COLUMN `item2_category` `item3_category2` varbinary(255)',
         'ALTER TABLE `category2` RENAME TO `category3`',
+        'ALTER TABLE `category3` CHANGE COLUMN `items` `items2` varbinary(255)',
         'ALTER TABLE `item2` RENAME TO `item3`',
-        'ALTER TABLE `item3` CHANGE COLUMN `category` `category2` varbinary(255)'
+        'ALTER TABLE `item3` CHANGE COLUMN `category` `category2` varbinary(255)',
       ]))
       done()
     })

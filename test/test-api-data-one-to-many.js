@@ -8,7 +8,7 @@ var app = require('./app')()
 var shared = 'foo'
 var secret = 'bar'
 
-describe('Test API for data manipulation', function() {
+describe('Test API for querying one to many relationships', function() {
 
   var name1 = 'Item1 name'
   var name2 = 'Item2 name'
